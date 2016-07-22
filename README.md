@@ -23,3 +23,10 @@ FeroxRev has sadly quit the scene. https://github.com/NecronomiconCoding/Pokemon
 - Recycle certain items if you have more than the specified amount
 - Basic statistics (thanks to: https://github.com/Spegeli/Pokemon-Go-Rocket-API)
 
+# Donate
+Bitcoin Address: 1LAPANo2N1jBBBHvBEqbMxG13pWqV1xCsY
+
+# To Do
+- Don't waste pokeballs on softbanned accounts
+- Tutorial for retards
+- ...
