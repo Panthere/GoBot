@@ -234,7 +234,7 @@ namespace GoBot.Logic
                     results.AddRange(pokemonList.Where(x => x.PokemonId == pokemon.Key && x.Favorite == 0 && x.Cp < belowCp)
                         .OrderByDescending(x => x.Cp)
                         .ThenBy(n => n.StaminaMax)
-                        .Skip(amountToSkip)
+                        .Skip(amountToSkip).Skip(UserSettings.TopX)
                         .ToList());
 
                 }
@@ -245,7 +245,7 @@ namespace GoBot.Logic
             return pokemonList
                 .GroupBy(p => p.PokemonId)
                 .Where(x => x.Count() > 1)
-                .SelectMany(p => p.Where(x => x.Favorite == 0 && x.Cp < belowCp).OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax).Skip(1).ToList());
+                .SelectMany(p => p.Where(x => x.Favorite == 0 && x.Cp < belowCp).OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax).Skip(1).Skip(UserSettings.TopX).ToList());
         }
 
 

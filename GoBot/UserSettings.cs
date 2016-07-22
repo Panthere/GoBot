@@ -31,6 +31,7 @@ namespace GoBot
         public static int KeepIV;
         public static int EvolveOverIV;
         public static int CatchOverIV;
-        
+
+        public static int TopX;
     }
 }

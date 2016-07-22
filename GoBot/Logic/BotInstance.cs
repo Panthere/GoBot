@@ -43,6 +43,7 @@ namespace GoBot.Logic
         public void Stop()
         {
             running = false;
+            Logger.Write("Stop was called!");
         }
         public async Task Execute()
         {
@@ -56,14 +57,15 @@ namespace GoBot.Logic
                         await _client.DoPtcLogin(_clientSettings.PtcUsername, _clientSettings.PtcPassword);
                     else if (_clientSettings.AuthType == AuthType.Google)
                         await _client.DoGoogleLogin();
-
+                    running = true;
                     await PostLoginExecute();
-
+                    running = true;
                 }
                 catch (AccessTokenExpiredException)
                 {
                     Logger.Write($"Access token expired", LogLevel.Info);
                 }
+                Logger.Write($"Looping Execute Again", LogLevel.Info);
                 await Task.Delay(rand.Next(8000, 15000));
             }
         }
@@ -88,16 +90,18 @@ namespace GoBot.Logic
                 }
                 catch (AccessTokenExpiredException)
                 {
+                    Logger.Write("Access token was expired");
                     throw;
                 }
                 catch (Exception ex)
                 {
                     //if ()
-                    Logger.Write($"Exception: {ex}", LogLevel.Error);
+                    Logger.Write($"Exception (postinvoke): {ex}", LogLevel.Error);
                 }
 
                 await Task.Delay(rand.Next(8000, 15000));
             }
+            Logger.Write($"We're out of the loop now, Running is {running}");
             // walk home
             try
             {
@@ -105,7 +109,7 @@ namespace GoBot.Logic
             }
             catch (Exception ex)
             {
-
+                Logger.Write($"Exception: {ex}", LogLevel.Error);
             }
         }
 
@@ -317,6 +321,12 @@ namespace GoBot.Logic
                 if (!TransferList.Contains(duplicatePokemon.PokemonId))
                     continue;
 
+                if (duplicatePokemon.Cp > UserSettings.KeepCP || CalculatePokemonPerfection(duplicatePokemon) > UserSettings.KeepIV)
+                {
+                    Logger.Write($"Did not Transfer {duplicatePokemon.PokemonId} ({duplicatePokemon.Cp} cp, {CalculatePokemonPerfection(duplicatePokemon).ToString("0.00")}%) (Over Requirement) ", LogLevel.Info);
+                    continue;
+                }
+
                 var transfer = await _client.TransferPokemon(duplicatePokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
@@ -330,7 +340,8 @@ namespace GoBot.Logic
             var pokemons = await _inventory.GetPokemons();
             var pokemonList = pokemons as IList<PokemonData> ?? pokemons.ToList();
 
-            foreach (var pokemon in pokemonList)
+            // UNTESTED
+            foreach (var pokemon in pokemonList.Where(x => x.Favorite == 0).OrderByDescending(i=> i.Cp).ThenBy(i => i.StaminaMax).Skip(UserSettings.TopX))
             {
                 if (!TransferList.Contains(pokemon.PokemonId))
                     continue;

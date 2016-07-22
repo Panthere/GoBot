@@ -50,26 +50,41 @@ namespace GoBot
         }
         private void LoadSettings()
         {
-            UserSettings.GoogleRefreshToken = Properties.Settings.Default.GoogleAuthValue;
-            txtUser.Text = Properties.Settings.Default.Username;
-            txtPass.Text = Properties.Settings.Default.Password;
+            try
+            {
+                UserSettings.GoogleRefreshToken = Properties.Settings.Default.GoogleAuthValue;
+                txtUser.Text = Properties.Settings.Default.Username;
+                txtPass.Text = Properties.Settings.Default.Password;
 
-            txtLat.Text = Properties.Settings.Default.Lat.ToString();
-            txtLng.Text = Properties.Settings.Default.Lng.ToString();
-            txtAltitude.Text = Properties.Settings.Default.Altitude.ToString();
+                txtLat.Text = Properties.Settings.Default.Lat.ToString();
+                txtLng.Text = Properties.Settings.Default.Lng.ToString();
+                txtAltitude.Text = Properties.Settings.Default.Altitude.ToString();
 
-            cbAuthType.SelectedIndex = Properties.Settings.Default.AuthType == "Ptc" ?  0 : 1;
+                cbAuthType.SelectedIndex = Properties.Settings.Default.AuthType == "Ptc" ? 0 : 1;
 
+                Logger.Write($"Google Token: {UserSettings.GoogleRefreshToken}");
+            }
+            catch (Exception ex)
+            {
+                MsgError(ex.ToString());
+            }
         }
         private void SaveSettings()
         {
-            Properties.Settings.Default.GoogleAuthValue = UserSettings.GoogleRefreshToken;
-            Properties.Settings.Default.Username = txtUser.Text;
-            Properties.Settings.Default.Password = txtPass.Text;
-            Properties.Settings.Default.Lat = GetDouble(txtLat.Text);
-            Properties.Settings.Default.Lng = GetDouble(txtLng.Text);
-            Properties.Settings.Default.Altitude = GetInt(txtAltitude.Text);
-            Properties.Settings.Default.Save();
+            try
+            {
+                Properties.Settings.Default.GoogleAuthValue = string.IsNullOrEmpty(UserSettings.GoogleRefreshToken) ? "" : UserSettings.GoogleRefreshToken;
+                Properties.Settings.Default.Username = txtUser.Text;
+                Properties.Settings.Default.Password = txtPass.Text;
+                Properties.Settings.Default.Lat = GetDouble(txtLat.Text);
+                Properties.Settings.Default.Lng = GetDouble(txtLng.Text);
+                Properties.Settings.Default.Altitude = GetInt(txtAltitude.Text);
+                Properties.Settings.Default.Save();
+            }
+            catch (Exception ex)
+            {
+                MsgError($"Exception: {ex}");
+            }
 
         }
         private void Events_OnMessageReceived(object sender, Utils.LogReceivedArgs e)
@@ -108,6 +123,7 @@ namespace GoBot
             {
                 return o;
             }
+            Logger.Write($"Count not parse int: {str})");
             return o;
         }
         private double GetDouble(string str)
@@ -118,6 +134,7 @@ namespace GoBot
             {
                 return o;
             }
+            Logger.Write($"Count not parse double: {str})");
             return o;
         }
         private void MsgInfo(string msg)
@@ -190,6 +207,8 @@ namespace GoBot
             UserSettings.CatchPokemon = chkCatchPokes.Checked;
             UserSettings.GetForts = chkGetForts.Checked;
 
+            UserSettings.TopX = GetInt(txtTopX.Text);
+
             UserSettings.Altitude = GetDouble(txtAltitude.Text);
 
             Settings settings = new Settings();
@@ -227,6 +246,7 @@ namespace GoBot
 
         private void btnStop_Click(object sender, EventArgs e)
         {
+            Logger.Write("Stop button hit!");
             bot.Stop();
             tStats.Stop();
             btnStart.Enabled = true;
@@ -267,5 +287,6 @@ namespace GoBot
                 MsgError(ex.ToString());
             }
         }
+
     }
 }

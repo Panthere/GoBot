@@ -51,6 +51,9 @@
             this.txtLat = new cTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.txtEvolveIV = new cTextBox();
+            this.txtTransferIV = new cTextBox();
+            this.txtCatchIV = new cTextBox();
             this.txtProbability = new cTextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.chkInverseBerries = new cCheckBox();
@@ -106,9 +109,10 @@
             this.lblFound = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.txtCatchIV = new cTextBox();
-            this.txtTransferIV = new cTextBox();
-            this.txtEvolveIV = new cTextBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.txtTopX = new cTextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
             this.cTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -147,6 +151,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage1.Controls.Add(this.label27);
             this.tabPage1.Controls.Add(this.cbAuthType);
             this.tabPage1.Controls.Add(this.chkGetForts);
             this.tabPage1.Controls.Add(this.chkCatchPokes);
@@ -360,6 +365,9 @@
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage3.Controls.Add(this.label26);
+            this.tabPage3.Controls.Add(this.label25);
+            this.tabPage3.Controls.Add(this.txtTopX);
             this.tabPage3.Controls.Add(this.txtEvolveIV);
             this.tabPage3.Controls.Add(this.txtTransferIV);
             this.tabPage3.Controls.Add(this.txtCatchIV);
@@ -390,6 +398,42 @@
             this.tabPage3.Size = new System.Drawing.Size(736, 586);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Pokemon Settings";
+            // 
+            // txtEvolveIV
+            // 
+            this.txtEvolveIV.Location = new System.Drawing.Point(148, 256);
+            this.txtEvolveIV.MaxLength = 32767;
+            this.txtEvolveIV.Name = "txtEvolveIV";
+            this.txtEvolveIV.ReadOnly = false;
+            this.txtEvolveIV.Scheme = cTextBox.Schemes.Black;
+            this.txtEvolveIV.Size = new System.Drawing.Size(85, 30);
+            this.txtEvolveIV.TabIndex = 22;
+            this.txtEvolveIV.Text = "25";
+            this.txtEvolveIV.UseSystemPasswordChar = false;
+            // 
+            // txtTransferIV
+            // 
+            this.txtTransferIV.Location = new System.Drawing.Point(607, 256);
+            this.txtTransferIV.MaxLength = 32767;
+            this.txtTransferIV.Name = "txtTransferIV";
+            this.txtTransferIV.ReadOnly = false;
+            this.txtTransferIV.Scheme = cTextBox.Schemes.Black;
+            this.txtTransferIV.Size = new System.Drawing.Size(85, 30);
+            this.txtTransferIV.TabIndex = 21;
+            this.txtTransferIV.Text = "25";
+            this.txtTransferIV.UseSystemPasswordChar = false;
+            // 
+            // txtCatchIV
+            // 
+            this.txtCatchIV.Location = new System.Drawing.Point(354, 256);
+            this.txtCatchIV.MaxLength = 32767;
+            this.txtCatchIV.Name = "txtCatchIV";
+            this.txtCatchIV.ReadOnly = false;
+            this.txtCatchIV.Scheme = cTextBox.Schemes.Black;
+            this.txtCatchIV.Size = new System.Drawing.Size(85, 30);
+            this.txtCatchIV.TabIndex = 20;
+            this.txtCatchIV.Text = "50";
+            this.txtCatchIV.UseSystemPasswordChar = false;
             // 
             // txtProbability
             // 
@@ -989,41 +1033,44 @@
             this.textBox1.Text = resources.GetString("textBox1.Text");
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // txtCatchIV
+            // label25
             // 
-            this.txtCatchIV.Location = new System.Drawing.Point(354, 256);
-            this.txtCatchIV.MaxLength = 32767;
-            this.txtCatchIV.Name = "txtCatchIV";
-            this.txtCatchIV.ReadOnly = false;
-            this.txtCatchIV.Scheme = cTextBox.Schemes.Black;
-            this.txtCatchIV.Size = new System.Drawing.Size(85, 30);
-            this.txtCatchIV.TabIndex = 20;
-            this.txtCatchIV.Text = "50";
-            this.txtCatchIV.UseSystemPasswordChar = false;
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(260, 317);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(85, 15);
+            this.label25.TabIndex = 24;
+            this.label25.Text = "Keep Top *CP*";
             // 
-            // txtTransferIV
+            // txtTopX
             // 
-            this.txtTransferIV.Location = new System.Drawing.Point(607, 256);
-            this.txtTransferIV.MaxLength = 32767;
-            this.txtTransferIV.Name = "txtTransferIV";
-            this.txtTransferIV.ReadOnly = false;
-            this.txtTransferIV.Scheme = cTextBox.Schemes.Black;
-            this.txtTransferIV.Size = new System.Drawing.Size(85, 30);
-            this.txtTransferIV.TabIndex = 21;
-            this.txtTransferIV.Text = "25";
-            this.txtTransferIV.UseSystemPasswordChar = false;
+            this.txtTopX.Location = new System.Drawing.Point(263, 335);
+            this.txtTopX.MaxLength = 32767;
+            this.txtTopX.Name = "txtTopX";
+            this.txtTopX.ReadOnly = false;
+            this.txtTopX.Scheme = cTextBox.Schemes.Black;
+            this.txtTopX.Size = new System.Drawing.Size(144, 30);
+            this.txtTopX.TabIndex = 23;
+            this.txtTopX.Text = "3";
+            this.txtTopX.UseSystemPasswordChar = false;
             // 
-            // txtEvolveIV
+            // label26
             // 
-            this.txtEvolveIV.Location = new System.Drawing.Point(148, 256);
-            this.txtEvolveIV.MaxLength = 32767;
-            this.txtEvolveIV.Name = "txtEvolveIV";
-            this.txtEvolveIV.ReadOnly = false;
-            this.txtEvolveIV.Scheme = cTextBox.Schemes.Black;
-            this.txtEvolveIV.Size = new System.Drawing.Size(85, 30);
-            this.txtEvolveIV.TabIndex = 22;
-            this.txtEvolveIV.Text = "25";
-            this.txtEvolveIV.UseSystemPasswordChar = false;
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(260, 368);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(147, 15);
+            this.label26.TabIndex = 25;
+            this.label26.Text = "Pokemons no matter what";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(262, 305);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(220, 15);
+            this.label27.TabIndex = 20;
+            this.label27.Text = "Settings CANNOT be changed after start";
             // 
             // FrmMain
             // 
@@ -1136,6 +1183,10 @@
         private cTextBox txtCatchIV;
         private cTextBox txtTransferIV;
         private cTextBox txtEvolveIV;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label25;
+        private cTextBox txtTopX;
+        private System.Windows.Forms.Label label27;
     }
 }
 
