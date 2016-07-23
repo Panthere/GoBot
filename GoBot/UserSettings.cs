@@ -33,5 +33,8 @@ namespace GoBot
         public static int CatchOverIV;
 
         public static int TopX;
+
+        public static bool Teleport;
+        public static bool UseDelays = true;
     }
 }

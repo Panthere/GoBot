@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventReceiver.cs" />
+    <Compile Include="ListViewColumnSorter.cs" />
     <Compile Include="UserLogger\EventLogger.cs" />
     <Compile Include="Logic\BotInstance.cs" />
     <Compile Include="DarkTheme.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserSettings.cs" />
+    <Compile Include="Utils\Delay.cs" />
     <Compile Include="Utils\Events.cs" />
     <Compile Include="Utils\LocationUtils.cs" />
     <Compile Include="Utils\Navigation.cs" />

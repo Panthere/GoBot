@@ -13,11 +13,15 @@ using GoBot.Logic;
 using System.Threading;
 using PokemonGo.RocketAPI.GeneratedCode;
 using GoBot.Utils;
+using PokemonGo.RocketAPI.Enums;
+using System.Globalization;
 
 namespace GoBot
 {
     public partial class FrmMain : Form
     {
+        private Sorter itemSorter;
+        private Sorter pokemonSorter;
         public BotInstance bot;
         public EventReceiver rec;
         public FrmMain()
@@ -25,6 +29,11 @@ namespace GoBot
             InitializeComponent();
             rec = new EventReceiver();
             cbAuthType.SelectedIndex = 0;
+            itemSorter = new Sorter();
+            pokemonSorter = new Sorter();
+            lvBalls.ListViewItemSorter = itemSorter;
+            lvPokemon.ListViewItemSorter = pokemonSorter;
+
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
@@ -39,9 +48,21 @@ namespace GoBot
 
             GoBot.Utils.Events.OnMessageReceived += Events_OnMessageReceived;
 
+            foreach (ColumnHeader ch in lvBalls.Columns)
+            {
+                string appendText = "< ";
+                ch.Text = appendText + ch.Text;
+            }
+            foreach (ColumnHeader ch in lvPokemon.Columns)
+            {
+                string appendText = "< ";
+                ch.Text = appendText + ch.Text;
+            }
+
             LoadSettings();
             
         }
+
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveSettings();
@@ -86,6 +107,50 @@ namespace GoBot
                 MsgError($"Exception: {ex}");
             }
 
+        }
+
+        private void lvBalls_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            itemSorter.Column = e.Column;
+            // Reverse the current sort direction for this column.
+            string appendText = "< ";
+            if (itemSorter.Order == SortOrder.Ascending)
+            {
+                itemSorter.Order = SortOrder.Descending;
+                appendText = "> ";
+
+            }
+            else
+            {
+                itemSorter.Order = SortOrder.Ascending;
+            }
+
+            lvBalls.Columns[e.Column].Text = appendText + lvBalls.Columns[e.Column].Text.Substring(2);
+
+            // Perform the sort with these new sort options.
+            lvBalls.Sort();
+        }
+
+        private void lvPokemon_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            pokemonSorter.Column = e.Column;
+            // Reverse the current sort direction for this column.
+            string appendText = "< ";
+            if (pokemonSorter.Order == SortOrder.Ascending)
+            {
+                pokemonSorter.Order = SortOrder.Descending;
+                appendText = "> ";
+
+            }
+            else
+            {
+                pokemonSorter.Order = SortOrder.Ascending;
+            }
+
+            lvPokemon.Columns[e.Column].Text = appendText + lvPokemon.Columns[e.Column].Text.Substring(2);
+
+            // Perform the sort with these new sort options.
+            lvPokemon.Sort();
         }
         private void Events_OnMessageReceived(object sender, Utils.LogReceivedArgs e)
         {
@@ -191,6 +256,10 @@ namespace GoBot
 
             UserSettings.Altitude = (txtAltitude.Text).ToDouble();
 
+            UserSettings.Teleport = chkTeleport.Checked;
+
+            UserSettings.UseDelays = !chkNoDelay.Checked;
+
             Settings settings = new Settings();
 
 
@@ -236,13 +305,14 @@ namespace GoBot
             btnStop.Scheme = cButton.Schemes.Red;
         }
 
-        private void tStats_Tick(object sender, EventArgs e)
+        private async void tStats_Tick(object sender, EventArgs e)
         {
 
             if (bot == null || !bot.running)
                 return;
             try
             {
+
                 lblFound.Text = Statistics.PokemonFound;
                 lblTransferred.Text = Statistics.PokemonTransferred;
                 lblStardust.Text = Statistics.Stardust;
@@ -251,6 +321,9 @@ namespace GoBot
                 lblLevelUp.Text = Statistics.LevelUp;
                 lblRequiredXP.Text = Statistics.RequiredXP;
                 //lblDump.Text = bot._stats.ToString();
+                lblRuntime.Text = Statistics.ProgramRuntime;
+                lblPokemonPerHour.Text = Statistics.PokemonPerHour;
+
             }
             catch (Exception ex)
             {
@@ -288,7 +361,10 @@ namespace GoBot
                 return;
             }
 
-            await bot.EvolveAllPokemonWithEnoughCandy();
+            if (!(MessageBox.Show("The override for evolve will evolve pokemon (in your inventory only) in the above CP and IV setting based on an OR statement. Filter lists WILL NOT APPLY.\r\n\r\nThis means that if you have 50 CP and 90% IV then it will evolve pokemon (with candy) that are OVER 49 CP OR that are greater than 89% IV.\r\n\r\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes))
+                return;
+
+            await bot.OverrideEvolve(txtOverrideCP.Text.ToInt(), txtOverrideIV.Text.ToInt());
         }
 
         private async void btnTransfer_Click(object sender, EventArgs e)
@@ -299,7 +375,148 @@ namespace GoBot
                 return;
             }
 
-            await bot.TransferDuplicatePokemon(UserSettings.KeepCP, false);
+            if (!(MessageBox.Show("The override for transfer will transfer pokemon (in your inventory only) in the above CP and IV setting based on an OR statement. This will TRANSFER EVERY POKEMON (REGARDLESS IF DUPE OR NOT). Filter lists WILL NOT APPLY.\r\n\r\nThis means that if you have 50 CP and 90% IV then it will transfer pokemon that are 49 CP or below OR that are less than 89% IV.\r\n\r\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes))
+                return;
+
+            if (txtOverrideCP.Text.ToInt() == 0 || txtOverrideIV.Text.ToInt() == 0)
+            {
+                if (!(MessageBox.Show("Warning, the IV and CP to override with have been set to 0. This will TRANSFER ALL POKEMON, IS THIS CORRECT?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes))
+                    return;
+            }
+
+
+            await bot.OverrideTransfer(txtOverrideCP.Text.ToInt(), txtOverrideIV.Text.ToInt());
+            //await bot.TransferDuplicatePokemon(UserSettings.KeepCP, false);
+        }
+
+        private void cbAuthType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbAuthType.SelectedIndex == 0)
+            {
+                txtUser.Visible = true;
+                txtPass.Visible = true;
+                txtGoogleAuth.Visible = false;
+            }
+            else
+            {
+                txtUser.Visible = false;
+                txtPass.Visible = false;
+                txtGoogleAuth.Visible = true;
+            }
+        }
+
+        private async void refreshBallsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot == null || !bot.running)
+            {
+                MsgError("You cannot refresh when the bot is not running...");
+                return;
+            }
+            try
+            {
+                lvBalls.Items.Clear();
+
+                var items = await bot._inventory.GetItems();
+                var balls = items.Where(i => ((MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_POKE_BALL
+                                          || (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_GREAT_BALL
+                                          || (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_ULTRA_BALL
+                                          || (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_MASTER_BALL) && i.Count > 0).GroupBy(i => ((MiscEnums.Item)i.Item_)).ToList();
+
+                var pokeBalls = items.Where(i => (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_POKE_BALL).ToList();
+                var greatBalls = items.Where(i => (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_GREAT_BALL).ToList();
+                var ultraBalls = items.Where(i => (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_ULTRA_BALL).ToList();
+                var masterBalls = items.Where(i => (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_MASTER_BALL).ToList();
+
+
+                if (pokeBalls.Count > 0)
+                    lvBalls.Items.Add(new ListViewItem(new[] { "Poke Balls", pokeBalls[0].Count.ToString() }));
+                if (greatBalls.Count > 0)
+                    lvBalls.Items.Add(new ListViewItem(new[] { "Great Balls", greatBalls[0].Count.ToString() }));
+                if (ultraBalls.Count > 0)
+                    lvBalls.Items.Add(new ListViewItem(new[] { "Ultra Balls", ultraBalls[0].Count.ToString() }));
+                if (masterBalls.Count > 0)
+                    lvBalls.Items.Add(new ListViewItem(new[] { "Master Balls", masterBalls[0].Count.ToString() }));
+            }
+            catch (Exception ex)
+            {
+                MsgError(ex.ToString());
+            }
+        }
+
+        private async void refreshPokemonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot == null || !bot.running)
+            {
+                MsgError("You cannot refresh when the bot is not running...");
+                return;
+            }
+            var items = await bot._inventory.GetItems();
+
+        }
+
+        private async void refreshAllItemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (bot == null || !bot.running)
+            {
+                MsgError("You cannot refresh when the bot is not running...");
+                return;
+            }
+            try
+            {
+                lvBalls.Items.Clear();
+                var items = await bot._inventory.GetItems();
+                foreach (var item in items)
+                {
+                    if (item.Count == 0)
+                        continue;
+                    try
+                    {
+                        MiscEnums.Item itemName = (MiscEnums.Item)item.Item_;
+                        ListViewItem lvi = new ListViewItem(Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(itemName.ToString().Replace("ITEM_", "").Replace("_", " ").ToLower()));
+                        lvi.SubItems.Add(item.Count.ToString());
+                        lvBalls.Items.Add(lvi);
+                    }
+                    catch (InvalidCastException)
+                    {
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MsgError(ex.ToString());
+            }
+}
+
+        private async void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (bot == null || !bot.running)
+            {
+                MsgError("You cannot refresh when the bot is not running...");
+                return;
+            }
+            try
+            {
+                lvPokemon.Items.Clear();
+
+                var pokemons = await bot._inventory.GetPokemons();
+
+                foreach (var pokemon in pokemons)
+                {
+                    ListViewItem lvi = new ListViewItem(pokemon.PokemonId.ToString());
+                    lvi.SubItems.Add(pokemon.Cp.ToString());
+                    lvi.SubItems.Add(BotInstance.CalculatePokemonPerfection(pokemon).ToString("0.00"));
+                    lvi.SubItems.Add(pokemon.Stamina.ToString());
+                    lvi.SubItems.Add(pokemon.StaminaMax.ToString());
+                    lvi.SubItems.Add(pokemon.IndividualAttack.ToString());
+                    lvPokemon.Items.Add(lvi);
+                }
+            }
+            catch (Exception ex)
+            {
+                MsgError(ex.ToString());
+            }
+
         }
     }
 }

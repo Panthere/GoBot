@@ -32,16 +32,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.tStats = new System.Windows.Forms.Timer(this.components);
             this.cTabControl1 = new cTabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.label27 = new System.Windows.Forms.Label();
-            this.cbAuthType = new BoosterComboBox();
-            this.chkGetForts = new cCheckBox();
-            this.chkCatchPokes = new cCheckBox();
-            this.btnStop = new cButton();
-            this.txtPass = new cTextBox();
-            this.txtUser = new cTextBox();
-            this.btnStart = new cButton();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.chkNoDelay = new cCheckBox();
+            this.chkTeleport = new cCheckBox();
             this.label11 = new System.Windows.Forms.Label();
             this.txtAltitude = new cTextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -52,6 +45,9 @@
             this.txtLat = new cTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label33 = new System.Windows.Forms.Label();
+            this.txtOverrideIV = new cTextBox();
+            this.txtOverrideCP = new cTextBox();
             this.label28 = new System.Windows.Forms.Label();
             this.btnTransfer = new cButton();
             this.btnEvolve = new cButton();
@@ -103,18 +99,49 @@
             this.label15 = new System.Windows.Forms.Label();
             this.txtPB = new cTextBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.txtGoogleAuth = new cTextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.cbAuthType = new BoosterComboBox();
+            this.chkGetForts = new cCheckBox();
+            this.chkCatchPokes = new cCheckBox();
+            this.btnStop = new cButton();
+            this.txtPass = new cTextBox();
+            this.txtUser = new cTextBox();
+            this.btnStart = new cButton();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.lvPokemon = new System.Windows.Forms.ListView();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cmsRefreshPokemon = new cContextMenuStrip();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.label31 = new System.Windows.Forms.Label();
+            this.lvBalls = new System.Windows.Forms.ListView();
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cmsItemRefresh = new cContextMenuStrip();
+            this.refreshBallsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.refreshAllItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.lvWalkLog = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.lblRuntime = new System.Windows.Forms.Label();
+            this.lblPokemonPerHour = new System.Windows.Forms.Label();
             this.lblRequiredXP = new System.Windows.Forms.Label();
             this.lblLevelUp = new System.Windows.Forms.Label();
             this.lblCurLevel = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.btnResetSettings = new cButton();
-            this.lblDump = new System.Windows.Forms.Label();
             this.lblXP = new System.Windows.Forms.Label();
             this.lblStardust = new System.Windows.Forms.Label();
             this.lblTransferred = new System.Windows.Forms.Label();
@@ -122,10 +149,13 @@
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.cTabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage8.SuspendLayout();
+            this.cmsRefreshPokemon.SuspendLayout();
+            this.cmsItemRefresh.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage7.SuspendLayout();
@@ -139,10 +169,11 @@
             // cTabControl1
             // 
             this.cTabControl1.Alignment = System.Windows.Forms.TabAlignment.Left;
-            this.cTabControl1.Controls.Add(this.tabPage1);
             this.cTabControl1.Controls.Add(this.tabPage2);
             this.cTabControl1.Controls.Add(this.tabPage3);
             this.cTabControl1.Controls.Add(this.tabPage6);
+            this.cTabControl1.Controls.Add(this.tabPage1);
+            this.cTabControl1.Controls.Add(this.tabPage8);
             this.cTabControl1.Controls.Add(this.tabPage4);
             this.cTabControl1.Controls.Add(this.tabPage5);
             this.cTabControl1.Controls.Add(this.tabPage7);
@@ -156,126 +187,11 @@
             this.cTabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.cTabControl1.TabIndex = 0;
             // 
-            // tabPage1
-            // 
-            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
-            this.tabPage1.Controls.Add(this.label27);
-            this.tabPage1.Controls.Add(this.cbAuthType);
-            this.tabPage1.Controls.Add(this.chkGetForts);
-            this.tabPage1.Controls.Add(this.chkCatchPokes);
-            this.tabPage1.Controls.Add(this.btnStop);
-            this.tabPage1.Controls.Add(this.txtPass);
-            this.tabPage1.Controls.Add(this.txtUser);
-            this.tabPage1.Controls.Add(this.btnStart);
-            this.tabPage1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.tabPage1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.tabPage1.Location = new System.Drawing.Point(174, 4);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(736, 586);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Bot Settings";
-            // 
-            // label27
-            // 
-            this.label27.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(262, 305);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(220, 15);
-            this.label27.TabIndex = 20;
-            this.label27.Text = "Settings CANNOT be changed after start";
-            // 
-            // cbAuthType
-            // 
-            this.cbAuthType.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbAuthType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbAuthType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbAuthType.FormattingEnabled = true;
-            this.cbAuthType.ItemHeight = 20;
-            this.cbAuthType.Items.AddRange(new object[] {
-            "Ptc",
-            "Google"});
-            this.cbAuthType.Location = new System.Drawing.Point(265, 137);
-            this.cbAuthType.Name = "cbAuthType";
-            this.cbAuthType.Size = new System.Drawing.Size(207, 26);
-            this.cbAuthType.TabIndex = 19;
-            // 
-            // chkGetForts
-            // 
-            this.chkGetForts.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.chkGetForts.AutoSize = true;
-            this.chkGetForts.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.chkGetForts.Location = new System.Drawing.Point(391, 241);
-            this.chkGetForts.Name = "chkGetForts";
-            this.chkGetForts.Size = new System.Drawing.Size(81, 19);
-            this.chkGetForts.TabIndex = 18;
-            this.chkGetForts.Text = "PokeStops";
-            this.chkGetForts.UseVisualStyleBackColor = true;
-            // 
-            // chkCatchPokes
-            // 
-            this.chkCatchPokes.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.chkCatchPokes.AutoSize = true;
-            this.chkCatchPokes.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.chkCatchPokes.Location = new System.Drawing.Point(264, 241);
-            this.chkCatchPokes.Name = "chkCatchPokes";
-            this.chkCatchPokes.Size = new System.Drawing.Size(111, 19);
-            this.chkCatchPokes.TabIndex = 17;
-            this.chkCatchPokes.Text = "Catch Pokemon";
-            this.chkCatchPokes.UseVisualStyleBackColor = true;
-            // 
-            // btnStop
-            // 
-            this.btnStop.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnStop.Location = new System.Drawing.Point(381, 266);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Scheme = cButton.Schemes.Red;
-            this.btnStop.Size = new System.Drawing.Size(91, 23);
-            this.btnStop.TabIndex = 9;
-            this.btnStop.Text = "Stop";
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
-            // txtPass
-            // 
-            this.txtPass.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtPass.Location = new System.Drawing.Point(265, 205);
-            this.txtPass.MaxLength = 32767;
-            this.txtPass.Name = "txtPass";
-            this.txtPass.ReadOnly = false;
-            this.txtPass.Scheme = cTextBox.Schemes.Black;
-            this.txtPass.Size = new System.Drawing.Size(207, 30);
-            this.txtPass.TabIndex = 8;
-            this.txtPass.UseSystemPasswordChar = true;
-            // 
-            // txtUser
-            // 
-            this.txtUser.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtUser.Location = new System.Drawing.Point(265, 169);
-            this.txtUser.MaxLength = 32767;
-            this.txtUser.Name = "txtUser";
-            this.txtUser.ReadOnly = false;
-            this.txtUser.Scheme = cTextBox.Schemes.Black;
-            this.txtUser.Size = new System.Drawing.Size(207, 30);
-            this.txtUser.TabIndex = 7;
-            this.txtUser.UseSystemPasswordChar = false;
-            // 
-            // btnStart
-            // 
-            this.btnStart.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnStart.Location = new System.Drawing.Point(265, 266);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Scheme = cButton.Schemes.Green;
-            this.btnStart.Size = new System.Drawing.Size(110, 23);
-            this.btnStart.TabIndex = 0;
-            this.btnStart.Text = "Start";
-            this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
-            // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage2.Controls.Add(this.chkNoDelay);
+            this.tabPage2.Controls.Add(this.chkTeleport);
             this.tabPage2.Controls.Add(this.label11);
             this.tabPage2.Controls.Add(this.txtAltitude);
             this.tabPage2.Controls.Add(this.label7);
@@ -293,6 +209,28 @@
             this.tabPage2.Size = new System.Drawing.Size(736, 586);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Walk Settings";
+            // 
+            // chkNoDelay
+            // 
+            this.chkNoDelay.AutoSize = true;
+            this.chkNoDelay.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkNoDelay.Location = new System.Drawing.Point(129, 284);
+            this.chkNoDelay.Name = "chkNoDelay";
+            this.chkNoDelay.Size = new System.Drawing.Size(146, 19);
+            this.chkNoDelay.TabIndex = 10;
+            this.chkNoDelay.Text = "No Delays (do not risk)";
+            this.chkNoDelay.UseVisualStyleBackColor = true;
+            // 
+            // chkTeleport
+            // 
+            this.chkTeleport.AutoSize = true;
+            this.chkTeleport.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkTeleport.Location = new System.Drawing.Point(129, 259);
+            this.chkTeleport.Name = "chkTeleport";
+            this.chkTeleport.Size = new System.Drawing.Size(181, 19);
+            this.chkTeleport.TabIndex = 9;
+            this.chkTeleport.Text = "Teleport (you will be banned)";
+            this.chkTeleport.UseVisualStyleBackColor = true;
             // 
             // label11
             // 
@@ -390,6 +328,9 @@
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage3.Controls.Add(this.label33);
+            this.tabPage3.Controls.Add(this.txtOverrideIV);
+            this.tabPage3.Controls.Add(this.txtOverrideCP);
             this.tabPage3.Controls.Add(this.label28);
             this.tabPage3.Controls.Add(this.btnTransfer);
             this.tabPage3.Controls.Add(this.btnEvolve);
@@ -427,21 +368,54 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Pokemon Settings";
             // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(599, 490);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(23, 15);
+            this.label33.TabIndex = 31;
+            this.label33.Text = "OR";
+            // 
+            // txtOverrideIV
+            // 
+            this.txtOverrideIV.Location = new System.Drawing.Point(628, 482);
+            this.txtOverrideIV.MaxLength = 32767;
+            this.txtOverrideIV.Name = "txtOverrideIV";
+            this.txtOverrideIV.ReadOnly = false;
+            this.txtOverrideIV.Scheme = cTextBox.Schemes.Black;
+            this.txtOverrideIV.Size = new System.Drawing.Size(85, 30);
+            this.txtOverrideIV.TabIndex = 30;
+            this.txtOverrideIV.Text = "25";
+            this.txtOverrideIV.UseSystemPasswordChar = false;
+            // 
+            // txtOverrideCP
+            // 
+            this.txtOverrideCP.Location = new System.Drawing.Point(525, 482);
+            this.txtOverrideCP.MaxLength = 32767;
+            this.txtOverrideCP.Name = "txtOverrideCP";
+            this.txtOverrideCP.ReadOnly = false;
+            this.txtOverrideCP.Scheme = cTextBox.Schemes.Black;
+            this.txtOverrideCP.Size = new System.Drawing.Size(68, 30);
+            this.txtOverrideCP.TabIndex = 29;
+            this.txtOverrideCP.Text = "100";
+            this.txtOverrideCP.UseSystemPasswordChar = false;
+            // 
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(291, 524);
+            this.label28.Location = new System.Drawing.Point(522, 464);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(100, 15);
+            this.label28.Size = new System.Drawing.Size(149, 15);
             this.label28.TabIndex = 28;
-            this.label28.Text = "Manual Overrides";
+            this.label28.Text = "Manual Overrides - (CP/IV)";
             // 
             // btnTransfer
             // 
-            this.btnTransfer.Location = new System.Drawing.Point(344, 542);
+            this.btnTransfer.Location = new System.Drawing.Point(525, 547);
             this.btnTransfer.Name = "btnTransfer";
             this.btnTransfer.Scheme = cButton.Schemes.Black;
-            this.btnTransfer.Size = new System.Drawing.Size(95, 23);
+            this.btnTransfer.Size = new System.Drawing.Size(188, 23);
             this.btnTransfer.TabIndex = 27;
             this.btnTransfer.Text = "Transfer Now";
             this.btnTransfer.UseVisualStyleBackColor = true;
@@ -449,10 +423,10 @@
             // 
             // btnEvolve
             // 
-            this.btnEvolve.Location = new System.Drawing.Point(263, 542);
+            this.btnEvolve.Location = new System.Drawing.Point(525, 518);
             this.btnEvolve.Name = "btnEvolve";
             this.btnEvolve.Scheme = cButton.Schemes.Black;
-            this.btnEvolve.Size = new System.Drawing.Size(75, 23);
+            this.btnEvolve.Size = new System.Drawing.Size(188, 23);
             this.btnEvolve.TabIndex = 26;
             this.btnEvolve.Text = "Evolve Now";
             this.btnEvolve.UseVisualStyleBackColor = true;
@@ -987,6 +961,314 @@
             this.label14.TabIndex = 0;
             this.label14.Text = "Item Recycling";
             // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage1.Controls.Add(this.txtGoogleAuth);
+            this.tabPage1.Controls.Add(this.label27);
+            this.tabPage1.Controls.Add(this.cbAuthType);
+            this.tabPage1.Controls.Add(this.chkGetForts);
+            this.tabPage1.Controls.Add(this.chkCatchPokes);
+            this.tabPage1.Controls.Add(this.btnStop);
+            this.tabPage1.Controls.Add(this.txtPass);
+            this.tabPage1.Controls.Add(this.txtUser);
+            this.tabPage1.Controls.Add(this.btnStart);
+            this.tabPage1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.tabPage1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.tabPage1.Location = new System.Drawing.Point(174, 4);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(736, 586);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Bot Settings";
+            // 
+            // txtGoogleAuth
+            // 
+            this.txtGoogleAuth.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.txtGoogleAuth.Location = new System.Drawing.Point(265, 183);
+            this.txtGoogleAuth.MaxLength = 32767;
+            this.txtGoogleAuth.Name = "txtGoogleAuth";
+            this.txtGoogleAuth.ReadOnly = false;
+            this.txtGoogleAuth.Scheme = cTextBox.Schemes.Black;
+            this.txtGoogleAuth.Size = new System.Drawing.Size(207, 30);
+            this.txtGoogleAuth.TabIndex = 21;
+            this.txtGoogleAuth.UseSystemPasswordChar = false;
+            this.txtGoogleAuth.Visible = false;
+            // 
+            // label27
+            // 
+            this.label27.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(262, 305);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(220, 15);
+            this.label27.TabIndex = 20;
+            this.label27.Text = "Settings CANNOT be changed after start";
+            // 
+            // cbAuthType
+            // 
+            this.cbAuthType.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbAuthType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbAuthType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAuthType.FormattingEnabled = true;
+            this.cbAuthType.ItemHeight = 20;
+            this.cbAuthType.Items.AddRange(new object[] {
+            "Ptc",
+            "Google"});
+            this.cbAuthType.Location = new System.Drawing.Point(265, 137);
+            this.cbAuthType.Name = "cbAuthType";
+            this.cbAuthType.Size = new System.Drawing.Size(207, 26);
+            this.cbAuthType.TabIndex = 19;
+            this.cbAuthType.SelectedIndexChanged += new System.EventHandler(this.cbAuthType_SelectedIndexChanged);
+            // 
+            // chkGetForts
+            // 
+            this.chkGetForts.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.chkGetForts.AutoSize = true;
+            this.chkGetForts.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkGetForts.Location = new System.Drawing.Point(391, 241);
+            this.chkGetForts.Name = "chkGetForts";
+            this.chkGetForts.Size = new System.Drawing.Size(81, 19);
+            this.chkGetForts.TabIndex = 18;
+            this.chkGetForts.Text = "PokeStops";
+            this.chkGetForts.UseVisualStyleBackColor = true;
+            // 
+            // chkCatchPokes
+            // 
+            this.chkCatchPokes.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.chkCatchPokes.AutoSize = true;
+            this.chkCatchPokes.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkCatchPokes.Location = new System.Drawing.Point(264, 241);
+            this.chkCatchPokes.Name = "chkCatchPokes";
+            this.chkCatchPokes.Size = new System.Drawing.Size(111, 19);
+            this.chkCatchPokes.TabIndex = 17;
+            this.chkCatchPokes.Text = "Catch Pokemon";
+            this.chkCatchPokes.UseVisualStyleBackColor = true;
+            // 
+            // btnStop
+            // 
+            this.btnStop.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnStop.Location = new System.Drawing.Point(381, 266);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Scheme = cButton.Schemes.Red;
+            this.btnStop.Size = new System.Drawing.Size(91, 23);
+            this.btnStop.TabIndex = 9;
+            this.btnStop.Text = "Stop";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // txtPass
+            // 
+            this.txtPass.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.txtPass.Location = new System.Drawing.Point(265, 205);
+            this.txtPass.MaxLength = 32767;
+            this.txtPass.Name = "txtPass";
+            this.txtPass.ReadOnly = false;
+            this.txtPass.Scheme = cTextBox.Schemes.Black;
+            this.txtPass.Size = new System.Drawing.Size(207, 30);
+            this.txtPass.TabIndex = 8;
+            this.txtPass.UseSystemPasswordChar = true;
+            // 
+            // txtUser
+            // 
+            this.txtUser.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.txtUser.Location = new System.Drawing.Point(265, 169);
+            this.txtUser.MaxLength = 32767;
+            this.txtUser.Name = "txtUser";
+            this.txtUser.ReadOnly = false;
+            this.txtUser.Scheme = cTextBox.Schemes.Black;
+            this.txtUser.Size = new System.Drawing.Size(207, 30);
+            this.txtUser.TabIndex = 7;
+            this.txtUser.UseSystemPasswordChar = false;
+            // 
+            // btnStart
+            // 
+            this.btnStart.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnStart.Location = new System.Drawing.Point(265, 266);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Scheme = cButton.Schemes.Green;
+            this.btnStart.Size = new System.Drawing.Size(110, 23);
+            this.btnStart.TabIndex = 0;
+            this.btnStart.Text = "Start";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage8.Controls.Add(this.label34);
+            this.tabPage8.Controls.Add(this.label32);
+            this.tabPage8.Controls.Add(this.lvPokemon);
+            this.tabPage8.Controls.Add(this.label31);
+            this.tabPage8.Controls.Add(this.lvBalls);
+            this.tabPage8.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.tabPage8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.tabPage8.Location = new System.Drawing.Point(174, 4);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Size = new System.Drawing.Size(736, 586);
+            this.tabPage8.TabIndex = 7;
+            this.tabPage8.Text = "Account Details";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(421, 125);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(176, 30);
+            this.label34.TabIndex = 18;
+            this.label34.Text = "Filler for something else...\r\nPsst! Right click on the listviews!";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.label32.Location = new System.Drawing.Point(15, 297);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(165, 25);
+            this.label32.TabIndex = 17;
+            this.label32.Text = "Account Pokemon";
+            // 
+            // lvPokemon
+            // 
+            this.lvPokemon.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvPokemon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.lvPokemon.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader5,
+            this.columnHeader6,
+            this.columnHeader7,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader10});
+            this.lvPokemon.ContextMenuStrip = this.cmsRefreshPokemon;
+            this.lvPokemon.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lvPokemon.FullRowSelect = true;
+            this.lvPokemon.Location = new System.Drawing.Point(20, 325);
+            this.lvPokemon.Name = "lvPokemon";
+            this.lvPokemon.Size = new System.Drawing.Size(698, 238);
+            this.lvPokemon.TabIndex = 16;
+            this.lvPokemon.UseCompatibleStateImageBehavior = false;
+            this.lvPokemon.View = System.Windows.Forms.View.Details;
+            this.lvPokemon.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvPokemon_ColumnClick);
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Tag = "Text";
+            this.columnHeader5.Text = "Name";
+            this.columnHeader5.Width = 191;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Tag = "Numeric";
+            this.columnHeader6.Text = "CP";
+            this.columnHeader6.Width = 112;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Tag = "Numeric";
+            this.columnHeader7.Text = "IV %";
+            this.columnHeader7.Width = 73;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Tag = "Numeric";
+            this.columnHeader8.Text = "Stamina";
+            this.columnHeader8.Width = 71;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Tag = "Numeric";
+            this.columnHeader9.Text = "Max Stamina";
+            this.columnHeader9.Width = 99;
+            // 
+            // columnHeader10
+            // 
+            this.columnHeader10.Tag = "Numeric";
+            this.columnHeader10.Text = "Attack";
+            this.columnHeader10.Width = 107;
+            // 
+            // cmsRefreshPokemon
+            // 
+            this.cmsRefreshPokemon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1});
+            this.cmsRefreshPokemon.Name = "cmsBallsRefresh";
+            this.cmsRefreshPokemon.Size = new System.Drawing.Size(168, 26);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(167, 22);
+            this.toolStripMenuItem1.Text = "Refresh Pokemon";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.label31.Location = new System.Drawing.Point(15, 15);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(131, 25);
+            this.label31.TabIndex = 15;
+            this.label31.Text = "Account Items";
+            // 
+            // lvBalls
+            // 
+            this.lvBalls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.lvBalls.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader3,
+            this.columnHeader4});
+            this.lvBalls.ContextMenuStrip = this.cmsItemRefresh;
+            this.lvBalls.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lvBalls.FullRowSelect = true;
+            this.lvBalls.Location = new System.Drawing.Point(20, 43);
+            this.lvBalls.Name = "lvBalls";
+            this.lvBalls.Size = new System.Drawing.Size(290, 222);
+            this.lvBalls.TabIndex = 14;
+            this.lvBalls.UseCompatibleStateImageBehavior = false;
+            this.lvBalls.View = System.Windows.Forms.View.Details;
+            this.lvBalls.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvBalls_ColumnClick);
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Tag = "Text";
+            this.columnHeader3.Text = "Item";
+            this.columnHeader3.Width = 138;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Tag = "Numeric";
+            this.columnHeader4.Text = "Count";
+            this.columnHeader4.Width = 112;
+            // 
+            // cmsItemRefresh
+            // 
+            this.cmsItemRefresh.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refreshBallsToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.refreshAllItemsToolStripMenuItem});
+            this.cmsItemRefresh.Name = "cmsBallsRefresh";
+            this.cmsItemRefresh.Size = new System.Drawing.Size(163, 54);
+            // 
+            // refreshBallsToolStripMenuItem
+            // 
+            this.refreshBallsToolStripMenuItem.Name = "refreshBallsToolStripMenuItem";
+            this.refreshBallsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.refreshBallsToolStripMenuItem.Text = "Refresh Balls";
+            this.refreshBallsToolStripMenuItem.Click += new System.EventHandler(this.refreshBallsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(159, 6);
+            // 
+            // refreshAllItemsToolStripMenuItem
+            // 
+            this.refreshAllItemsToolStripMenuItem.Name = "refreshAllItemsToolStripMenuItem";
+            this.refreshAllItemsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.refreshAllItemsToolStripMenuItem.Text = "Refresh All Items";
+            this.refreshAllItemsToolStripMenuItem.Click += new System.EventHandler(this.refreshAllItemsToolStripMenuItem_Click);
+            // 
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
@@ -1030,13 +1312,14 @@
             // tabPage5
             // 
             this.tabPage5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage5.Controls.Add(this.lblRuntime);
+            this.tabPage5.Controls.Add(this.lblPokemonPerHour);
             this.tabPage5.Controls.Add(this.lblRequiredXP);
             this.tabPage5.Controls.Add(this.lblLevelUp);
             this.tabPage5.Controls.Add(this.lblCurLevel);
             this.tabPage5.Controls.Add(this.label30);
             this.tabPage5.Controls.Add(this.label29);
             this.tabPage5.Controls.Add(this.btnResetSettings);
-            this.tabPage5.Controls.Add(this.lblDump);
             this.tabPage5.Controls.Add(this.lblXP);
             this.tabPage5.Controls.Add(this.lblStardust);
             this.tabPage5.Controls.Add(this.lblTransferred);
@@ -1048,6 +1331,24 @@
             this.tabPage5.Size = new System.Drawing.Size(736, 586);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Statistics";
+            // 
+            // lblRuntime
+            // 
+            this.lblRuntime.AutoSize = true;
+            this.lblRuntime.Location = new System.Drawing.Point(45, 194);
+            this.lblRuntime.Name = "lblRuntime";
+            this.lblRuntime.Size = new System.Drawing.Size(93, 15);
+            this.lblRuntime.TabIndex = 12;
+            this.lblRuntime.Text = "Runtime: 0 mins";
+            // 
+            // lblPokemonPerHour
+            // 
+            this.lblPokemonPerHour.AutoSize = true;
+            this.lblPokemonPerHour.Location = new System.Drawing.Point(45, 164);
+            this.lblPokemonPerHour.Name = "lblPokemonPerHour";
+            this.lblPokemonPerHour.Size = new System.Drawing.Size(84, 15);
+            this.lblPokemonPerHour.TabIndex = 11;
+            this.lblPokemonPerHour.Text = "Pokemon/H: 0";
             // 
             // lblRequiredXP
             // 
@@ -1109,17 +1410,6 @@
             this.btnResetSettings.Text = "Reset Settings";
             this.btnResetSettings.UseVisualStyleBackColor = true;
             this.btnResetSettings.Click += new System.EventHandler(this.btnResetSettings_Click);
-            // 
-            // lblDump
-            // 
-            this.lblDump.AutoSize = true;
-            this.lblDump.Location = new System.Drawing.Point(262, 319);
-            this.lblDump.MaximumSize = new System.Drawing.Size(250, 0);
-            this.lblDump.Name = "lblDump";
-            this.lblDump.Size = new System.Drawing.Size(12, 15);
-            this.lblDump.TabIndex = 4;
-            this.lblDump.Text = "-";
-            this.lblDump.Visible = false;
             // 
             // lblXP
             // 
@@ -1198,14 +1488,18 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.cTabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage8.ResumeLayout(false);
+            this.tabPage8.PerformLayout();
+            this.cmsRefreshPokemon.ResumeLayout(false);
+            this.cmsItemRefresh.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
@@ -1266,7 +1560,6 @@
         private System.Windows.Forms.Label lblFound;
         private System.Windows.Forms.Label lblStardust;
         private System.Windows.Forms.Label lblXP;
-        private System.Windows.Forms.Label lblDump;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Label label16;
         private cTextBox txtGPB;
@@ -1308,6 +1601,34 @@
         private System.Windows.Forms.Label lblRequiredXP;
         private System.Windows.Forms.Label lblLevelUp;
         private System.Windows.Forms.Label lblCurLevel;
+        private System.Windows.Forms.Label lblPokemonPerHour;
+        private System.Windows.Forms.Label lblRuntime;
+        private cTextBox txtGoogleAuth;
+        private cContextMenuStrip cmsItemRefresh;
+        private System.Windows.Forms.ToolStripMenuItem refreshBallsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem refreshAllItemsToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPage8;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.ListView lvBalls;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.ListView lvPokemon;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ColumnHeader columnHeader7;
+        private System.Windows.Forms.ColumnHeader columnHeader8;
+        private System.Windows.Forms.ColumnHeader columnHeader9;
+        private System.Windows.Forms.ColumnHeader columnHeader10;
+        private cContextMenuStrip cmsRefreshPokemon;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private cTextBox txtOverrideIV;
+        private cTextBox txtOverrideCP;
+        private System.Windows.Forms.Label label33;
+        private cCheckBox chkTeleport;
+        private cCheckBox chkNoDelay;
+        private System.Windows.Forms.Label label34;
     }
 }
 

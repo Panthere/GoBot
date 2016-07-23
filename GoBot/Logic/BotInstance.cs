@@ -65,7 +65,7 @@ namespace GoBot.Logic
                     Logger.Write($"Access token expired", LogLevel.Info);
                 }
                 Logger.Write($"Looping Execute Again", LogLevel.Info);
-                await Task.Delay(rand.Next(8000, 15000));
+                T.Delay(rand.Next(8000, 15000));
             }
         }
         public async Task PostLoginExecute()
@@ -98,7 +98,7 @@ namespace GoBot.Logic
                     Logger.Write($"Exception (postinvoke): {ex}", LogLevel.Error);
                 }
 
-                await Task.Delay(rand.Next(8000, 15000));
+                T.Delay(rand.Next(8000, 15000));
             }
             Logger.Write($"We're out of the loop now, Running is {running}");
             // walk home
@@ -128,8 +128,16 @@ namespace GoBot.Logic
             {
                 if (!running)
                     break;
-                var update =
-                    await _navigation.HumanLikeWalking(new Navigation.Location(pokeStop.Latitude, pokeStop.Longitude), UserSettings.WalkingSpeed);
+                if (UserSettings.Teleport)
+                {
+                    // You'll be banned, I warned you...
+                    var update = await _client.UpdatePlayerLocation(pokeStop.Latitude, pokeStop.Longitude, UserSettings.Altitude);
+                }
+                else
+                {
+                    var update =
+                        await _navigation.HumanLikeWalking(new Navigation.Location(pokeStop.Latitude, pokeStop.Longitude), UserSettings.WalkingSpeed);
+                }
 
                 if (UserSettings.GetForts)
                 {
@@ -142,15 +150,17 @@ namespace GoBot.Logic
                     await Events.FortFarmed(fortSearch, pokeStop);
 
                     Logger.Write($"Farmed XP: {fortSearch.ExperienceAwarded}, Gems: { fortSearch.GemsAwarded}, Eggs: {fortSearch.PokemonDataEgg} Items: {StringUtils.GetSummedFriendlyNameOfItemAwardList(fortSearch.ItemsAwarded)}", LogLevel.Info);
-                    await Task.Delay(rand.Next(3000, 6000));
+                    T.Delay(rand.Next(3000, 6000));
                 }
 
-                
+                var profile = await _client.GetProfile();
+                _stats.getStardust(profile.Profile.Currency.ToArray()[1].Amount);
+                _stats.updateConsoleTitle(_inventory);
 
                 if (getPokes)
                    await ExecuteCatchAllNearbyPokemons();
 
-                await Task.Delay(15000);
+                T.Delay(15000);
             }
         }
 
@@ -165,7 +175,14 @@ namespace GoBot.Logic
                 if (!running)
                     break;
 
-                var update = await _navigation.HumanLikeWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
+                if (UserSettings.Teleport)
+                {
+                    var update = await _client.UpdatePlayerLocation(pokemon.Latitude, pokemon.Longitude, UserSettings.Altitude);
+                }
+                else
+                {
+                    var update = await _navigation.HumanLikeWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
+                }
 
                 var encounter = await _client.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnpointId);
 
@@ -176,7 +193,7 @@ namespace GoBot.Logic
 
 
 
-                await Task.Delay(rand.Next(15000, 30000));
+                T.Delay(rand.Next(15000, 30000));
             }
         }
 
@@ -222,12 +239,16 @@ namespace GoBot.Logic
 
                     foreach (int xp in caughtPokemonResponse.Scores.Xp)
                         _stats.addExperience(xp);
+
+                    var profile = await _client.GetProfile();
+                    _stats.getStardust(profile.Profile.Currency.ToArray()[1].Amount);
+
                     _stats.increasePokemons();
                     _stats.updateConsoleTitle(_inventory);
                     await Events.PokemonCaught(encounter?.WildPokemon?.PokemonData);
                 }
 
-                await Task.Delay(rand.Next(1500, 3000));
+                T.Delay(rand.Next(1500, 3000));
             }
             while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed);
         }
@@ -323,7 +344,7 @@ namespace GoBot.Logic
 
             var useRaspberry = await _client.UseCaptureItem(encounterId, ItemId.ItemRazzBerry, spawnPointId);
             Logger.Write($"Use Rasperry. Remaining: {berry.Count}", LogLevel.Info);
-            await Task.Delay(rand.Next(4000, 8000));
+            T.Delay(rand.Next(4000, 8000));
         }
         public static float CalculatePokemonPerfection(PokemonData poke)
         {
@@ -353,13 +374,16 @@ namespace GoBot.Logic
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
 
 
-                await Task.Delay(rand.Next(3000, 5000));
+                T.Delay(rand.Next(3000, 5000));
             }
         }
 
         public async Task TransferDuplicatePokemon(int keepCp, bool keepPokemonsThatCanEvolve = false)
         {
+
             var duplicatePokemons = await _inventory.GetDuplicatePokemonToTransfer(keepCp, keepPokemonsThatCanEvolve);
+
+            Logger.Write($"Sorting through {duplicatePokemons.ToList().Count} pokemon to transfer duplicates...");
 
             foreach (var duplicatePokemon in duplicatePokemons)
             {
@@ -377,7 +401,7 @@ namespace GoBot.Logic
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 Logger.Write($"Transferred {duplicatePokemon.PokemonId} with {duplicatePokemon.Cp} CP", LogLevel.Info);
-                await Task.Delay(rand.Next(3000, 6000));
+                T.Delay(rand.Next(3000, 6000));
             }
         }
 
@@ -400,9 +424,60 @@ namespace GoBot.Logic
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 Logger.Write($"Transferred {pokemon.PokemonId} with {pokemon.Cp} CP", LogLevel.Info);
-                await Task.Delay(rand.Next(3000, 6000));
+                T.Delay(rand.Next(3000, 6000));
             }
         }
+
+        public async Task OverrideTransfer(int keepCp, int keepIv)
+        {
+            var pokemons = await _inventory.GetPokemons();
+            var pokemonList = pokemons as IList<PokemonData> ?? pokemons.ToList();
+            Logger.Write($"Forcibly (override) sorting transfer of {pokemonList.Count} pokemon(s)");
+            // UNTESTED
+            foreach (var pokemon in pokemonList.Where(x => x.Favorite == 0).OrderByDescending(i => i.Cp).ThenBy(i => i.StaminaMax).Skip(UserSettings.TopX))
+            {
+               // if (!TransferList.Contains(pokemon.PokemonId))
+               //     continue;
+                if (pokemon.Cp > keepCp || CalculatePokemonPerfection(pokemon) > keepIv)
+                {
+                    Logger.Write($"Did not Transfer {pokemon.PokemonId} ({pokemon.Cp} cp, {CalculatePokemonPerfection(pokemon).ToString("0.00")}%) (Over Requirement) ", LogLevel.Info);
+                    continue;
+                }
+                var transfer = await _client.TransferPokemon(pokemon.Id);
+                _stats.increasePokemonsTransfered();
+                _stats.updateConsoleTitle(_inventory);
+                Logger.Write($"Transferred {pokemon.PokemonId} with {pokemon.Cp} CP ({CalculatePokemonPerfection(pokemon).ToString("0.00")}%)", LogLevel.Info);
+                T.Delay(rand.Next(3000, 6000));
+            }
+        }
+
+        public async Task OverrideEvolve(int keepCp, int keepIv)
+        {
+            var pokemonToEvolve = await _inventory.GetPokemonToEvolve();
+            foreach (var pokemon in pokemonToEvolve)
+            {
+                //if (!EvolveList.Contains(pokemon.PokemonId))
+                //    continue;
+
+                if (pokemon.Cp < keepCp || CalculatePokemonPerfection(pokemon) < keepIv)
+                {
+                    Logger.Write($"Did not Evolve {pokemon.PokemonId} ({pokemon.Cp} cp, {CalculatePokemonPerfection(pokemon).ToString("0.00")}%) (Under Requirement) ", LogLevel.Info);
+                    continue;
+                }
+
+                var evolvePokemonOutProto = await _client.EvolvePokemon((ulong)pokemon.Id);
+                _stats.increasePokemonsTransfered();
+                _stats.updateConsoleTitle(_inventory);
+                if (evolvePokemonOutProto.Result == EvolvePokemonOut.Types.EvolvePokemonStatus.PokemonEvolvedSuccess)
+                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExpAwarded}xp", LogLevel.Info);
+                else
+                    Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
+
+
+                T.Delay(rand.Next(3000, 5000));
+            }
+        }
+
 
         public async Task EvolvePokemonFromList()
         {
@@ -428,7 +503,7 @@ namespace GoBot.Logic
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
 
 
-                await Task.Delay(rand.Next(3500, 5000));
+                T.Delay(rand.Next(3500, 5000));
             }
         }
 
@@ -440,7 +515,7 @@ namespace GoBot.Logic
             {
                 var transfer = await _client.RecycleItem((ItemId)item.Item_, item.Count);
                 Logger.Write($"Recycled {item.Count}x {(ItemId)item.Item_}", LogLevel.Info);
-                await Task.Delay(rand.Next(4000, 8000));
+                T.Delay(rand.Next(4000, 8000));
             }
         }
 

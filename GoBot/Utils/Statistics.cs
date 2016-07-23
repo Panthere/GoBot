@@ -9,6 +9,7 @@ using PokemonGo.RocketAPI.Extensions;
 using PokemonGo.RocketAPI.GeneratedCode;
 using PokemonGo.RocketAPI.Helpers;
 using GoBot.Logic;
+using PokemonGo.RocketAPI;
 
 namespace GoBot.Utils
 {
@@ -39,11 +40,15 @@ namespace GoBot.Utils
 
         public async Task<string> _getcurrentLevelInfos(Inventory _inventory)
         {
+            // pokeballs
+
+
             var stats = await _inventory.GetPlayerStats();
             var output = string.Empty;
             PlayerStats stat = stats.FirstOrDefault();
             if (stat != null)
             {
+                
                 var _ep = (stat.NextLevelXp - stat.PrevLevelXp) - (stat.Experience - stat.PrevLevelXp);
                 var _hours = Math.Round(_ep / (_totalExperience / _getSessionRuntime()), 2);
 
@@ -78,8 +83,28 @@ namespace GoBot.Utils
 
         public async void updateConsoleTitle(Inventory _inventory)
         {
-            _currentLevelInfos = await _getcurrentLevelInfos(_inventory);
+            // can throw invalid response exception
+            try
+            {
+                _currentLevelInfos = await _getcurrentLevelInfos(_inventory);
+            }
+            catch (Exception ex)
+            {
+                Logger.Write("Stat Update Exception: " + ex.ToString());
+            }
             //Console.Title = ToString();
+        }
+        public static string ProgramRuntime
+        {
+            get
+            {
+                TimeSpan time = (DateTime.Now - _initSessionDateTime);
+                return string.Format("Runtime: {0} hour{3}, {1} minute{4}, {2} second{5}", time.Hours, time.Minutes, time.Seconds,
+                    time.Hours > 1 ? "s" : "",
+                    time.Minutes > 1 ? "s" : "",
+                    time.Seconds > 1 ? "s" : "");
+                //return string.Format((DateTime.Now - _initSessionDateTime).ToString("h'hours 'm'm 's's'")
+            }
         }
         public static string PlayerLevel
         {
@@ -131,8 +156,16 @@ namespace GoBot.Utils
                 return "Pokemon Transferred: " + _totalPokemonsTransfered.ToString();
             }
 
+            
         }
+        public static string PokemonPerHour
+        {
+            get
+            {
+                return string.Format("Pokemon/H:  {0:0.0}", _totalPokemons / _getSessionRuntime());
+            }
 
+        }
         public override string ToString()
         {
             return string.Format("LvL: {1:0}{0}EXP/H: {2:0.0} EXP{0}P/H: {3:0.0} Pokemon(s){0}Stardust: {4:0}{0}Pokemon Transfered: {5:0}{0}Items Removed: {6:0}{0}", Environment.NewLine, _currentLevelInfos, _totalExperience / _getSessionRuntime(), _totalPokemons / _getSessionRuntime(), _totalStardust, _totalPokemonsTransfered, _totalItemsRemoved);

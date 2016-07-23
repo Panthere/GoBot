@@ -45,7 +45,7 @@ namespace GoBot.Utils
                 {
                     if (speedInMetersPerSecond > speedDownTo)
                     {
-                        Logger.Write("We are within 40 meters of the target. Speeding down to 10 km/h to not pass the target.", LogLevel.Info);
+                        Logger.Write("We are within 40 meters of the target. Slowing down to 10 km/h to not pass the target.", LogLevel.Info);
                         speedInMetersPerSecond = speedDownTo;
                     }
                     else

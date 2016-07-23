@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="GoogleAuthValue" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Auth Token</Value>
     </Setting>
     <Setting Name="Username" Type="System.String" Scope="User">
       <Value Profile="(Default)">Username</Value>

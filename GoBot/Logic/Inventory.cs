@@ -167,7 +167,33 @@ namespace GoBot.Logic
             EvolutionRequirements.Add(PokemonId.Zubat, 50);
         }
 
+
+
         // candy requirements
+
+        public async Task<IEnumerable<PokemonData>> GetHighestsCP(int limit)
+        {
+            var myPokemon = await GetPokemons();
+            var pokemons = myPokemon.ToList();
+            return pokemons.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax).Take(limit);
+        }
+
+        public async Task<IEnumerable<PokemonData>> GetHighestsPerfect(int limit)
+        {
+            var myPokemon = await GetPokemons();
+            var pokemons = myPokemon.ToList();
+            return pokemons.OrderByDescending(BotInstance.CalculatePokemonPerfection).Take(limit);
+        }
+
+        public async Task<PokemonData> GetHighestPokemonOfTypeByCP(PokemonData pokemon)
+        {
+            var myPokemon = await GetPokemons();
+            var pokemons = myPokemon.ToList();
+            return pokemons.Where(x => x.PokemonId == pokemon.PokemonId)
+                .OrderByDescending(x => x.Cp)
+                .First();
+        }
+
         public async Task<IEnumerable<PlayerStats>> GetPlayerStats()
         {
             var inventory = await _client.GetInventory();
