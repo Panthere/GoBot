@@ -34,4 +34,4 @@ Bitcoin Address: 1LAPANo2N1jBBBHvBEqbMxG13pWqV1xCsY
 # To Do
 - Don't waste pokeballs on softbanned accounts
 - Tutorial for retards
-- Runtime in stats
+- Right click to evolve/transfer/recycle
