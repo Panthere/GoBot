@@ -33,6 +33,7 @@
             this.tStats = new System.Windows.Forms.Timer(this.components);
             this.cTabControl1 = new cTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label27 = new System.Windows.Forms.Label();
             this.cbAuthType = new BoosterComboBox();
             this.chkGetForts = new cCheckBox();
             this.chkCatchPokes = new cCheckBox();
@@ -51,6 +52,12 @@
             this.txtLat = new cTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label28 = new System.Windows.Forms.Label();
+            this.btnTransfer = new cButton();
+            this.btnEvolve = new cButton();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.txtTopX = new cTextBox();
             this.txtEvolveIV = new cTextBox();
             this.txtTransferIV = new cTextBox();
             this.txtCatchIV = new cTextBox();
@@ -101,6 +108,11 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.lblRequiredXP = new System.Windows.Forms.Label();
+            this.lblLevelUp = new System.Windows.Forms.Label();
+            this.lblCurLevel = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
             this.btnResetSettings = new cButton();
             this.lblDump = new System.Windows.Forms.Label();
             this.lblXP = new System.Windows.Forms.Label();
@@ -109,10 +121,6 @@
             this.lblFound = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label25 = new System.Windows.Forms.Label();
-            this.txtTopX = new cTextBox();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
             this.cTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -168,8 +176,19 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Bot Settings";
             // 
+            // label27
+            // 
+            this.label27.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(262, 305);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(220, 15);
+            this.label27.TabIndex = 20;
+            this.label27.Text = "Settings CANNOT be changed after start";
+            // 
             // cbAuthType
             // 
+            this.cbAuthType.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cbAuthType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cbAuthType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAuthType.FormattingEnabled = true;
@@ -184,6 +203,7 @@
             // 
             // chkGetForts
             // 
+            this.chkGetForts.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkGetForts.AutoSize = true;
             this.chkGetForts.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.chkGetForts.Location = new System.Drawing.Point(391, 241);
@@ -195,6 +215,7 @@
             // 
             // chkCatchPokes
             // 
+            this.chkCatchPokes.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkCatchPokes.AutoSize = true;
             this.chkCatchPokes.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.chkCatchPokes.Location = new System.Drawing.Point(264, 241);
@@ -206,6 +227,7 @@
             // 
             // btnStop
             // 
+            this.btnStop.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnStop.Location = new System.Drawing.Point(381, 266);
             this.btnStop.Name = "btnStop";
             this.btnStop.Scheme = cButton.Schemes.Red;
@@ -217,6 +239,7 @@
             // 
             // txtPass
             // 
+            this.txtPass.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtPass.Location = new System.Drawing.Point(265, 205);
             this.txtPass.MaxLength = 32767;
             this.txtPass.Name = "txtPass";
@@ -228,6 +251,7 @@
             // 
             // txtUser
             // 
+            this.txtUser.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtUser.Location = new System.Drawing.Point(265, 169);
             this.txtUser.MaxLength = 32767;
             this.txtUser.Name = "txtUser";
@@ -239,6 +263,7 @@
             // 
             // btnStart
             // 
+            this.btnStart.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnStart.Location = new System.Drawing.Point(265, 266);
             this.btnStart.Name = "btnStart";
             this.btnStart.Scheme = cButton.Schemes.Green;
@@ -365,6 +390,9 @@
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage3.Controls.Add(this.label28);
+            this.tabPage3.Controls.Add(this.btnTransfer);
+            this.tabPage3.Controls.Add(this.btnEvolve);
             this.tabPage3.Controls.Add(this.label26);
             this.tabPage3.Controls.Add(this.label25);
             this.tabPage3.Controls.Add(this.txtTopX);
@@ -398,6 +426,67 @@
             this.tabPage3.Size = new System.Drawing.Size(736, 586);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Pokemon Settings";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(291, 524);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(100, 15);
+            this.label28.TabIndex = 28;
+            this.label28.Text = "Manual Overrides";
+            // 
+            // btnTransfer
+            // 
+            this.btnTransfer.Location = new System.Drawing.Point(344, 542);
+            this.btnTransfer.Name = "btnTransfer";
+            this.btnTransfer.Scheme = cButton.Schemes.Black;
+            this.btnTransfer.Size = new System.Drawing.Size(95, 23);
+            this.btnTransfer.TabIndex = 27;
+            this.btnTransfer.Text = "Transfer Now";
+            this.btnTransfer.UseVisualStyleBackColor = true;
+            this.btnTransfer.Click += new System.EventHandler(this.btnTransfer_Click);
+            // 
+            // btnEvolve
+            // 
+            this.btnEvolve.Location = new System.Drawing.Point(263, 542);
+            this.btnEvolve.Name = "btnEvolve";
+            this.btnEvolve.Scheme = cButton.Schemes.Black;
+            this.btnEvolve.Size = new System.Drawing.Size(75, 23);
+            this.btnEvolve.TabIndex = 26;
+            this.btnEvolve.Text = "Evolve Now";
+            this.btnEvolve.UseVisualStyleBackColor = true;
+            this.btnEvolve.Click += new System.EventHandler(this.btnEvolve_Click);
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(260, 368);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(147, 15);
+            this.label26.TabIndex = 25;
+            this.label26.Text = "Pokemons no matter what";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(260, 317);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(85, 15);
+            this.label25.TabIndex = 24;
+            this.label25.Text = "Keep Top *CP*";
+            // 
+            // txtTopX
+            // 
+            this.txtTopX.Location = new System.Drawing.Point(263, 335);
+            this.txtTopX.MaxLength = 32767;
+            this.txtTopX.Name = "txtTopX";
+            this.txtTopX.ReadOnly = false;
+            this.txtTopX.Scheme = cTextBox.Schemes.Black;
+            this.txtTopX.Size = new System.Drawing.Size(176, 30);
+            this.txtTopX.TabIndex = 23;
+            this.txtTopX.Text = "3";
+            this.txtTopX.UseSystemPasswordChar = false;
             // 
             // txtEvolveIV
             // 
@@ -912,11 +1001,15 @@
             // 
             // lvWalkLog
             // 
+            this.lvWalkLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvWalkLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
             this.lvWalkLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
+            this.lvWalkLog.ForeColor = System.Drawing.Color.Gainsboro;
             this.lvWalkLog.FullRowSelect = true;
-            this.lvWalkLog.GridLines = true;
             this.lvWalkLog.Location = new System.Drawing.Point(50, 54);
             this.lvWalkLog.Name = "lvWalkLog";
             this.lvWalkLog.Size = new System.Drawing.Size(637, 491);
@@ -926,7 +1019,7 @@
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "Sender";
+            this.columnHeader1.Text = "Time";
             this.columnHeader1.Width = 167;
             // 
             // columnHeader2
@@ -937,6 +1030,11 @@
             // tabPage5
             // 
             this.tabPage5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage5.Controls.Add(this.lblRequiredXP);
+            this.tabPage5.Controls.Add(this.lblLevelUp);
+            this.tabPage5.Controls.Add(this.lblCurLevel);
+            this.tabPage5.Controls.Add(this.label30);
+            this.tabPage5.Controls.Add(this.label29);
             this.tabPage5.Controls.Add(this.btnResetSettings);
             this.tabPage5.Controls.Add(this.lblDump);
             this.tabPage5.Controls.Add(this.lblXP);
@@ -951,8 +1049,58 @@
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Statistics";
             // 
+            // lblRequiredXP
+            // 
+            this.lblRequiredXP.AutoSize = true;
+            this.lblRequiredXP.Location = new System.Drawing.Point(407, 135);
+            this.lblRequiredXP.Name = "lblRequiredXP";
+            this.lblRequiredXP.Size = new System.Drawing.Size(97, 15);
+            this.lblRequiredXP.TabIndex = 10;
+            this.lblRequiredXP.Text = "( Required XP: 0 )";
+            // 
+            // lblLevelUp
+            // 
+            this.lblLevelUp.AutoSize = true;
+            this.lblLevelUp.Location = new System.Drawing.Point(407, 104);
+            this.lblLevelUp.Name = "lblLevelUp";
+            this.lblLevelUp.Size = new System.Drawing.Size(114, 15);
+            this.lblLevelUp.TabIndex = 9;
+            this.lblLevelUp.Text = "Level up in 0 hour(s)";
+            this.lblLevelUp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblCurLevel
+            // 
+            this.lblCurLevel.AutoSize = true;
+            this.lblCurLevel.Location = new System.Drawing.Point(407, 74);
+            this.lblCurLevel.Name = "lblCurLevel";
+            this.lblCurLevel.Size = new System.Drawing.Size(98, 15);
+            this.lblCurLevel.TabIndex = 8;
+            this.lblCurLevel.Text = "Level: Currently 0";
+            this.lblCurLevel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.label30.Location = new System.Drawing.Point(420, 32);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(81, 25);
+            this.label30.TabIndex = 7;
+            this.label30.Text = "Account";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.label29.Location = new System.Drawing.Point(91, 32);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(40, 25);
+            this.label29.TabIndex = 6;
+            this.label29.Text = "Bot";
+            // 
             // btnResetSettings
             // 
+            this.btnResetSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnResetSettings.Location = new System.Drawing.Point(625, 555);
             this.btnResetSettings.Name = "btnResetSettings";
             this.btnResetSettings.Scheme = cButton.Schemes.Black;
@@ -965,17 +1113,18 @@
             // lblDump
             // 
             this.lblDump.AutoSize = true;
-            this.lblDump.Location = new System.Drawing.Point(62, 235);
+            this.lblDump.Location = new System.Drawing.Point(262, 319);
             this.lblDump.MaximumSize = new System.Drawing.Size(250, 0);
             this.lblDump.Name = "lblDump";
             this.lblDump.Size = new System.Drawing.Size(12, 15);
             this.lblDump.TabIndex = 4;
             this.lblDump.Text = "-";
+            this.lblDump.Visible = false;
             // 
             // lblXP
             // 
             this.lblXP.AutoSize = true;
-            this.lblXP.Location = new System.Drawing.Point(62, 165);
+            this.lblXP.Location = new System.Drawing.Point(45, 135);
             this.lblXP.Name = "lblXP";
             this.lblXP.Size = new System.Drawing.Size(47, 15);
             this.lblXP.TabIndex = 3;
@@ -984,7 +1133,7 @@
             // lblStardust
             // 
             this.lblStardust.AutoSize = true;
-            this.lblStardust.Location = new System.Drawing.Point(62, 131);
+            this.lblStardust.Location = new System.Drawing.Point(407, 164);
             this.lblStardust.Name = "lblStardust";
             this.lblStardust.Size = new System.Drawing.Size(62, 15);
             this.lblStardust.TabIndex = 2;
@@ -993,7 +1142,7 @@
             // lblTransferred
             // 
             this.lblTransferred.AutoSize = true;
-            this.lblTransferred.Location = new System.Drawing.Point(62, 97);
+            this.lblTransferred.Location = new System.Drawing.Point(45, 104);
             this.lblTransferred.Name = "lblTransferred";
             this.lblTransferred.Size = new System.Drawing.Size(133, 15);
             this.lblTransferred.TabIndex = 1;
@@ -1002,7 +1151,7 @@
             // lblFound
             // 
             this.lblFound.AutoSize = true;
-            this.lblFound.Location = new System.Drawing.Point(62, 62);
+            this.lblFound.Location = new System.Drawing.Point(45, 74);
             this.lblFound.Name = "lblFound";
             this.lblFound.Size = new System.Drawing.Size(107, 15);
             this.lblFound.TabIndex = 0;
@@ -1022,6 +1171,9 @@
             // 
             // textBox1
             // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.ForeColor = System.Drawing.Color.Gainsboro;
@@ -1032,45 +1184,6 @@
             this.textBox1.TabIndex = 0;
             this.textBox1.Text = resources.GetString("textBox1.Text");
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(260, 317);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(85, 15);
-            this.label25.TabIndex = 24;
-            this.label25.Text = "Keep Top *CP*";
-            // 
-            // txtTopX
-            // 
-            this.txtTopX.Location = new System.Drawing.Point(263, 335);
-            this.txtTopX.MaxLength = 32767;
-            this.txtTopX.Name = "txtTopX";
-            this.txtTopX.ReadOnly = false;
-            this.txtTopX.Scheme = cTextBox.Schemes.Black;
-            this.txtTopX.Size = new System.Drawing.Size(144, 30);
-            this.txtTopX.TabIndex = 23;
-            this.txtTopX.Text = "3";
-            this.txtTopX.UseSystemPasswordChar = false;
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(260, 368);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(147, 15);
-            this.label26.TabIndex = 25;
-            this.label26.Text = "Pokemons no matter what";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(262, 305);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(220, 15);
-            this.label27.TabIndex = 20;
-            this.label27.Text = "Settings CANNOT be changed after start";
             // 
             // FrmMain
             // 
@@ -1187,6 +1300,14 @@
         private System.Windows.Forms.Label label25;
         private cTextBox txtTopX;
         private System.Windows.Forms.Label label27;
+        private cButton btnTransfer;
+        private cButton btnEvolve;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label lblRequiredXP;
+        private System.Windows.Forms.Label lblLevelUp;
+        private System.Windows.Forms.Label lblCurLevel;
     }
 }
 

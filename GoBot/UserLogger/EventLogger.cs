@@ -24,5 +24,15 @@ namespace GoBot.UserLogger
             Utils.Events.Log("Main", message);
             //throw new NotImplementedException();
         }
+
+        public void Write(string message, LogLevel level = LogLevel.Info, ConsoleColor color = ConsoleColor.Black)
+        {
+            // Quick fix, this is not going to stay.
+
+            if (level > maxLogLevel)
+                return;
+            Utils.Events.Log("Main", message);
+            //throw new NotImplementedException();
+        }
     }
 }

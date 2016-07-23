@@ -65,11 +65,11 @@ namespace GoBot
                         else
                         {
                             await Task.Delay(5000);
-                            await bot.TransferDuplicatePokemon(UserSettings.KeepCP, false);
+                          
                         }
                     }
                 }
-
+                await bot.TransferDuplicatePokemon(UserSettings.KeepCP, false);
                 await Task.Delay(bot.rand.Next(4500, 7000));
                 await bot.RecycleItems();
                 await Task.Delay(bot.rand.Next(4500, 7000));

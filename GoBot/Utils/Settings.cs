@@ -5,7 +5,6 @@ using System;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
-using AllEnum;
 using PokemonGo.RocketAPI;
 
 namespace GoBot
@@ -43,7 +42,7 @@ namespace GoBot
         {
             get
             {
-                throw new NotImplementedException();
+                return UserSettings.KeepIV / 100;
             }
         }
 
@@ -51,7 +50,7 @@ namespace GoBot
         {
             get
             {
-                throw new NotImplementedException();
+                return UserSettings.KeepCP;
             }
         }
 
@@ -77,6 +76,54 @@ namespace GoBot
         }
 
         public ICollection<PokemonId> PokemonsToEvolve
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool EvolveAllPokemonWithEnoughCandy
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool TransferDuplicatePokemon
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int DelayBetweenMove
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool UsePokemonToNotCatchFilter
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public ICollection<PokemonId> PokemonsNotToTransfer
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public ICollection<PokemonId> PokemonsNotToCatch
         {
             get
             {

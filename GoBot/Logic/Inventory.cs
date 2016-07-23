@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AllEnum;
 using PokemonGo.RocketAPI.GeneratedCode;
 using PokemonGo.RocketAPI;
+using PokemonGo.RocketAPI.Enums;
 
 namespace GoBot.Logic
 {
@@ -30,9 +30,7 @@ namespace GoBot.Logic
             EvolutionRequirements.Add(PokemonId.Chansey, -1);
             EvolutionRequirements.Add(PokemonId.Charizard, -1);
             EvolutionRequirements.Add(PokemonId.Charmeleon, 100);
-            EvolutionRequirements.Add(PokemonId.Charmender, 25);
             EvolutionRequirements.Add(PokemonId.Clefable, -1);
-            EvolutionRequirements.Add(PokemonId.Clefary, 50);
             EvolutionRequirements.Add(PokemonId.Cloyster, -1);
             EvolutionRequirements.Add(PokemonId.Cubone, 50);
             EvolutionRequirements.Add(PokemonId.Dewgong, -1);
@@ -300,7 +298,7 @@ namespace GoBot.Logic
 
             return myItems
                 .Where(x => settings.ItemRecycleFilter.Any(f => f.Key == ((ItemId)x.Item_) && x.Count > f.Value))
-                .Select(x => new Item { Item_ = x.Item_, Count = x.Count - settings.ItemRecycleFilter.Single(f => f.Key == (AllEnum.ItemId)x.Item_).Value, Unseen = x.Unseen });
+                .Select(x => new Item { Item_ = x.Item_, Count = x.Count - settings.ItemRecycleFilter.Single(f => f.Key == (ItemId)x.Item_).Value, Unseen = x.Unseen });
         }
     }
 }

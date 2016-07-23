@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PokemonGo.RocketAPI;
-using AllEnum;
+
 using GoBot.Logic;
 using System.Threading;
 using PokemonGo.RocketAPI.GeneratedCode;
@@ -76,9 +76,9 @@ namespace GoBot
                 Properties.Settings.Default.GoogleAuthValue = string.IsNullOrEmpty(UserSettings.GoogleRefreshToken) ? "" : UserSettings.GoogleRefreshToken;
                 Properties.Settings.Default.Username = txtUser.Text;
                 Properties.Settings.Default.Password = txtPass.Text;
-                Properties.Settings.Default.Lat = GetDouble(txtLat.Text);
-                Properties.Settings.Default.Lng = GetDouble(txtLng.Text);
-                Properties.Settings.Default.Altitude = GetInt(txtAltitude.Text);
+                Properties.Settings.Default.Lat = txtLat.Text.ToDouble();
+                Properties.Settings.Default.Lng = txtLng.Text.ToDouble();
+                Properties.Settings.Default.Altitude = txtAltitude.Text.ToInt();
                 Properties.Settings.Default.Save();
             }
             catch (Exception ex)
@@ -100,7 +100,7 @@ namespace GoBot
                     if (lvWalkLog.Items.Count > 300)
                         lvWalkLog.Items.Clear();
 
-                    ListViewItem lvi = new ListViewItem(e.Sender);
+                    ListViewItem lvi = new ListViewItem($"[{ DateTime.Now.ToString("HH:mm:ss")}]");
                     lvi.SubItems.Add(e.Message);
 
 
@@ -115,28 +115,8 @@ namespace GoBot
             }
         }
 
-        private int GetInt(string str)
-        {
-            int o = 0;
 
-            if (int.TryParse(str, out o))
-            {
-                return o;
-            }
-            Logger.Write($"Count not parse int: {str})");
-            return o;
-        }
-        private double GetDouble(string str)
-        {
-            double o = 0;
 
-            if (double.TryParse(str, out o))
-            {
-                return o;
-            }
-            Logger.Write($"Count not parse double: {str})");
-            return o;
-        }
         private void MsgInfo(string msg)
         {
             MessageBox.Show(msg, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -189,41 +169,41 @@ namespace GoBot
         }
         private void btnStart_Click(object sender, EventArgs e)
         {
-            UserSettings.KeepCP = GetInt(txtBelowCp.Text);
-            UserSettings.EvolveOverCP = GetInt(txtEvolveCp.Text);
-            UserSettings.CatchOverCP = GetInt(txtCatchCp.Text);
+            UserSettings.KeepCP = (txtBelowCp.Text).ToInt();
+            UserSettings.EvolveOverCP = (txtEvolveCp.Text).ToInt(); 
+            UserSettings.CatchOverCP = (txtCatchCp.Text).ToInt(); 
 
-            UserSettings.KeepIV = GetInt(txtTransferIV.Text);
-            UserSettings.CatchOverIV = GetInt(txtCatchIV.Text);
-            UserSettings.EvolveOverIV = GetInt(txtEvolveIV.Text);
+            UserSettings.KeepIV = (txtTransferIV.Text).ToInt(); 
+            UserSettings.CatchOverIV = (txtCatchIV.Text).ToInt(); 
+            UserSettings.EvolveOverIV = (txtEvolveIV.Text).ToInt(); 
 
             UserSettings.Username = txtUser.Text;
             UserSettings.Password = txtPass.Text;
             UserSettings.Auth = cbAuthType.SelectedIndex == 0 ? PokemonGo.RocketAPI.Enums.AuthType.Ptc : PokemonGo.RocketAPI.Enums.AuthType.Google;
             UserSettings.UseBerries = clbBerries.CheckedItems.Count > 0;
             UserSettings.WalkingSpeed = 20;
-            UserSettings.StartLat = GetDouble(txtLat.Text);
-            UserSettings.StartLng = GetDouble(txtLng.Text);
+            UserSettings.StartLat = (txtLat.Text).ToDouble();
+            UserSettings.StartLng = (txtLng.Text).ToDouble();
             UserSettings.CatchPokemon = chkCatchPokes.Checked;
             UserSettings.GetForts = chkGetForts.Checked;
 
-            UserSettings.TopX = GetInt(txtTopX.Text);
+            UserSettings.TopX = (txtTopX.Text).ToInt();
 
-            UserSettings.Altitude = GetDouble(txtAltitude.Text);
+            UserSettings.Altitude = (txtAltitude.Text).ToDouble();
 
             Settings settings = new Settings();
 
 
-            settings.recycleSettings.Add(GetInt(txtPB.Text));
-            settings.recycleSettings.Add(GetInt(txtGPB.Text));
-            settings.recycleSettings.Add(GetInt(txtUPB.Text));
-            settings.recycleSettings.Add(GetInt(txtP.Text));
-            settings.recycleSettings.Add(GetInt(txtSP.Text));
-            settings.recycleSettings.Add(GetInt(txtHP.Text));
-            settings.recycleSettings.Add(GetInt(txtMP.Text));
-            settings.recycleSettings.Add(GetInt(txtRevive.Text));
-            settings.recycleSettings.Add(GetInt(txtMaxRevive.Text));
-            settings.recycleSettings.Add(GetInt(txtRB.Text));
+            settings.recycleSettings.Add((txtPB.Text).ToInt());
+            settings.recycleSettings.Add((txtGPB.Text).ToInt());
+            settings.recycleSettings.Add((txtUPB.Text).ToInt());
+            settings.recycleSettings.Add((txtP.Text).ToInt());
+            settings.recycleSettings.Add((txtSP.Text).ToInt());
+            settings.recycleSettings.Add((txtHP.Text).ToInt());
+            settings.recycleSettings.Add((txtMP.Text).ToInt());
+            settings.recycleSettings.Add((txtRevive.Text).ToInt());
+            settings.recycleSettings.Add((txtMaxRevive.Text).ToInt());
+            settings.recycleSettings.Add((txtRB.Text).ToInt());
 
             bot = new BotInstance(settings);
 
@@ -267,8 +247,10 @@ namespace GoBot
                 lblTransferred.Text = Statistics.PokemonTransferred;
                 lblStardust.Text = Statistics.Stardust;
                 lblXP.Text = Statistics.ExperiencePerHour;
-
-                lblDump.Text = bot._stats.ToString();
+                lblCurLevel.Text = Statistics.PlayerLevel;
+                lblLevelUp.Text = Statistics.LevelUp;
+                lblRequiredXP.Text = Statistics.RequiredXP;
+                //lblDump.Text = bot._stats.ToString();
             }
             catch (Exception ex)
             {
@@ -281,6 +263,16 @@ namespace GoBot
             try
             {
                 Properties.Settings.Default.Reset();
+                Properties.Settings.Default.Save();
+
+                Properties.Settings.Default.GoogleAuthValue = "";
+                Properties.Settings.Default.Username = "Username";
+                Properties.Settings.Default.Password = "Password";
+                Properties.Settings.Default.Lat = 0;
+                Properties.Settings.Default.Lng = 0;
+                Properties.Settings.Default.Altitude = 0;
+
+                Properties.Settings.Default.Save();
             }
             catch (Exception ex)
             {
@@ -288,5 +280,26 @@ namespace GoBot
             }
         }
 
+        private async void btnEvolve_Click(object sender, EventArgs e)
+        {
+            if (bot == null || !bot.running)
+            {
+                MsgError("You cannot override when the bot is not running...");
+                return;
+            }
+
+            await bot.EvolveAllPokemonWithEnoughCandy();
+        }
+
+        private async void btnTransfer_Click(object sender, EventArgs e)
+        {
+            if (bot == null || !bot.running)
+            {
+                MsgError("You cannot override when the bot is not running...");
+                return;
+            }
+
+            await bot.TransferDuplicatePokemon(UserSettings.KeepCP, false);
+        }
     }
 }
