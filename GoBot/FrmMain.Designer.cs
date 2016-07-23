@@ -446,12 +446,13 @@
             this.label25.AutoSize = true;
             this.label25.Location = new System.Drawing.Point(260, 317);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(85, 15);
+            this.label25.Size = new System.Drawing.Size(109, 15);
             this.label25.TabIndex = 24;
-            this.label25.Text = "Keep Top *CP*";
+            this.label25.Text = "Keep Top (bugged)";
             // 
             // txtTopX
             // 
+            this.txtTopX.Enabled = false;
             this.txtTopX.Location = new System.Drawing.Point(263, 335);
             this.txtTopX.MaxLength = 32767;
             this.txtTopX.Name = "txtTopX";
@@ -459,7 +460,7 @@
             this.txtTopX.Scheme = cTextBox.Schemes.Black;
             this.txtTopX.Size = new System.Drawing.Size(176, 30);
             this.txtTopX.TabIndex = 23;
-            this.txtTopX.Text = "3";
+            this.txtTopX.Text = "0";
             this.txtTopX.UseSystemPasswordChar = false;
             // 
             // txtEvolveIV

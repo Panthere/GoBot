@@ -130,5 +130,21 @@ namespace GoBot
                 throw new NotImplementedException();
             }
         }
+
+        public int DelayBetweenPokemonCatch
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int KeepMinDuplicatePokemon
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

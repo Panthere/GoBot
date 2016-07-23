@@ -17,7 +17,6 @@ namespace GoBot.Logic
 
             EvolutionRequirements.Add(PokemonId.Abra, 25);
             EvolutionRequirements.Add(PokemonId.Aerodactyl, -1);
-            EvolutionRequirements.Add(PokemonId.Alakhazam, -1);
             EvolutionRequirements.Add(PokemonId.Arbok, -1);
             EvolutionRequirements.Add(PokemonId.Arcanine, -1);
             EvolutionRequirements.Add(PokemonId.Articuno, -1);
@@ -54,7 +53,6 @@ namespace GoBot.Logic
             EvolutionRequirements.Add(PokemonId.Flareon, -1);
             EvolutionRequirements.Add(PokemonId.Gastly, 25);
             EvolutionRequirements.Add(PokemonId.Gengar, -1);
-            EvolutionRequirements.Add(PokemonId.Geoduge, 25);
             EvolutionRequirements.Add(PokemonId.Gloom, 100);
             EvolutionRequirements.Add(PokemonId.Golbat, -1);
             EvolutionRequirements.Add(PokemonId.Goldeen, 50);
@@ -132,7 +130,6 @@ namespace GoBot.Logic
             EvolutionRequirements.Add(PokemonId.Rattata, 25);
             EvolutionRequirements.Add(PokemonId.Rhydon, -1);
             EvolutionRequirements.Add(PokemonId.Rhyhorn, 50);
-            EvolutionRequirements.Add(PokemonId.Sandlash, -1);
             EvolutionRequirements.Add(PokemonId.Sandshrew, 50);
             EvolutionRequirements.Add(PokemonId.Scyther, -1);
             EvolutionRequirements.Add(PokemonId.Seadra , -1);
@@ -154,7 +151,6 @@ namespace GoBot.Logic
             EvolutionRequirements.Add(PokemonId.Venomoth, -1);
             EvolutionRequirements.Add(PokemonId.Venonat, 50);
             EvolutionRequirements.Add(PokemonId.Venusaur, -1);
-            EvolutionRequirements.Add(PokemonId.Victreebell, -1);
             EvolutionRequirements.Add(PokemonId.Vileplume, -1);
             EvolutionRequirements.Add(PokemonId.Voltorb, 50);
             EvolutionRequirements.Add(PokemonId.Vulpix, 50);

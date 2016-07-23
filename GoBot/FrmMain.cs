@@ -77,9 +77,12 @@ namespace GoBot
                 txtUser.Text = Properties.Settings.Default.Username;
                 txtPass.Text = Properties.Settings.Default.Password;
 
+                txtGoogleAuth.Text = UserSettings.GoogleRefreshToken;
+
                 txtLat.Text = Properties.Settings.Default.Lat.ToString();
                 txtLng.Text = Properties.Settings.Default.Lng.ToString();
                 txtAltitude.Text = Properties.Settings.Default.Altitude.ToString();
+
 
                 cbAuthType.SelectedIndex = Properties.Settings.Default.AuthType == "Ptc" ? 0 : 1;
 

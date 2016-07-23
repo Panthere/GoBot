@@ -82,6 +82,7 @@ namespace GoBot.Logic
 
                     
                     await ExecuteFarmingForts(UserSettings.CatchPokemon);
+
                     /*await EvolveAllPokemonWithEnoughCandy();
                     await TransferDuplicatePokemon(true);
                     await RecycleItems();
@@ -99,6 +100,7 @@ namespace GoBot.Logic
                 }
 
                 T.Delay(rand.Next(8000, 15000));
+                Logger.Write($"Looping PostLogin Again", LogLevel.Info);
             }
             Logger.Write($"We're out of the loop now, Running is {running}");
             // walk home
@@ -174,26 +176,32 @@ namespace GoBot.Logic
             {
                 if (!running)
                     break;
-
-                if (UserSettings.Teleport)
+                try
                 {
-                    var update = await _client.UpdatePlayerLocation(pokemon.Latitude, pokemon.Longitude, UserSettings.Altitude);
+                    if (UserSettings.Teleport)
+                    {
+                        var update = await _client.UpdatePlayerLocation(pokemon.Latitude, pokemon.Longitude, UserSettings.Altitude);
+                    }
+                    else
+                    {
+                        var update = await _navigation.HumanLikeWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
+                    }
+
+                    var encounter = await _client.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnpointId);
+
+                    var pokeId = encounter?.WildPokemon?.PokemonData.PokemonId;
+
+
+                    await CatchEncounter(encounter, pokemon);
+
+
+
+                    T.Delay(rand.Next(15000, 30000));
                 }
-                else
+                catch (Exception ex)
                 {
-                    var update = await _navigation.HumanLikeWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
+                    Logger.Write($"Exception CatchNearby: {ex}");
                 }
-
-                var encounter = await _client.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnpointId);
-
-                var pokeId = encounter?.WildPokemon?.PokemonData.PokemonId;
-
-                
-                await CatchEncounter(encounter, pokemon);
-
-
-
-                T.Delay(rand.Next(15000, 30000));
             }
         }
 
@@ -204,51 +212,59 @@ namespace GoBot.Logic
             CatchPokemonResponse caughtPokemonResponse;
             do
             {
-                PokemonData pokeData = encounter?.WildPokemon?.PokemonData;
-
-               
-
-                if (encounter?.CaptureProbability.CaptureProbability_.First() < (UserSettings.BerryProbability / 100))
+                try
                 {
-                    if (pokeData != null)
+                    PokemonData pokeData = encounter?.WildPokemon?.PokemonData;
+
+
+
+                    if (encounter?.CaptureProbability.CaptureProbability_.First() < (UserSettings.BerryProbability / 100))
                     {
-                        if (BerryList.Contains(pokeData.PokemonId))
+                        if (pokeData != null)
                         {
-                            await UseBerry(pokemon.EncounterId, pokemon.SpawnpointId);
+                            if (BerryList.Contains(pokeData.PokemonId))
+                            {
+                                await UseBerry(pokemon.EncounterId, pokemon.SpawnpointId);
+                            }
                         }
+
+
                     }
-                    
-                    
-                }
 
-                var pokeball = await GetBestBall(encounter?.WildPokemon);
-                
-                if (pokeball == MiscEnums.Item.ITEM_UNKNOWN)
+                    var pokeball = await GetBestBall(encounter?.WildPokemon);
+
+                    if (pokeball == MiscEnums.Item.ITEM_UNKNOWN)
+                    {
+                        Logger.Write("No Pokeballs to use! STOPPING BOT!");
+                        Stop();
+                        return;
+                    }
+                    caughtPokemonResponse = await _client.CatchPokemon(pokemon.EncounterId, pokemon.SpawnpointId, pokemon.Latitude, pokemon.Longitude, pokeball);
+
+                    Logger.Write(caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? $"We caught a {pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} ({CalculatePokemonPerfection(encounter?.WildPokemon?.PokemonData).ToString("0.00")}% perfection) using a {pokeball}" : $"{pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} got away while using a {pokeball}..", LogLevel.Info);
+
+                    if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
+                    {
+                        pokeData = encounter?.WildPokemon?.PokemonData;
+
+                        foreach (int xp in caughtPokemonResponse.Scores.Xp)
+                            _stats.addExperience(xp);
+
+                        var profile = await _client.GetProfile();
+                        _stats.getStardust(profile.Profile.Currency.ToArray()[1].Amount);
+
+                        _stats.increasePokemons();
+                        _stats.updateConsoleTitle(_inventory);
+                        await Events.PokemonCaught(encounter?.WildPokemon?.PokemonData);
+                    }
+
+                    T.Delay(rand.Next(1500, 3000));
+                }
+                catch (Exception ex)
                 {
-                    Logger.Write("No Pokeballs to use! STOPPING BOT!");
-                    Stop();
-                    return;
+                    Logger.Write($"Exception in Encounter: {ex}");
+                    break;
                 }
-                caughtPokemonResponse = await _client.CatchPokemon(pokemon.EncounterId, pokemon.SpawnpointId, pokemon.Latitude, pokemon.Longitude, pokeball);
-
-                Logger.Write(caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? $"We caught a {pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} ({CalculatePokemonPerfection(encounter?.WildPokemon?.PokemonData).ToString("0.00")}% perfection) using a {pokeball}" : $"{pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} got away while using a {pokeball}..", LogLevel.Info);
-
-                if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
-                {
-                    pokeData = encounter?.WildPokemon?.PokemonData;
-
-                    foreach (int xp in caughtPokemonResponse.Scores.Xp)
-                        _stats.addExperience(xp);
-
-                    var profile = await _client.GetProfile();
-                    _stats.getStardust(profile.Profile.Currency.ToArray()[1].Amount);
-
-                    _stats.increasePokemons();
-                    _stats.updateConsoleTitle(_inventory);
-                    await Events.PokemonCaught(encounter?.WildPokemon?.PokemonData);
-                }
-
-                T.Delay(rand.Next(1500, 3000));
             }
             while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed);
         }
