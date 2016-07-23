@@ -6,6 +6,10 @@ A simple bot using the Rocket API for Pokemon Go.
 This is not a fully functioning bot. This was made in only a couple of hours. The API that this uses changes several hundred times a day.
 If you build from source there may be some small issues to fix (as you will have to download the API too!)
 
+# Screenshots
+![Main Settings](http://i.imgur.com/O5XTB2R.png)
+![Statistics](http://i.imgur.com/fmS38kZ.png)
+
 # API Link 
 FeroxRev has sadly quit the scene. https://github.com/NecronomiconCoding/Pokemon-Go-Bot is the API that will work.
 
@@ -26,7 +30,8 @@ FeroxRev has sadly quit the scene. https://github.com/NecronomiconCoding/Pokemon
 # Donate
 Bitcoin Address: 1LAPANo2N1jBBBHvBEqbMxG13pWqV1xCsY
 
+
 # To Do
 - Don't waste pokeballs on softbanned accounts
 - Tutorial for retards
-- ...
+- Runtime in stats
