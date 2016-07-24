@@ -11,7 +11,7 @@ If you build from source there may be some small issues to fix (as you will have
 ![Statistics](http://i.imgur.com/fmS38kZ.png)
 
 # API Link 
-FeroxRev has sadly quit the scene. https://github.com/NecronomiconCoding/Pokemon-Go-Bot is the API that will work.
+https://github.com/FeroxRev/Pokemon-Go-Rocket-API
 
 # Features
 - Walking (human)
