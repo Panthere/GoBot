@@ -10,6 +10,7 @@ using PokemonGo.RocketAPI.GeneratedCode;
 using PokemonGo.RocketAPI.Login;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,8 +66,13 @@ namespace GoBot.Logic
                         }
                         else
                         {
+                            _client.SetAuthType(AuthType.Google);
+
                             var devCode = await GoogleLogin.GetDeviceCode();
                             Logger.Write($"Your Google Device Code is {devCode.user_code} enter it at {devCode.verification_url}");
+                            
+                            //Process.Start(devCode.verification_url);
+
                             Logger.Write("Once entered, please wait for the bot to start...");
                             var respModel = await GoogleLogin.GetAccessToken(devCode);
                             if (respModel == null)
@@ -87,32 +93,46 @@ namespace GoBot.Logic
                     }
                         
                     running = true;
+
                     await PostLoginExecute();
+
                     running = true;
+
+                    
                 }
-                catch (AccessTokenExpiredException)
+                catch (Exception ex)
                 {
-                    Logger.Write($"Access token expired", LogLevel.Info);
+                    Logger.Write($"Execute Exception: {ex}", LogLevel.Info);
                 }
                 Logger.Write($"Looping Execute Again", LogLevel.Info);
-                T.Delay(rand.Next(8000, 15000));
+                await T.Delay(rand.Next(8000, 15000));
             }
         }
         public async Task PostLoginExecute()
         {
             while (running)
             {
+
                 try
                 {
-                    await _client.SetServer();
+                    if (!UserSettings.CatchPokemon && !UserSettings.GetForts)
+                    {
+                        // idle instead
+                        await _client.SetServer();
 
-                    await EvolveAllPokemonWithEnoughCandy();
-                    await RecycleItems();
-                    await TransferDuplicatePokemon(UserSettings.KeepCP, true);
 
-                    
-                    await ExecuteFarmingForts(UserSettings.CatchPokemon);
+                    }
+                    else
+                    {
+                        await _client.SetServer();
 
+                        await EvolveAllPokemonWithEnoughCandy();
+                        await RecycleItems();
+                        await TransferDuplicatePokemon(UserSettings.KeepCP, true);
+
+
+                        await ExecuteFarmingForts(UserSettings.CatchPokemon);
+                    }
                     /*await EvolveAllPokemonWithEnoughCandy();
                     await TransferDuplicatePokemon(true);
                     await RecycleItems();
@@ -126,11 +146,11 @@ namespace GoBot.Logic
                 catch (Exception ex)
                 {
                     //if ()
-                    Logger.Write($"Exception (postinvoke): {ex}", LogLevel.Error);
+                    Logger.Write($"Exception (PostLogin): {ex}", LogLevel.Error);
                 }
 
-                T.Delay(rand.Next(8000, 15000));
-                Logger.Write($"Looping PostLogin Again", LogLevel.Info);
+                await T.Delay(rand.Next(8000, 15000));
+                Logger.Write($"Looping PostLogin Again - Idle: {!UserSettings.CatchPokemon && !UserSettings.GetForts}", LogLevel.Info);
             }
             Logger.Write($"We're out of the loop now, Running is {running}");
             // walk home
@@ -156,6 +176,7 @@ namespace GoBot.Logic
 
             var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts).Where(i => i.Type == FortType.Checkpoint && i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLat, _client.CurrentLng), new Navigation.Location(i.Latitude, i.Longitude)));
 
+            Logger.Write($"Farming {pokeStops.ToList().Count} PokeStops... {running}");
             foreach (var pokeStop in pokeStops)
             {
                 if (!running)
@@ -182,7 +203,7 @@ namespace GoBot.Logic
                     await Events.FortFarmed(fortSearch, pokeStop);
 
                     Logger.Write($"Farmed XP: {fortSearch.ExperienceAwarded}, Gems: { fortSearch.GemsAwarded}, Eggs: {fortSearch.PokemonDataEgg} Items: {StringUtils.GetSummedFriendlyNameOfItemAwardList(fortSearch.ItemsAwarded)}", LogLevel.Info);
-                    T.Delay(rand.Next(3000, 6000));
+                    await T.Delay(rand.Next(3000, 6000));
                 }
 
                 var profile = await _client.GetProfile();
@@ -192,7 +213,7 @@ namespace GoBot.Logic
                 if (getPokes)
                    await ExecuteCatchAllNearbyPokemons();
 
-                T.Delay(15000);
+                await T.Delay(15000);
             }
         }
 
@@ -226,7 +247,7 @@ namespace GoBot.Logic
 
 
 
-                    T.Delay(rand.Next(15000, 30000));
+                    await T.Delay(rand.Next(15000, 30000));
                 }
                 catch (Exception ex)
                 {
@@ -288,7 +309,7 @@ namespace GoBot.Logic
                         await Events.PokemonCaught(encounter?.WildPokemon?.PokemonData);
                     }
 
-                    T.Delay(rand.Next(1500, 3000));
+                    await T.Delay(rand.Next(1500, 3000));
                 }
                 catch (Exception ex)
                 {
@@ -390,7 +411,7 @@ namespace GoBot.Logic
 
             var useRaspberry = await _client.UseCaptureItem(encounterId, ItemId.ItemRazzBerry, spawnPointId);
             Logger.Write($"Use Rasperry. Remaining: {berry.Count}", LogLevel.Info);
-            T.Delay(rand.Next(4000, 8000));
+            await T.Delay(rand.Next(4000, 8000));
         }
         public static float CalculatePokemonPerfection(PokemonData poke)
         {
@@ -420,7 +441,7 @@ namespace GoBot.Logic
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
 
 
-                T.Delay(rand.Next(3000, 5000));
+                await T.Delay(rand.Next(3000, 5000));
             }
         }
 
@@ -447,7 +468,7 @@ namespace GoBot.Logic
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 Logger.Write($"Transferred {duplicatePokemon.PokemonId} with {duplicatePokemon.Cp} CP", LogLevel.Info);
-                T.Delay(rand.Next(3000, 6000));
+                await T.Delay(rand.Next(3000, 6000));
             }
         }
 
@@ -470,7 +491,7 @@ namespace GoBot.Logic
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 Logger.Write($"Transferred {pokemon.PokemonId} with {pokemon.Cp} CP", LogLevel.Info);
-                T.Delay(rand.Next(3000, 6000));
+                await T.Delay(rand.Next(3000, 6000));
             }
         }
 
@@ -493,7 +514,7 @@ namespace GoBot.Logic
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 Logger.Write($"Transferred {pokemon.PokemonId} with {pokemon.Cp} CP ({CalculatePokemonPerfection(pokemon).ToString("0.00")}%)", LogLevel.Info);
-                T.Delay(rand.Next(3000, 6000));
+                await T.Delay(rand.Next(3000, 6000));
             }
         }
 
@@ -520,7 +541,7 @@ namespace GoBot.Logic
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
 
 
-                T.Delay(rand.Next(3000, 5000));
+                await T.Delay(rand.Next(3000, 5000));
             }
         }
 
@@ -549,7 +570,7 @@ namespace GoBot.Logic
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
 
 
-                T.Delay(rand.Next(3500, 5000));
+                await T.Delay(rand.Next(3500, 5000));
             }
         }
 
@@ -561,7 +582,7 @@ namespace GoBot.Logic
             {
                 var transfer = await _client.RecycleItem((ItemId)item.Item_, item.Count);
                 Logger.Write($"Recycled {item.Count}x {(ItemId)item.Item_}", LogLevel.Info);
-                T.Delay(rand.Next(4000, 8000));
+                await T.Delay(rand.Next(4000, 8000));
             }
         }
 

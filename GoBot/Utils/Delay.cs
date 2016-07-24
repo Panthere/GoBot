@@ -9,7 +9,7 @@ namespace GoBot.Utils
 {
     public static class T
     {
-        public static async void Delay(int delay)
+        public static async Task Delay(int delay)
         {
             if (UserSettings.UseDelays)
             {

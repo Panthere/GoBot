@@ -681,7 +681,7 @@ namespace GoBot
 
                         int[] candy = await bot._inventory.GetRequiredCandy(pokemonSettings, pokemonFamilies, pd.PokemonId);
 
-                        if (candy[0] != candy[1])
+                        if (candy[0] < candy[1])
                         {
                             Logger.Write($"Skipped {pd.PokemonId} because it only had {candy[0]} out of {candy[1]} required candies");
                             continue;
