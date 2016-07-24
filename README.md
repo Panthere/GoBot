@@ -27,6 +27,9 @@ https://github.com/FeroxRev/Pokemon-Go-Rocket-API
 - Use berries on certain pokemons if probability of capture is less than x (out of 100)
 - Recycle certain items if you have more than the specified amount
 - Basic statistics (thanks to: https://github.com/Spegeli/Pokemon-Go-Rocket-API)
+- Perform tasks while idling in a location
+- Evolve, or transfer selected pokemon from your inventory
+- Show your pokemon inventory, pokeball inventory, or item inventory (detailed).
 
 # Donate
 Bitcoin Address: 1LAPANo2N1jBBBHvBEqbMxG13pWqV1xCsY
