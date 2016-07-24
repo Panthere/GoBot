@@ -199,6 +199,19 @@ namespace GoBot.Logic
                 .Where(p => p != null);
         }
 
+        public async Task<PokemonData> GetLastCaughtPokemon(PokemonData match)
+        {
+            var inventory = await _client.GetInventory();
+            return
+                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.Pokemon)
+                    .Where(p => p != null && p?.PokemonId > 0
+                    && p?.Cp == match.Cp
+                    && p?.PokemonId == match.PokemonId
+                    && p?.WeightKg == match.WeightKg 
+                    && p?.Stamina == match.Stamina
+                    && BotInstance.CalculatePokemonPerfection(p) == BotInstance.CalculatePokemonPerfection(match)).First();
+        }
+
         public async Task<IEnumerable<PokemonData>> GetPokemons()
         {
             var inventory = await _client.GetInventory();

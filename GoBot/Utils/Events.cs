@@ -37,7 +37,7 @@ namespace GoBot.Utils
             FortFarmedReset.Reset();
         }
 
-        public static async Task PokemonCaught(PokemonData poke)
+        public static async Task PokemonCaught(PokemonData poke, ulong pokemonId)
         {
 
             OnPokemonCaught(null, new PokemonCaughtArgs() { CaughtPokemon = poke });
@@ -79,6 +79,7 @@ namespace GoBot.Utils
     public class PokemonCaughtArgs : EventArgs
     {
         public PokemonData CaughtPokemon;
+        public ulong CaughtID;
     }
     public class FortFarmedArgs : EventArgs
     {

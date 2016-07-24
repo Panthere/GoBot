@@ -117,10 +117,11 @@ namespace GoBot.Logic
                 {
                     if (!UserSettings.CatchPokemon && !UserSettings.GetForts)
                     {
-                        // idle instead
+                        // idle instead and clean/evolve/whatever.
                         await _client.SetServer();
-
-
+                        await EvolveAllPokemonWithEnoughCandy();
+                        await RecycleItems();
+                        await TransferDuplicatePokemon(UserSettings.KeepCP, false);
                     }
                     else
                     {
@@ -128,7 +129,7 @@ namespace GoBot.Logic
 
                         await EvolveAllPokemonWithEnoughCandy();
                         await RecycleItems();
-                        await TransferDuplicatePokemon(UserSettings.KeepCP, true);
+                        await TransferDuplicatePokemon(UserSettings.KeepCP, false);
 
 
                         await ExecuteFarmingForts(UserSettings.CatchPokemon);
@@ -297,7 +298,7 @@ namespace GoBot.Logic
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
                         pokeData = encounter?.WildPokemon?.PokemonData;
-
+                        
                         foreach (int xp in caughtPokemonResponse.Scores.Xp)
                             _stats.addExperience(xp);
 
@@ -306,7 +307,7 @@ namespace GoBot.Logic
 
                         _stats.increasePokemons();
                         _stats.updateConsoleTitle(_inventory);
-                        await Events.PokemonCaught(encounter?.WildPokemon?.PokemonData);
+                        await Events.PokemonCaught(encounter?.WildPokemon?.PokemonData, caughtPokemonResponse.CapturedPokemonId);
                     }
 
                     await T.Delay(rand.Next(1500, 3000));
