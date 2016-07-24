@@ -7,6 +7,7 @@ This is not a fully functioning bot. This was made in only a couple of hours. Th
 If you build from source there may be some small issues to fix (as you will have to download the API too!)
 
 # Screenshots
+![Latest](http://i.imgur.com/exz22XW.gif)
 ![Main Settings](http://i.imgur.com/O5XTB2R.png)
 ![Statistics](http://i.imgur.com/fmS38kZ.png)
 
@@ -34,4 +35,6 @@ Bitcoin Address: 1LAPANo2N1jBBBHvBEqbMxG13pWqV1xCsY
 # To Do
 - Don't waste pokeballs on softbanned accounts
 - Tutorial for retards
-- Right click to evolve/transfer/recycle
+- Integrate Google Maps Directional API
+- Integrate 'Live Map' of area and player moving
+
