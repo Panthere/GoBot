@@ -70,9 +70,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\GitHub\Pokemon-Go-Rocket-API\PokemonGo.RocketAPI\bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Pokemon Go Rocket API, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Pokemon Go Rocket API, Version=1.0.3.4, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\GitHub\Pokemon-Go-Bot\PokemonGo.RocketAPI\bin\Debug\Pokemon Go Rocket API.dll</HintPath>
+      <HintPath>..\..\..\..\GitHub\Pokemon-Go-Rocket-API\PokemonGo.RocketAPI\bin\Debug\Pokemon Go Rocket API.dll</HintPath>
     </Reference>
     <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -114,6 +114,7 @@
     <Compile Include="Logic\Inventory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserLogger\ILogger.cs" />
     <Compile Include="UserSettings.cs" />
     <Compile Include="Utils\Delay.cs" />
     <Compile Include="Utils\Events.cs" />

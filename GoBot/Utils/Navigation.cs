@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using PokemonGo.RocketAPI.GeneratedCode;
 using PokemonGo.RocketAPI;
+using GoBot.UserLogger;
 
 namespace GoBot.Utils
 {

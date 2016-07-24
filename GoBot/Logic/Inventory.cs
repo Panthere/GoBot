@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using PokemonGo.RocketAPI.GeneratedCode;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
+using AllEnum;
 
 namespace GoBot.Logic
 {
@@ -222,6 +223,14 @@ namespace GoBot.Logic
                     .Where(p => p != null && p?.FamilyId != PokemonFamilyId.FamilyUnset);
         }
 
+        public async Task<int[]> GetRequiredCandy(List<PokemonSettings> pokemonSettings, PokemonFamily[] pokemonFamilies, PokemonId pokemon)
+        {
+           
+            var settings = pokemonSettings.Single(x => x.PokemonId == pokemon);
+            var familyCandy = pokemonFamilies.Single(x => settings.FamilyId == x.FamilyId);
+
+            return new[] { familyCandy.Candy, settings.CandyToEvolve };
+        }
 
         public async Task<IEnumerable<PokemonData>> GetDuplicatePokemonToTransfer(int belowCp, bool keepPokemonsThatCanEvolve = false)
         {
@@ -319,8 +328,8 @@ namespace GoBot.Logic
             var myItems = await GetItems();
 
             return myItems
-                .Where(x => settings.ItemRecycleFilter.Any(f => f.Key == ((ItemId)x.Item_) && x.Count > f.Value))
-                .Select(x => new Item { Item_ = x.Item_, Count = x.Count - settings.ItemRecycleFilter.Single(f => f.Key == (ItemId)x.Item_).Value, Unseen = x.Unseen });
+                .Where(x => UserSettings.ItemRecycleFilter.Any(f => f.Key == ((ItemId)x.Item_) && x.Count > f.Value))
+                .Select(x => new Item { Item_ = x.Item_, Count = x.Count - UserSettings.ItemRecycleFilter.Single(f => f.Key == (ItemId)x.Item_).Value, Unseen = x.Unseen });
         }
     }
 }

@@ -10,6 +10,7 @@ using PokemonGo.RocketAPI.GeneratedCode;
 using PokemonGo.RocketAPI.Helpers;
 using GoBot.Logic;
 using PokemonGo.RocketAPI;
+using GoBot.UserLogger;
 
 namespace GoBot.Utils
 {

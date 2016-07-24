@@ -27,17 +27,36 @@ class Sorter : System.Collections.IComparer
                 return 0;
             try
             {
-                float fl1 = float.Parse(l1.SubItems[Column].Text);
-                float fl2 = float.Parse(l2.SubItems[Column].Text);
-
-                if (Order == SortOrder.Ascending)
+                if (l1.SubItems[Column].Text.Contains("/") && l2.SubItems[Column].Text.Contains("/"))
                 {
-                    return fl1.CompareTo(fl2);
+                    float fl1 = float.Parse(l1.SubItems[Column].Text.Split('/')[0]);
+                    float fl2 = float.Parse(l2.SubItems[Column].Text.Split('/')[0]);
+
+                    if (Order == SortOrder.Ascending)
+                    {
+                        return fl1.CompareTo(fl2);
+                    }
+                    else
+                    {
+                        return fl2.CompareTo(fl1);
+                    }
                 }
                 else
                 {
-                    return fl2.CompareTo(fl1);
+                    float fl1 = float.Parse(l1.SubItems[Column].Text);
+                    float fl2 = float.Parse(l2.SubItems[Column].Text);
+
+                    if (Order == SortOrder.Ascending)
+                    {
+                        return fl1.CompareTo(fl2);
+                    }
+                    else
+                    {
+                        return fl2.CompareTo(fl1);
+                    }
+
                 }
+               
             }
             catch (Exception)
             {

@@ -1,4 +1,5 @@
-﻿using PokemonGo.RocketAPI;
+﻿using GoBot.UserLogger;
+using PokemonGo.RocketAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;

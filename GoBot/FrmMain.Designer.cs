@@ -62,6 +62,8 @@
             this.chkInverseBerries = new cCheckBox();
             this.label13 = new System.Windows.Forms.Label();
             this.clbBerries = new System.Windows.Forms.CheckedListBox();
+            this.cmsUntickAll = new cContextMenuStrip();
+            this.uncheckAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label10 = new System.Windows.Forms.Label();
             this.txtEvolveCp = new cTextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -70,7 +72,7 @@
             this.chkInverseCatch = new cCheckBox();
             this.chkInverseEvolve = new cCheckBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.txtBelowCp = new cTextBox();
+            this.txtTransferCp = new cTextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.clbTransfer = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -110,17 +112,24 @@
             this.txtUser = new cTextBox();
             this.btnStart = new cButton();
             this.tabPage8 = new System.Windows.Forms.TabPage();
-            this.label34 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
             this.lvPokemon = new System.Windows.Forms.ListView();
+            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader18 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cmsRefreshPokemon = new cContextMenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.evolveSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.transferSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.lvBalls = new System.Windows.Forms.ListView();
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -151,6 +160,7 @@
             this.cTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.cmsUntickAll.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage8.SuspendLayout();
@@ -353,7 +363,7 @@
             this.tabPage3.Controls.Add(this.chkInverseCatch);
             this.tabPage3.Controls.Add(this.chkInverseEvolve);
             this.tabPage3.Controls.Add(this.label8);
-            this.tabPage3.Controls.Add(this.txtBelowCp);
+            this.tabPage3.Controls.Add(this.txtTransferCp);
             this.tabPage3.Controls.Add(this.label3);
             this.tabPage3.Controls.Add(this.clbTransfer);
             this.tabPage3.Controls.Add(this.label2);
@@ -545,12 +555,27 @@
             this.clbBerries.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
             this.clbBerries.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.clbBerries.CheckOnClick = true;
+            this.clbBerries.ContextMenuStrip = this.cmsUntickAll;
             this.clbBerries.ForeColor = System.Drawing.Color.Gainsboro;
             this.clbBerries.FormattingEnabled = true;
             this.clbBerries.Location = new System.Drawing.Point(26, 322);
             this.clbBerries.Name = "clbBerries";
             this.clbBerries.Size = new System.Drawing.Size(207, 162);
             this.clbBerries.TabIndex = 15;
+            // 
+            // cmsUntickAll
+            // 
+            this.cmsUntickAll.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.uncheckAllToolStripMenuItem});
+            this.cmsUntickAll.Name = "cmsUntickAll";
+            this.cmsUntickAll.Size = new System.Drawing.Size(138, 26);
+            // 
+            // uncheckAllToolStripMenuItem
+            // 
+            this.uncheckAllToolStripMenuItem.Name = "uncheckAllToolStripMenuItem";
+            this.uncheckAllToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.uncheckAllToolStripMenuItem.Text = "Uncheck All";
+            this.uncheckAllToolStripMenuItem.Click += new System.EventHandler(this.uncheckAllToolStripMenuItem_Click);
             // 
             // label10
             // 
@@ -636,17 +661,17 @@
             this.label8.TabIndex = 7;
             this.label8.Text = "Below (CP/IV)";
             // 
-            // txtBelowCp
+            // txtTransferCp
             // 
-            this.txtBelowCp.Location = new System.Drawing.Point(506, 256);
-            this.txtBelowCp.MaxLength = 32767;
-            this.txtBelowCp.Name = "txtBelowCp";
-            this.txtBelowCp.ReadOnly = false;
-            this.txtBelowCp.Scheme = cTextBox.Schemes.Black;
-            this.txtBelowCp.Size = new System.Drawing.Size(97, 30);
-            this.txtBelowCp.TabIndex = 6;
-            this.txtBelowCp.Text = "100";
-            this.txtBelowCp.UseSystemPasswordChar = false;
+            this.txtTransferCp.Location = new System.Drawing.Point(506, 256);
+            this.txtTransferCp.MaxLength = 32767;
+            this.txtTransferCp.Name = "txtTransferCp";
+            this.txtTransferCp.ReadOnly = false;
+            this.txtTransferCp.Scheme = cTextBox.Schemes.Black;
+            this.txtTransferCp.Size = new System.Drawing.Size(97, 30);
+            this.txtTransferCp.TabIndex = 6;
+            this.txtTransferCp.Text = "100";
+            this.txtTransferCp.UseSystemPasswordChar = false;
             // 
             // label3
             // 
@@ -662,6 +687,7 @@
             this.clbTransfer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
             this.clbTransfer.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.clbTransfer.CheckOnClick = true;
+            this.clbTransfer.ContextMenuStrip = this.cmsUntickAll;
             this.clbTransfer.ForeColor = System.Drawing.Color.Gainsboro;
             this.clbTransfer.FormattingEnabled = true;
             this.clbTransfer.Location = new System.Drawing.Point(506, 33);
@@ -683,6 +709,7 @@
             this.clbCatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
             this.clbCatch.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.clbCatch.CheckOnClick = true;
+            this.clbCatch.ContextMenuStrip = this.cmsUntickAll;
             this.clbCatch.ForeColor = System.Drawing.Color.Gainsboro;
             this.clbCatch.FormattingEnabled = true;
             this.clbCatch.Location = new System.Drawing.Point(263, 33);
@@ -704,6 +731,7 @@
             this.clbEvolve.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
             this.clbEvolve.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.clbEvolve.CheckOnClick = true;
+            this.clbEvolve.ContextMenuStrip = this.cmsUntickAll;
             this.clbEvolve.ForeColor = System.Drawing.Color.Gainsboro;
             this.clbEvolve.FormattingEnabled = true;
             this.clbEvolve.Location = new System.Drawing.Point(26, 33);
@@ -1097,9 +1125,9 @@
             // tabPage8
             // 
             this.tabPage8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage8.Controls.Add(this.lvPokemon);
             this.tabPage8.Controls.Add(this.label34);
             this.tabPage8.Controls.Add(this.label32);
-            this.tabPage8.Controls.Add(this.lvPokemon);
             this.tabPage8.Controls.Add(this.label31);
             this.tabPage8.Controls.Add(this.lvBalls);
             this.tabPage8.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -1109,6 +1137,128 @@
             this.tabPage8.Size = new System.Drawing.Size(736, 586);
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Text = "Account Details";
+            // 
+            // lvPokemon
+            // 
+            this.lvPokemon.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvPokemon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.lvPokemon.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader11,
+            this.columnHeader12,
+            this.columnHeader13,
+            this.columnHeader14,
+            this.columnHeader15,
+            this.columnHeader16,
+            this.columnHeader17,
+            this.columnHeader18,
+            this.columnHeader5});
+            this.lvPokemon.ContextMenuStrip = this.cmsRefreshPokemon;
+            this.lvPokemon.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lvPokemon.FullRowSelect = true;
+            this.lvPokemon.Location = new System.Drawing.Point(20, 325);
+            this.lvPokemon.Name = "lvPokemon";
+            this.lvPokemon.Size = new System.Drawing.Size(698, 238);
+            this.lvPokemon.TabIndex = 20;
+            this.lvPokemon.UseCompatibleStateImageBehavior = false;
+            this.lvPokemon.View = System.Windows.Forms.View.Details;
+            this.lvPokemon.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvPokemon_ColumnClick);
+            // 
+            // columnHeader11
+            // 
+            this.columnHeader11.Tag = "Text";
+            this.columnHeader11.Text = "Name";
+            this.columnHeader11.Width = 122;
+            // 
+            // columnHeader12
+            // 
+            this.columnHeader12.Tag = "Numeric";
+            this.columnHeader12.Text = "CP";
+            // 
+            // columnHeader13
+            // 
+            this.columnHeader13.Tag = "Numeric";
+            this.columnHeader13.Text = "IV %";
+            this.columnHeader13.Width = 73;
+            // 
+            // columnHeader14
+            // 
+            this.columnHeader14.Tag = "Numeric";
+            this.columnHeader14.Text = "HP";
+            this.columnHeader14.Width = 54;
+            // 
+            // columnHeader15
+            // 
+            this.columnHeader15.Tag = "Numeric";
+            this.columnHeader15.Text = "Stamina";
+            this.columnHeader15.Width = 76;
+            // 
+            // columnHeader16
+            // 
+            this.columnHeader16.Tag = "Numeric";
+            this.columnHeader16.Text = "Attack";
+            this.columnHeader16.Width = 74;
+            // 
+            // columnHeader17
+            // 
+            this.columnHeader17.Tag = "Numeric";
+            this.columnHeader17.Text = "Defence";
+            this.columnHeader17.Width = 71;
+            // 
+            // columnHeader18
+            // 
+            this.columnHeader18.Tag = "Numeric";
+            this.columnHeader18.Text = "Total";
+            this.columnHeader18.Width = 58;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Tag = "Numeric";
+            this.columnHeader5.Text = "Candies";
+            this.columnHeader5.Width = 79;
+            // 
+            // cmsRefreshPokemon
+            // 
+            this.cmsRefreshPokemon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.toolStripSeparator2,
+            this.evolveSelectedToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.transferSelectedToolStripMenuItem});
+            this.cmsRefreshPokemon.Name = "cmsBallsRefresh";
+            this.cmsRefreshPokemon.Size = new System.Drawing.Size(168, 82);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(167, 22);
+            this.toolStripMenuItem1.Text = "Refresh Pokemon";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(164, 6);
+            // 
+            // evolveSelectedToolStripMenuItem
+            // 
+            this.evolveSelectedToolStripMenuItem.Name = "evolveSelectedToolStripMenuItem";
+            this.evolveSelectedToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.evolveSelectedToolStripMenuItem.Text = "Evolve Selected";
+            this.evolveSelectedToolStripMenuItem.Click += new System.EventHandler(this.evolveSelectedToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(164, 6);
+            // 
+            // transferSelectedToolStripMenuItem
+            // 
+            this.transferSelectedToolStripMenuItem.Name = "transferSelectedToolStripMenuItem";
+            this.transferSelectedToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.transferSelectedToolStripMenuItem.Text = "Transfer Selected";
+            this.transferSelectedToolStripMenuItem.Click += new System.EventHandler(this.transferSelectedToolStripMenuItem_Click);
             // 
             // label34
             // 
@@ -1128,80 +1278,6 @@
             this.label32.Size = new System.Drawing.Size(165, 25);
             this.label32.TabIndex = 17;
             this.label32.Text = "Account Pokemon";
-            // 
-            // lvPokemon
-            // 
-            this.lvPokemon.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvPokemon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
-            this.lvPokemon.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5,
-            this.columnHeader6,
-            this.columnHeader7,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader10});
-            this.lvPokemon.ContextMenuStrip = this.cmsRefreshPokemon;
-            this.lvPokemon.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lvPokemon.FullRowSelect = true;
-            this.lvPokemon.Location = new System.Drawing.Point(20, 325);
-            this.lvPokemon.Name = "lvPokemon";
-            this.lvPokemon.Size = new System.Drawing.Size(698, 238);
-            this.lvPokemon.TabIndex = 16;
-            this.lvPokemon.UseCompatibleStateImageBehavior = false;
-            this.lvPokemon.View = System.Windows.Forms.View.Details;
-            this.lvPokemon.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvPokemon_ColumnClick);
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Tag = "Text";
-            this.columnHeader5.Text = "Name";
-            this.columnHeader5.Width = 191;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Tag = "Numeric";
-            this.columnHeader6.Text = "CP";
-            this.columnHeader6.Width = 112;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Tag = "Numeric";
-            this.columnHeader7.Text = "IV %";
-            this.columnHeader7.Width = 73;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Tag = "Numeric";
-            this.columnHeader8.Text = "Stamina";
-            this.columnHeader8.Width = 71;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Tag = "Numeric";
-            this.columnHeader9.Text = "Max Stamina";
-            this.columnHeader9.Width = 99;
-            // 
-            // columnHeader10
-            // 
-            this.columnHeader10.Tag = "Numeric";
-            this.columnHeader10.Text = "Attack";
-            this.columnHeader10.Width = 107;
-            // 
-            // cmsRefreshPokemon
-            // 
-            this.cmsRefreshPokemon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1});
-            this.cmsRefreshPokemon.Name = "cmsBallsRefresh";
-            this.cmsRefreshPokemon.Size = new System.Drawing.Size(168, 26);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(167, 22);
-            this.toolStripMenuItem1.Text = "Refresh Pokemon";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // label31
             // 
@@ -1493,6 +1569,7 @@
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.cmsUntickAll.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
             this.tabPage1.ResumeLayout(false);
@@ -1532,7 +1609,7 @@
         private System.Windows.Forms.Label label7;
         private cTextBox txtWalkSpeed;
         private System.Windows.Forms.Label label8;
-        private cTextBox txtBelowCp;
+        private cTextBox txtTransferCp;
         private cButton btnStart;
         private cButton btnStop;
         private cTextBox txtPass;
@@ -1615,13 +1692,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.Label label32;
-        private System.Windows.Forms.ListView lvPokemon;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.ColumnHeader columnHeader6;
-        private System.Windows.Forms.ColumnHeader columnHeader7;
-        private System.Windows.Forms.ColumnHeader columnHeader8;
-        private System.Windows.Forms.ColumnHeader columnHeader9;
-        private System.Windows.Forms.ColumnHeader columnHeader10;
         private cContextMenuStrip cmsRefreshPokemon;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private cTextBox txtOverrideIV;
@@ -1630,6 +1700,22 @@
         private cCheckBox chkTeleport;
         private cCheckBox chkNoDelay;
         private System.Windows.Forms.Label label34;
+        private cContextMenuStrip cmsUntickAll;
+        private System.Windows.Forms.ToolStripMenuItem uncheckAllToolStripMenuItem;
+        private System.Windows.Forms.ListView lvPokemon;
+        private System.Windows.Forms.ColumnHeader columnHeader11;
+        private System.Windows.Forms.ColumnHeader columnHeader12;
+        private System.Windows.Forms.ColumnHeader columnHeader13;
+        private System.Windows.Forms.ColumnHeader columnHeader14;
+        private System.Windows.Forms.ColumnHeader columnHeader15;
+        private System.Windows.Forms.ColumnHeader columnHeader16;
+        private System.Windows.Forms.ColumnHeader columnHeader17;
+        private System.Windows.Forms.ColumnHeader columnHeader18;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem evolveSelectedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem transferSelectedToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }
 

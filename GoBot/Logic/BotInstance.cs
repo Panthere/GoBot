@@ -1,4 +1,6 @@
 ﻿
+using AllEnum;
+using GoBot.UserLogger;
 using GoBot.Utils;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;

@@ -106,5 +106,168 @@ namespace GoBot.Properties {
                 this["Altitude"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.ArrayList Evolve {
+            get {
+                return ((global::System.Collections.ArrayList)(this["Evolve"]));
+            }
+            set {
+                this["Evolve"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.ArrayList Catch {
+            get {
+                return ((global::System.Collections.ArrayList)(this["Catch"]));
+            }
+            set {
+                this["Catch"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.ArrayList Transfer {
+            get {
+                return ((global::System.Collections.ArrayList)(this["Transfer"]));
+            }
+            set {
+                this["Transfer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int EvolveCP {
+            get {
+                return ((int)(this["EvolveCP"]));
+            }
+            set {
+                this["EvolveCP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public int EvolveIV {
+            get {
+                return ((int)(this["EvolveIV"]));
+            }
+            set {
+                this["EvolveIV"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int CatchCP {
+            get {
+                return ((int)(this["CatchCP"]));
+            }
+            set {
+                this["CatchCP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int CatchIV {
+            get {
+                return ((int)(this["CatchIV"]));
+            }
+            set {
+                this["CatchIV"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int TransferCP {
+            get {
+                return ((int)(this["TransferCP"]));
+            }
+            set {
+                this["TransferCP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public int TransferIV {
+            get {
+                return ((int)(this["TransferIV"]));
+            }
+            set {
+                this["TransferIV"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int OverrideCP {
+            get {
+                return ((int)(this["OverrideCP"]));
+            }
+            set {
+                this["OverrideCP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public int OverrideIV {
+            get {
+                return ((int)(this["OverrideIV"]));
+            }
+            set {
+                this["OverrideIV"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.ArrayList Berries {
+            get {
+                return ((global::System.Collections.ArrayList)(this["Berries"]));
+            }
+            set {
+                this["Berries"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public int BerriesProbability {
+            get {
+                return ((int)(this["BerriesProbability"]));
+            }
+            set {
+                this["BerriesProbability"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.ArrayList RecycleList {
+            get {
+                return ((global::System.Collections.ArrayList)(this["RecycleList"]));
+            }
+            set {
+                this["RecycleList"] = value;
+            }
+        }
     }
 }
