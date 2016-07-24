@@ -7,6 +7,7 @@ using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
 using PokemonGo.RocketAPI.Extensions;
 using PokemonGo.RocketAPI.GeneratedCode;
+using PokemonGo.RocketAPI.Login;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +58,34 @@ namespace GoBot.Logic
                     if (_clientSettings.AuthType == AuthType.Ptc)
                         await _client.DoPtcLogin(_clientSettings.PtcUsername, _clientSettings.PtcPassword);
                     else if (_clientSettings.AuthType == AuthType.Google)
-                        await _client.DoGoogleLogin();
+                    {
+                        if (!string.IsNullOrEmpty(_clientSettings.GoogleRefreshToken) && _clientSettings.GoogleRefreshToken != "Auth Token")
+                        {
+                            await _client.DoGoogleLogin();
+                        }
+                        else
+                        {
+                            var devCode = await GoogleLogin.GetDeviceCode();
+                            Logger.Write($"Your Google Device Code is {devCode.user_code} enter it at {devCode.verification_url}");
+                            Logger.Write("Once entered, please wait for the bot to start...");
+                            var respModel = await GoogleLogin.GetAccessToken(devCode);
+                            if (respModel == null)
+                            {
+                                Logger.Write("Google Response Model was null! Cannot continue!");
+                                running = false;
+                                break;
+                            }
+                            else
+                            {
+                                UserSettings.GoogleRefreshToken = respModel.refresh_token;
+                                _clientSettings.GoogleRefreshToken = respModel.refresh_token;
+                                _client.AccessToken = respModel.id_token;
+
+                                Logger.Write("Google Auth Token entered, bot will now start...");
+                            }
+                        }
+                    }
+                        
                     running = true;
                     await PostLoginExecute();
                     running = true;
