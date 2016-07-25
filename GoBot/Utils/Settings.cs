@@ -1,11 +1,5 @@
-﻿using System.Configuration;
+﻿using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
-using PokemonGo.RocketAPI.GeneratedCode;
-using System;
-using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Collections.Generic;
-using PokemonGo.RocketAPI;
 
 namespace GoBot
 {

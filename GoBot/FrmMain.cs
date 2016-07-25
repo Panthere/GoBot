@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using PokemonGo.RocketAPI;
-
-using GoBot.Logic;
-using System.Threading;
-using PokemonGo.RocketAPI.GeneratedCode;
-using GoBot.Utils;
-using PokemonGo.RocketAPI.Enums;
-using System.Globalization;
-using AllEnum;
+﻿using GoBot.Logic;
 using GoBot.UserLogger;
+using GoBot.Utils;
+using POGOProtos.Data;
+using POGOProtos.Enums;
+using POGOProtos.Inventory;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace GoBot
 {
@@ -292,8 +285,9 @@ namespace GoBot
             foreach (var item in array)
             {
                 string pokemon = (string)item;
-
-                clb.SetItemChecked(clb.Items.IndexOf(pokemon), true);
+                int index = clb.Items.IndexOf(pokemon);
+                if (index != -1)
+                    clb.SetItemChecked(index, true);
             }
         }
         private void LoadPokemon(CheckedListBox clb)
@@ -523,15 +517,15 @@ namespace GoBot
                 lvBalls.Items.Clear();
 
                 var items = await bot._inventory.GetItems();
-                var balls = items.Where(i => ((MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_POKE_BALL
-                                          || (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_GREAT_BALL
-                                          || (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_ULTRA_BALL
-                                          || (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_MASTER_BALL) && i.Count > 0).GroupBy(i => ((MiscEnums.Item)i.Item_)).ToList();
+                var balls = items.Where(i => (i.ItemId == ItemId.ItemPokeBall
+                                          || i.ItemId == ItemId.ItemGreatBall
+                                          || i.ItemId == ItemId.ItemUltraBall
+                                          || i.ItemId == ItemId.ItemMasterBall) && i.Count > 0).GroupBy(i => i.ItemId).ToList();
 
-                var pokeBalls = items.Where(i => (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_POKE_BALL).ToList();
-                var greatBalls = items.Where(i => (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_GREAT_BALL).ToList();
-                var ultraBalls = items.Where(i => (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_ULTRA_BALL).ToList();
-                var masterBalls = items.Where(i => (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_MASTER_BALL).ToList();
+                var pokeBalls = items.Where(i => i.ItemId == ItemId.ItemPokeBall).ToList();
+                var greatBalls = items.Where(i => i.ItemId == ItemId.ItemGreatBall).ToList();
+                var ultraBalls = items.Where(i => i.ItemId == ItemId.ItemUltraBall).ToList();
+                var masterBalls = items.Where(i => i.ItemId == ItemId.ItemMasterBall).ToList();
 
 
                 if (pokeBalls.Count > 0)
@@ -577,8 +571,8 @@ namespace GoBot
                         continue;
                     try
                     {
-                        MiscEnums.Item itemName = (MiscEnums.Item)item.Item_;
-                        ListViewItem lvi = new ListViewItem(Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(itemName.ToString().Replace("ITEM_", "").Replace("_", " ").ToLower()));
+                        var itemName = item.ItemId;
+                        ListViewItem lvi = new ListViewItem(Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(itemName.ToString().Replace("Item", "").ToLower()));
                         lvi.SubItems.Add(item.Count.ToString());
                         lvBalls.Items.Add(lvi);
                     }
@@ -688,9 +682,9 @@ namespace GoBot
                         }
                         var res = await bot._client.EvolvePokemon(pd.Id);
 
-                        if (res.Result == EvolvePokemonOut.Types.EvolvePokemonStatus.PokemonEvolvedSuccess)
+                        if (res.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
                         {
-                            Logger.Write($"Evolved {pd.PokemonId} successfully for {res.ExpAwarded}xp", LogLevel.Info);
+                            Logger.Write($"Evolved {pd.PokemonId} successfully for {res.ExperienceAwarded}xp", LogLevel.Info);
                             bot._stats.increasePokemonsTransfered();
                             bot._stats.updateConsoleTitle(bot._inventory);
                         }

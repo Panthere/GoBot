@@ -27,36 +27,36 @@ class Sorter : System.Collections.IComparer
                 return 0;
             try
             {
-                if (l1.SubItems[Column].Text.Contains("/") && l2.SubItems[Column].Text.Contains("/"))
-                {
-                    float fl1 = float.Parse(l1.SubItems[Column].Text.Split('/')[0]);
-                    float fl2 = float.Parse(l2.SubItems[Column].Text.Split('/')[0]);
+                float fl1 = 0;
+                float fl2 = 0;
 
-                    if (Order == SortOrder.Ascending)
-                    {
-                        return fl1.CompareTo(fl2);
-                    }
-                    else
-                    {
-                        return fl2.CompareTo(fl1);
-                    }
+
+                if (l1.SubItems[Column].Text.Contains("/"))
+                {
+                    fl1 = float.Parse(l1.SubItems[Column].Text.Split('/')[0]);
                 }
                 else
                 {
-                    float fl1 = float.Parse(l1.SubItems[Column].Text);
-                    float fl2 = float.Parse(l2.SubItems[Column].Text);
-
-                    if (Order == SortOrder.Ascending)
-                    {
-                        return fl1.CompareTo(fl2);
-                    }
-                    else
-                    {
-                        return fl2.CompareTo(fl1);
-                    }
-
+                    fl1 = float.Parse(l1.SubItems[Column].Text);
                 }
-               
+
+                if (l2.SubItems[Column].Text.Contains("/"))
+                {
+                    fl2 = float.Parse(l2.SubItems[Column].Text.Split('/')[0]);
+                }
+                else
+                {
+                    fl2 = float.Parse(l2.SubItems[Column].Text);
+                }
+
+                if (Order == SortOrder.Ascending)
+                {
+                    return fl1.CompareTo(fl2);
+                }
+                else
+                {
+                    return fl2.CompareTo(fl1);
+                }
             }
             catch (Exception)
             {

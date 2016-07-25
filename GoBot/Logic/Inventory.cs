@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using POGOProtos.Data;
+using POGOProtos.Data.Player;
+using POGOProtos.Enums;
+using POGOProtos.Inventory;
+using POGOProtos.Settings.Master;
+using PokemonGo.RocketAPI;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PokemonGo.RocketAPI.GeneratedCode;
-using PokemonGo.RocketAPI;
-using PokemonGo.RocketAPI.Enums;
-using AllEnum;
 
 namespace GoBot.Logic
 {
@@ -203,7 +205,7 @@ namespace GoBot.Logic
         {
             var inventory = await _client.GetInventory();
             return
-                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.Pokemon)
+                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
                     .Where(p => p != null && p?.PokemonId > 0
                     && p?.Cp == match.Cp
                     && p?.PokemonId == match.PokemonId
@@ -216,7 +218,7 @@ namespace GoBot.Logic
         {
             var inventory = await _client.GetInventory();
             return
-                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.Pokemon)
+                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
                     .Where(p => p != null && p?.PokemonId > 0);
         }
 
@@ -330,10 +332,10 @@ namespace GoBot.Logic
                 .Where(p => p != null);
         }
 
-        public async Task<int> GetItemAmountByType(MiscEnums.Item type)
+        public async Task<int> GetItemAmountByType(ItemId type)
         {
             var pokeballs = await GetItems();
-            return pokeballs.FirstOrDefault(i => (MiscEnums.Item)i.Item_ == type)?.Count ?? 0;
+            return pokeballs.FirstOrDefault(i => (ItemId)i.ItemId == type)?.Count ?? 0;
         }
 
         public async Task<IEnumerable<Item>> GetItemsToRecycle(ISettings settings)
@@ -341,8 +343,8 @@ namespace GoBot.Logic
             var myItems = await GetItems();
 
             return myItems
-                .Where(x => UserSettings.ItemRecycleFilter.Any(f => f.Key == ((ItemId)x.Item_) && x.Count > f.Value))
-                .Select(x => new Item { Item_ = x.Item_, Count = x.Count - UserSettings.ItemRecycleFilter.Single(f => f.Key == (ItemId)x.Item_).Value, Unseen = x.Unseen });
+                .Where(x => UserSettings.ItemRecycleFilter.Any(f => f.Key == ((ItemId)x.ItemId) && x.Count > f.Value))
+                .Select(x => new Item { ItemId = x.ItemId, Count = x.Count - UserSettings.ItemRecycleFilter.Single(f => f.Key == (ItemId)x.ItemId).Value, Unseen = x.Unseen });
         }
     }
 }

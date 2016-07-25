@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using PokemonGo.RocketAPI.GeneratedCode;
+﻿using GoBot.UserLogger;
+using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI;
-using GoBot.UserLogger;
+using System;
+using System.Threading.Tasks;
 
 namespace GoBot.Utils
 {
@@ -22,7 +22,7 @@ namespace GoBot.Utils
         {
             double speedInMetersPerSecond = walkingSpeedInKilometersPerHour / 3.6;
 
-            Location sourceLocation = new Location(_client.CurrentLat, _client.CurrentLng);
+            Location sourceLocation = new Location(_client.CurrentLatitude, _client.CurrentLongitude);
 
             Logger.Write($"Distance to target location: {LocationUtils.CalculateDistanceInMeters(sourceLocation, targetLocation):0.##} meters.", LogLevel.Info);
 
@@ -40,7 +40,7 @@ namespace GoBot.Utils
                 await Task.Delay(3000);
                 double millisecondsUntilGetUpdatePlayerLocationResponse = (DateTime.Now - requestSendDateTime).TotalMilliseconds;
 
-                sourceLocation = new Location(_client.CurrentLat, _client.CurrentLng);
+                sourceLocation = new Location(_client.CurrentLatitude, _client.CurrentLongitude);
 
                 if (LocationUtils.CalculateDistanceInMeters(sourceLocation, targetLocation) < 40)
                 {

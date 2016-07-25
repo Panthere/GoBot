@@ -1,17 +1,14 @@
-﻿using PokemonGo.RocketAPI.GeneratedCode;
-using System;
+﻿using POGOProtos.Inventory;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GoBot.Utils
 {
     public static class StringUtils
     { 
-        public static string GetSummedFriendlyNameOfItemAwardList(IEnumerable<FortSearchResponse.Types.ItemAward> items)
+        public static string GetSummedFriendlyNameOfItemAwardList(IEnumerable<ItemAward> items)
         {
-            var enumerable = items as IList<FortSearchResponse.Types.ItemAward> ?? items.ToList();
+            var enumerable = items as IList<ItemAward> ?? items.ToList();
 
             if (!enumerable.Any())
                 return string.Empty;

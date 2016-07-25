@@ -1,13 +1,8 @@
 ﻿using GoBot.Logic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GoBot.Utils;
-using PokemonGo.RocketAPI.GeneratedCode;
-using PokemonGo.RocketAPI;
 using GoBot.UserLogger;
+using GoBot.Utils;
+using POGOProtos.Data;
+using System;
 
 namespace GoBot
 {
@@ -53,7 +48,7 @@ namespace GoBot
                         var actualPokemon = await bot._inventory.GetLastCaughtPokemon(pokeData);
                         var resp = await bot._client.TransferPokemon(actualPokemon.Id);
                         // stats
-                        if (resp.Status != 0)
+                        if (resp.Result == POGOProtos.Networking.Responses.ReleasePokemonResponse.Types.Result.Success)
                         {
                             bot._stats.increasePokemonsTransfered();
                             bot._stats.updateConsoleTitle(bot._inventory);
@@ -69,7 +64,7 @@ namespace GoBot
                             var actualPokemon = await bot._inventory.GetLastCaughtPokemon(pokeData);
                             var resp = await bot._client.TransferPokemon(actualPokemon.Id);
                             // stats
-                            if (resp.Status != 0)
+                            if (resp.Result == POGOProtos.Networking.Responses.ReleasePokemonResponse.Types.Result.Success)
                             {
                                 bot._stats.increasePokemonsTransfered();
                                 bot._stats.updateConsoleTitle(bot._inventory);

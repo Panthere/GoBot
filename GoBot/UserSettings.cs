@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using POGOProtos.Inventory;
 using PokemonGo.RocketAPI.Enums;
-using AllEnum;
+using System.Collections.Generic;
 
 namespace GoBot
 {

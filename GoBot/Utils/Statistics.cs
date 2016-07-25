@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PokemonGo.RocketAPI.Enums;
-using PokemonGo.RocketAPI.Exceptions;
-using PokemonGo.RocketAPI.Extensions;
-using PokemonGo.RocketAPI.GeneratedCode;
-using PokemonGo.RocketAPI.Helpers;
-using GoBot.Logic;
-using PokemonGo.RocketAPI;
+﻿using GoBot.Logic;
 using GoBot.UserLogger;
+using POGOProtos.Data.Player;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GoBot.Utils
 {

@@ -1,18 +1,22 @@
 ﻿
-using AllEnum;
+
 using GoBot.UserLogger;
 using GoBot.Utils;
+using POGOProtos.Data;
+using POGOProtos.Enums;
+using POGOProtos.Inventory;
+using POGOProtos.Map.Fort;
+using POGOProtos.Map.Pokemon;
+using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
 using PokemonGo.RocketAPI.Extensions;
-using PokemonGo.RocketAPI.GeneratedCode;
+
 using PokemonGo.RocketAPI.Login;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GoBot.Logic
@@ -85,7 +89,7 @@ namespace GoBot.Logic
                             {
                                 UserSettings.GoogleRefreshToken = respModel.refresh_token;
                                 _clientSettings.GoogleRefreshToken = respModel.refresh_token;
-                                _client.AccessToken = respModel.id_token;
+                                _client.AuthToken = respModel.id_token;
 
                                 Logger.Write("Google Auth Token entered, bot will now start...");
                             }
@@ -175,7 +179,7 @@ namespace GoBot.Logic
         {
             var mapObjects = await _client.GetMapObjects();
 
-            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts).Where(i => i.Type == FortType.Checkpoint && i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLat, _client.CurrentLng), new Navigation.Location(i.Latitude, i.Longitude)));
+            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts).Where(i => i.Type == FortType.Checkpoint && i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
 
             Logger.Write($"Farming {pokeStops.ToList().Count} PokeStops... {running}");
             foreach (var pokeStop in pokeStops)
@@ -207,8 +211,8 @@ namespace GoBot.Logic
                     await T.Delay(rand.Next(3000, 6000));
                 }
 
-                var profile = await _client.GetProfile();
-                _stats.getStardust(profile.Profile.Currency.ToArray()[1].Amount);
+                var profile = await _client.GetOwnProfile();
+                _stats.getStardust(profile.PlayerData.Currencies.ToArray()[1].Amount);
                 _stats.updateConsoleTitle(_inventory);
 
                 if (getPokes)
@@ -222,7 +226,7 @@ namespace GoBot.Logic
         {
             var mapObjects = await _client.GetMapObjects();
 
-            var pokemons = mapObjects.MapCells.SelectMany(i => i.CatchablePokemons).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLat, _client.CurrentLng), new Navigation.Location(i.Latitude, i.Longitude)));
+            var pokemons = mapObjects.MapCells.SelectMany(i => i.CatchablePokemons).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
 
             foreach (var pokemon in pokemons)
             {
@@ -239,7 +243,7 @@ namespace GoBot.Logic
                         var update = await _navigation.HumanLikeWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
                     }
 
-                    var encounter = await _client.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnpointId);
+                    var encounter = await _client.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId);
 
                     var pokeId = encounter?.WildPokemon?.PokemonData.PokemonId;
 
@@ -276,7 +280,7 @@ namespace GoBot.Logic
                         {
                             if (BerryList.Contains(pokeData.PokemonId))
                             {
-                                await UseBerry(pokemon.EncounterId, pokemon.SpawnpointId);
+                                await UseBerry(pokemon.EncounterId, pokemon.SpawnPointId);
                             }
                         }
 
@@ -285,25 +289,25 @@ namespace GoBot.Logic
 
                     var pokeball = await GetBestBall(encounter?.WildPokemon);
 
-                    if (pokeball == MiscEnums.Item.ITEM_UNKNOWN)
+                    if (pokeball == ItemId.ItemUnknown)
                     {
                         Logger.Write("No Pokeballs to use! STOPPING BOT!");
                         Stop();
                         return;
                     }
-                    caughtPokemonResponse = await _client.CatchPokemon(pokemon.EncounterId, pokemon.SpawnpointId, pokemon.Latitude, pokemon.Longitude, pokeball);
+                    caughtPokemonResponse = await _client.CatchPokemon(pokemon.EncounterId, pokemon.SpawnPointId, pokeball);
 
                     Logger.Write(caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? $"We caught a {pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} ({CalculatePokemonPerfection(encounter?.WildPokemon?.PokemonData).ToString("0.00")}% perfection) using a {pokeball}" : $"{pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} got away while using a {pokeball}..", LogLevel.Info);
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
                         pokeData = encounter?.WildPokemon?.PokemonData;
-                        
-                        foreach (int xp in caughtPokemonResponse.Scores.Xp)
+                       
+                        foreach (int xp in caughtPokemonResponse.CaptureAward.Xp)
                             _stats.addExperience(xp);
 
-                        var profile = await _client.GetProfile();
-                        _stats.getStardust(profile.Profile.Currency.ToArray()[1].Amount);
+                        var profile = await _client.GetOwnProfile();
+                        _stats.getStardust(profile.PlayerData.Currencies.ToArray()[1].Amount);
 
                         _stats.increasePokemons();
                         _stats.updateConsoleTitle(_inventory);
@@ -321,36 +325,36 @@ namespace GoBot.Logic
             while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed);
         }
 
-        private async Task<MiscEnums.Item> GetBestBall(WildPokemon pokemon)
+        private async Task<ItemId> GetBestBall(WildPokemon pokemon)
         {
             var pokemonCp = pokemon?.PokemonData?.Cp;
 
             var items = await _inventory.GetItems();
-            var balls = items.Where(i => ((MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_POKE_BALL
-                                      || (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_GREAT_BALL
-                                      || (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_ULTRA_BALL
-                                      || (MiscEnums.Item)i.Item_ == MiscEnums.Item.ITEM_MASTER_BALL) && i.Count > 0).GroupBy(i => ((MiscEnums.Item)i.Item_)).ToList();
-            if (balls.Count == 0) return MiscEnums.Item.ITEM_UNKNOWN;
+            var balls = items.Where(i => (i.ItemId == ItemId.ItemPokeBall
+                                      || i.ItemId == ItemId.ItemGreatBall
+                                      || i.ItemId == ItemId.ItemUltraBall
+                                      || i.ItemId == ItemId.ItemMasterBall) && i.Count > 0).GroupBy(i => (i.ItemId)).ToList();
+            if (balls.Count == 0) return ItemId.ItemUnknown;
 
-            var pokeBalls = balls.Any(g => g.Key == MiscEnums.Item.ITEM_POKE_BALL);
-            var greatBalls = balls.Any(g => g.Key == MiscEnums.Item.ITEM_GREAT_BALL);
-            var ultraBalls = balls.Any(g => g.Key == MiscEnums.Item.ITEM_ULTRA_BALL);
-            var masterBalls = balls.Any(g => g.Key == MiscEnums.Item.ITEM_MASTER_BALL);
+            var pokeBalls = balls.Any(g => g.Key == ItemId.ItemPokeBall);
+            var greatBalls = balls.Any(g => g.Key == ItemId.ItemGreatBall);
+            var ultraBalls = balls.Any(g => g.Key == ItemId.ItemUltraBall);
+            var masterBalls = balls.Any(g => g.Key == ItemId.ItemMasterBall);
 
             if (masterBalls && pokemonCp >= 2000)
-                return MiscEnums.Item.ITEM_MASTER_BALL;
+                return ItemId.ItemMasterBall;
             else if (ultraBalls && pokemonCp >= 2000)
-                return MiscEnums.Item.ITEM_ULTRA_BALL;
+                return ItemId.ItemUltraBall;
             else if (greatBalls && pokemonCp >= 2000)
-                return MiscEnums.Item.ITEM_GREAT_BALL;
+                return ItemId.ItemGreatBall;
 
             if (ultraBalls && pokemonCp >= 1000)
-                return MiscEnums.Item.ITEM_ULTRA_BALL;
+                return ItemId.ItemUltraBall;
             else if (greatBalls && pokemonCp >= 1000)
-                return MiscEnums.Item.ITEM_GREAT_BALL;
+                return ItemId.ItemGreatBall;
 
             if (greatBalls && pokemonCp >= 500)
-                return MiscEnums.Item.ITEM_GREAT_BALL;
+                return ItemId.ItemGreatBall;
 
             return balls.OrderBy(g => g.Key).First().Key;
         }
@@ -359,18 +363,18 @@ namespace GoBot.Logic
             var pokemonCp = pokemon?.PokemonData?.Cp;
 
             var items = await _inventory.GetItems();
-            var berries = items.Where(i => (ItemId)i.Item_ == ItemId.ItemRazzBerry
-                                        || (ItemId)i.Item_ == ItemId.ItemBlukBerry
-                                        || (ItemId)i.Item_ == ItemId.ItemNanabBerry
-                                        || (ItemId)i.Item_ == ItemId.ItemWeparBerry
-                                        || (ItemId)i.Item_ == ItemId.ItemPinapBerry).GroupBy(i => ((ItemId)i.Item_)).ToList();
+            var berries = items.Where(i => i.ItemId == ItemId.ItemRazzBerry
+                                        || i.ItemId == ItemId.ItemBlukBerry
+                                        || i.ItemId == ItemId.ItemNanabBerry
+                                        || i.ItemId == ItemId.ItemWeparBerry
+                                        || i.ItemId == ItemId.ItemPinapBerry).GroupBy(i => (i.ItemId)).ToList();
             if (berries.Count == 0 || pokemonCp <= 350) return ItemId.ItemUnknown;
 
-            var razzBerryCount = await _inventory.GetItemAmountByType(MiscEnums.Item.ITEM_RAZZ_BERRY);
-            var blukBerryCount = await _inventory.GetItemAmountByType(MiscEnums.Item.ITEM_BLUK_BERRY);
-            var nanabBerryCount = await _inventory.GetItemAmountByType(MiscEnums.Item.ITEM_NANAB_BERRY);
-            var weparBerryCount = await _inventory.GetItemAmountByType(MiscEnums.Item.ITEM_WEPAR_BERRY);
-            var pinapBerryCount = await _inventory.GetItemAmountByType(MiscEnums.Item.ITEM_PINAP_BERRY);
+            var razzBerryCount = await _inventory.GetItemAmountByType(ItemId.ItemRazzBerry);
+            var blukBerryCount = await _inventory.GetItemAmountByType(ItemId.ItemBlukBerry);
+            var nanabBerryCount = await _inventory.GetItemAmountByType(ItemId.ItemNanabBerry);
+            var weparBerryCount = await _inventory.GetItemAmountByType(ItemId.ItemWeparBerry);
+            var pinapBerryCount = await _inventory.GetItemAmountByType(ItemId.ItemPinapBerry);
 
             if (pinapBerryCount > 0 && pokemonCp >= 2000)
                 return ItemId.ItemPinapBerry;
@@ -404,7 +408,7 @@ namespace GoBot.Logic
                 return;
 
             var inventoryBalls = await _inventory.GetItems();
-            var berries = inventoryBalls.Where(p => (ItemId)p.Item_ == ItemId.ItemRazzBerry);
+            var berries = inventoryBalls.Where(p => (ItemId)p.ItemId == ItemId.ItemRazzBerry);
             var berry = berries.FirstOrDefault();
 
             if (berry == null)
@@ -436,8 +440,8 @@ namespace GoBot.Logic
                 var evolvePokemonOutProto = await _client.EvolvePokemon((ulong)pokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
-                if (evolvePokemonOutProto.Result == EvolvePokemonOut.Types.EvolvePokemonStatus.PokemonEvolvedSuccess)
-                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExpAwarded}xp", LogLevel.Info);
+                if (evolvePokemonOutProto.Result == EvolvePokemonResponse.Types.Result.Success)
+                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExperienceAwarded}xp", LogLevel.Info);
                 else
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
 
@@ -536,11 +540,10 @@ namespace GoBot.Logic
                 var evolvePokemonOutProto = await _client.EvolvePokemon((ulong)pokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
-                if (evolvePokemonOutProto.Result == EvolvePokemonOut.Types.EvolvePokemonStatus.PokemonEvolvedSuccess)
-                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExpAwarded}xp", LogLevel.Info);
+                if (evolvePokemonOutProto.Result == EvolvePokemonResponse.Types.Result.Success)
+                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExperienceAwarded}xp", LogLevel.Info);
                 else
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
-
 
                 await T.Delay(rand.Next(3000, 5000));
             }
@@ -564,9 +567,10 @@ namespace GoBot.Logic
                 }
 
                 var evolvePokemonOutProto = await _client.EvolvePokemon((ulong)pokemon.Id);
-
-                if (evolvePokemonOutProto.Result == EvolvePokemonOut.Types.EvolvePokemonStatus.PokemonEvolvedSuccess)
-                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExpAwarded}xp", LogLevel.Info);
+                _stats.increasePokemonsTransfered();
+                _stats.updateConsoleTitle(_inventory);
+                if (evolvePokemonOutProto.Result == EvolvePokemonResponse.Types.Result.Success)
+                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExperienceAwarded}xp", LogLevel.Info);
                 else
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
 
@@ -581,8 +585,8 @@ namespace GoBot.Logic
 
             foreach (var item in items)
             {
-                var transfer = await _client.RecycleItem((ItemId)item.Item_, item.Count);
-                Logger.Write($"Recycled {item.Count}x {(ItemId)item.Item_}", LogLevel.Info);
+                var transfer = await _client.RecycleItem(item.ItemId, item.Count);
+                Logger.Write($"Recycled {item.Count}x {item.ItemId}", LogLevel.Info);
                 await T.Delay(rand.Next(4000, 8000));
             }
         }
