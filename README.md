@@ -30,6 +30,8 @@ https://github.com/FeroxRev/Pokemon-Go-Rocket-API
 - Perform tasks while idling in a location
 - Evolve, or transfer selected pokemon from your inventory
 - Show your pokemon inventory, pokeball inventory, or item inventory (detailed).
+- Google Maps integration - live minimap!
+- Google Direction API Integrated
 
 # Donate
 Bitcoin Address: 1LAPANo2N1jBBBHvBEqbMxG13pWqV1xCsY
@@ -38,6 +40,3 @@ Bitcoin Address: 1LAPANo2N1jBBBHvBEqbMxG13pWqV1xCsY
 # To Do
 - Don't waste pokeballs on softbanned accounts
 - Tutorial for retards
-- Integrate Google Maps Directional API
-- Integrate 'Live Map' of area and player moving
-
