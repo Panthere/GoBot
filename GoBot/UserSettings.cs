@@ -1,4 +1,5 @@
-﻿using POGOProtos.Inventory;
+﻿using GoogleMapsApi.Entities.Directions.Request;
+using POGOProtos.Inventory;
 using PokemonGo.RocketAPI.Enums;
 using System.Collections.Generic;
 
@@ -34,6 +35,9 @@ namespace GoBot
 
         public static bool Teleport;
         public static bool UseDelays = true;
+        public static bool UseGoogleDirections;
+
+        public static TravelMode ModeOfTravel = TravelMode.Walking;
 
         public static List<int> recycleSettings = new List<int>();
 

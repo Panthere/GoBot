@@ -31,8 +31,10 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.tStats = new System.Windows.Forms.Timer(this.components);
+            this.tMap = new System.Windows.Forms.Timer(this.components);
             this.cTabControl1 = new cTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.chkGoogleDirections = new cCheckBox();
             this.chkNoDelay = new cCheckBox();
             this.chkTeleport = new cCheckBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -112,6 +114,7 @@
             this.txtUser = new cTextBox();
             this.btnStart = new cButton();
             this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.gmap = new GMap.NET.WindowsForms.GMapControl();
             this.lvPokemon = new System.Windows.Forms.ListView();
             this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -157,6 +160,7 @@
             this.lblFound = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnActivateLuckyEgg = new cButton();
             this.cTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -175,6 +179,10 @@
             // 
             this.tStats.Interval = 500;
             this.tStats.Tick += new System.EventHandler(this.tStats_Tick);
+            // 
+            // tMap
+            // 
+            this.tMap.Tick += new System.EventHandler(this.tMap_Tick);
             // 
             // cTabControl1
             // 
@@ -200,6 +208,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage2.Controls.Add(this.chkGoogleDirections);
             this.tabPage2.Controls.Add(this.chkNoDelay);
             this.tabPage2.Controls.Add(this.chkTeleport);
             this.tabPage2.Controls.Add(this.label11);
@@ -219,6 +228,19 @@
             this.tabPage2.Size = new System.Drawing.Size(736, 586);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Walk Settings";
+            // 
+            // chkGoogleDirections
+            // 
+            this.chkGoogleDirections.AutoSize = true;
+            this.chkGoogleDirections.Checked = true;
+            this.chkGoogleDirections.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkGoogleDirections.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkGoogleDirections.Location = new System.Drawing.Point(129, 309);
+            this.chkGoogleDirections.Name = "chkGoogleDirections";
+            this.chkGoogleDirections.Size = new System.Drawing.Size(152, 19);
+            this.chkGoogleDirections.TabIndex = 11;
+            this.chkGoogleDirections.Text = "Google Directions (safe)";
+            this.chkGoogleDirections.UseVisualStyleBackColor = true;
             // 
             // chkNoDelay
             // 
@@ -338,6 +360,7 @@
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage3.Controls.Add(this.btnActivateLuckyEgg);
             this.tabPage3.Controls.Add(this.label33);
             this.tabPage3.Controls.Add(this.txtOverrideIV);
             this.tabPage3.Controls.Add(this.txtOverrideCP);
@@ -1125,6 +1148,7 @@
             // tabPage8
             // 
             this.tabPage8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage8.Controls.Add(this.gmap);
             this.tabPage8.Controls.Add(this.lvPokemon);
             this.tabPage8.Controls.Add(this.label34);
             this.tabPage8.Controls.Add(this.label32);
@@ -1138,10 +1162,37 @@
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Text = "Account Details";
             // 
+            // gmap
+            // 
+            this.gmap.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gmap.Bearing = 0F;
+            this.gmap.CanDragMap = true;
+            this.gmap.EmptyTileColor = System.Drawing.Color.AliceBlue;
+            this.gmap.GrayScaleMode = false;
+            this.gmap.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.gmap.LevelsKeepInMemmory = 5;
+            this.gmap.Location = new System.Drawing.Point(328, 43);
+            this.gmap.MarkersEnabled = true;
+            this.gmap.MaxZoom = 18;
+            this.gmap.MinZoom = 2;
+            this.gmap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.gmap.Name = "gmap";
+            this.gmap.NegativeMode = false;
+            this.gmap.PolygonsEnabled = true;
+            this.gmap.RetryLoadTile = 0;
+            this.gmap.RoutesEnabled = true;
+            this.gmap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.gmap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.gmap.ShowTileGridLines = false;
+            this.gmap.Size = new System.Drawing.Size(390, 222);
+            this.gmap.TabIndex = 21;
+            this.gmap.Zoom = 12D;
+            // 
             // lvPokemon
             // 
-            this.lvPokemon.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvPokemon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvPokemon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
             this.lvPokemon.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -1263,14 +1314,15 @@
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(421, 125);
+            this.label34.Location = new System.Drawing.Point(152, 23);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(176, 30);
+            this.label34.Size = new System.Drawing.Size(65, 15);
             this.label34.TabIndex = 18;
-            this.label34.Text = "Filler for something else...\r\nPsst! Right click on the listviews!";
+            this.label34.Text = "Right click!";
             // 
             // label32
             // 
+            this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Segoe UI", 14F);
             this.label32.Location = new System.Drawing.Point(15, 297);
@@ -1291,6 +1343,8 @@
             // 
             // lvBalls
             // 
+            this.lvBalls.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.lvBalls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
             this.lvBalls.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3,
@@ -1552,6 +1606,17 @@
             this.textBox1.Text = resources.GetString("textBox1.Text");
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // btnActivateLuckyEgg
+            // 
+            this.btnActivateLuckyEgg.Location = new System.Drawing.Point(263, 403);
+            this.btnActivateLuckyEgg.Name = "btnActivateLuckyEgg";
+            this.btnActivateLuckyEgg.Scheme = cButton.Schemes.Black;
+            this.btnActivateLuckyEgg.Size = new System.Drawing.Size(176, 23);
+            this.btnActivateLuckyEgg.TabIndex = 32;
+            this.btnActivateLuckyEgg.Text = "Use Lucky Egg";
+            this.btnActivateLuckyEgg.UseVisualStyleBackColor = true;
+            this.btnActivateLuckyEgg.Click += new System.EventHandler(this.btnActivateLuckyEgg_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1716,6 +1781,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem transferSelectedToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader columnHeader5;
+        private cCheckBox chkGoogleDirections;
+        private GMap.NET.WindowsForms.GMapControl gmap;
+        private System.Windows.Forms.Timer tMap;
+        private cButton btnActivateLuckyEgg;
     }
 }
 

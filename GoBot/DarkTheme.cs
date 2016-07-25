@@ -10,7 +10,28 @@ using System.Drawing;
 
 public static class Helpers
 {
+    public static Color C1_F = ColorFromHex("#007196");
+    public static Color C1_B = ColorFromHex("#00BFFF");
 
+    public static Color C2_F = ColorFromHex("#D15A4D");
+    public static Color C2_B = ColorFromHex("#FFCFCA");
+
+    public static Color C3_F = ColorFromHex("#54AB54");
+    public static Color C3_B = ColorFromHex("#CAFFCA");
+
+    public static Color C4_F = ColorFromHex("#ADA200");
+    public static Color C4_B = ColorFromHex("#FCF47E");
+
+    public static Color C5_F = ColorFromHex("#E800CD");
+    public static Color C5_B = ColorFromHex("#FFBFF7");
+
+    public static Color C6_F = ColorFromHex("#0EADAD");
+    public static Color C6_B = ColorFromHex("#9CFFFF");
+
+    public static Color ColorFromHex(string Hex)
+    {
+        return Color.FromArgb(Convert.ToInt32(long.Parse(string.Format("FFFFFFFFFF{0}", Hex.StartsWith("#") ? Hex.Substring(1) : Hex), System.Globalization.NumberStyles.HexNumber)));
+    }
     public enum MouseState : byte
     {
         None = 0,

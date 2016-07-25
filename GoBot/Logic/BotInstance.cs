@@ -24,9 +24,9 @@ namespace GoBot.Logic
     public class BotInstance
     {
         public readonly Client _client;
-        private readonly ISettings _clientSettings;
+        public readonly ISettings _clientSettings;
         public readonly Inventory _inventory;
-        private readonly Navigation _navigation;
+        public readonly Navigation _navigation;
 
         public Statistics _stats;
 
@@ -54,7 +54,7 @@ namespace GoBot.Logic
         }
         public async Task Execute()
         {
-            Logger.Write($"Starting Execute on login server: {_clientSettings.AuthType}", LogLevel.Info);
+            Logger.Write($"Starting Execute on login server: {_clientSettings.AuthType}", LogLevel.Info, ConsoleColor.Magenta);
             running = true;
             while (running)
             {
@@ -73,15 +73,15 @@ namespace GoBot.Logic
                             _client.SetAuthType(AuthType.Google);
 
                             var devCode = await GoogleLogin.GetDeviceCode();
-                            Logger.Write($"Your Google Device Code is {devCode.user_code} enter it at {devCode.verification_url}");
+                            Logger.Write($"Your Google Device Code is {devCode.user_code} enter it at {devCode.verification_url}", LogLevel.Info, ConsoleColor.White);
                             
                             //Process.Start(devCode.verification_url);
 
-                            Logger.Write("Once entered, please wait for the bot to start...");
+                            Logger.Write("Once entered, please wait for the bot to start...", LogLevel.Info, ConsoleColor.White);
                             var respModel = await GoogleLogin.GetAccessToken(devCode);
                             if (respModel == null)
                             {
-                                Logger.Write("Google Response Model was null! Cannot continue!");
+                                Logger.Write("Google Response Model was null! Cannot continue!", LogLevel.Info, ConsoleColor.White);
                                 running = false;
                                 break;
                             }
@@ -91,7 +91,7 @@ namespace GoBot.Logic
                                 _clientSettings.GoogleRefreshToken = respModel.refresh_token;
                                 _client.AuthToken = respModel.id_token;
 
-                                Logger.Write("Google Auth Token entered, bot will now start...");
+                                Logger.Write("Google Auth Token entered, bot will now start...", LogLevel.Info, ConsoleColor.White);
                             }
                         }
                     }
@@ -106,7 +106,7 @@ namespace GoBot.Logic
                 }
                 catch (Exception ex)
                 {
-                    Logger.Write($"Execute Exception: {ex}", LogLevel.Info);
+                    Logger.Write($"Execute Exception: {ex}", LogLevel.Info, ConsoleColor.Red);
                 }
                 Logger.Write($"Looping Execute Again", LogLevel.Info);
                 await T.Delay(rand.Next(8000, 15000));
@@ -138,20 +138,17 @@ namespace GoBot.Logic
 
                         await ExecuteFarmingForts(UserSettings.CatchPokemon);
                     }
-                    /*await EvolveAllPokemonWithEnoughCandy();
-                    await TransferDuplicatePokemon(true);
-                    await RecycleItems();
-                    await ExecuteFarmingPokestopsAndPokemons();*/
+
                 }
                 catch (AccessTokenExpiredException)
                 {
-                    Logger.Write("Access token was expired");
+                    Logger.Write("Access token was expired", LogLevel.Error, ConsoleColor.Red);
                     throw;
                 }
                 catch (Exception ex)
                 {
                     //if ()
-                    Logger.Write($"Exception (PostLogin): {ex}", LogLevel.Error);
+                    Logger.Write($"Exception (PostLogin): {ex}", LogLevel.Error, ConsoleColor.Red);
                 }
 
                 await T.Delay(rand.Next(8000, 15000));
@@ -165,14 +162,14 @@ namespace GoBot.Logic
             }
             catch (Exception ex)
             {
-                Logger.Write($"Exception: {ex}", LogLevel.Error);
+                Logger.Write($"Exception: {ex}", LogLevel.Error, ConsoleColor.Red);
             }
         }
 
         public async Task WalkToStart()
         {
             Logger.Write("Stopping and walking to start point...");
-            var update = await _navigation.HumanLikeWalking(new Navigation.Location(_clientSettings.DefaultLatitude, _clientSettings.DefaultLongitude), UserSettings.WalkingSpeed);
+            var update = await _navigation.DirectionalWalking(new Navigation.Location(_clientSettings.DefaultLatitude, _clientSettings.DefaultLongitude), UserSettings.WalkingSpeed);//await _navigation.HumanLikeWalking(new Navigation.Location(_clientSettings.DefaultLatitude, _clientSettings.DefaultLongitude), UserSettings.WalkingSpeed);
             Logger.Write("Bot has been stopped and has reached the start point used. You may now safely exit.");
         }
         public async Task ExecuteFarmingForts(bool getPokes)
@@ -181,7 +178,7 @@ namespace GoBot.Logic
 
             var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts).Where(i => i.Type == FortType.Checkpoint && i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
 
-            Logger.Write($"Farming {pokeStops.ToList().Count} PokeStops... {running}");
+            Logger.Write($"Farming {pokeStops.ToList().Count} PokeStops... {running}", LogLevel.Info, ConsoleColor.Cyan);
             foreach (var pokeStop in pokeStops)
             {
                 if (!running)
@@ -194,7 +191,7 @@ namespace GoBot.Logic
                 else
                 {
                     var update =
-                        await _navigation.HumanLikeWalking(new Navigation.Location(pokeStop.Latitude, pokeStop.Longitude), UserSettings.WalkingSpeed);
+                        await _navigation.DirectionalWalking(new Navigation.Location(pokeStop.Latitude, pokeStop.Longitude), UserSettings.WalkingSpeed);
                 }
 
                 if (UserSettings.GetForts)
@@ -207,7 +204,7 @@ namespace GoBot.Logic
 
                     await Events.FortFarmed(fortSearch, pokeStop);
 
-                    Logger.Write($"Farmed XP: {fortSearch.ExperienceAwarded}, Gems: { fortSearch.GemsAwarded}, Eggs: {fortSearch.PokemonDataEgg} Items: {StringUtils.GetSummedFriendlyNameOfItemAwardList(fortSearch.ItemsAwarded)}", LogLevel.Info);
+                    Logger.Write($"Farmed XP: {fortSearch.ExperienceAwarded}, Gems: { fortSearch.GemsAwarded}, Eggs: {fortSearch.PokemonDataEgg} Items: {StringUtils.GetSummedFriendlyNameOfItemAwardList(fortSearch.ItemsAwarded)}", LogLevel.Info, ConsoleColor.Cyan);
                     await T.Delay(rand.Next(3000, 6000));
                 }
 
@@ -240,7 +237,7 @@ namespace GoBot.Logic
                     }
                     else
                     {
-                        var update = await _navigation.HumanLikeWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
+                        var update = await _navigation.DirectionalWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
                     }
 
                     var encounter = await _client.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId);
@@ -256,7 +253,7 @@ namespace GoBot.Logic
                 }
                 catch (Exception ex)
                 {
-                    Logger.Write($"Exception CatchNearby: {ex}");
+                    Logger.Write($"Exception CatchNearby: {ex}", LogLevel.Error, ConsoleColor.Red);
                 }
             }
         }
@@ -272,9 +269,7 @@ namespace GoBot.Logic
                 {
                     PokemonData pokeData = encounter?.WildPokemon?.PokemonData;
 
-
-
-                    if (encounter?.CaptureProbability.CaptureProbability_.First() < (UserSettings.BerryProbability / 100))
+                    if (encounter?.CaptureProbability != null && encounter?.CaptureProbability.CaptureProbability_.First() < (UserSettings.BerryProbability / 100))
                     {
                         if (pokeData != null)
                         {
@@ -291,13 +286,13 @@ namespace GoBot.Logic
 
                     if (pokeball == ItemId.ItemUnknown)
                     {
-                        Logger.Write("No Pokeballs to use! STOPPING BOT!");
+                        Logger.Write("No Pokeballs to use! STOPPING BOT!", LogLevel.Error, ConsoleColor.Red);
                         Stop();
                         return;
                     }
                     caughtPokemonResponse = await _client.CatchPokemon(pokemon.EncounterId, pokemon.SpawnPointId, pokeball);
 
-                    Logger.Write(caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? $"We caught a {pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} ({CalculatePokemonPerfection(encounter?.WildPokemon?.PokemonData).ToString("0.00")}% perfection) using a {pokeball}" : $"{pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} got away while using a {pokeball}..", LogLevel.Info);
+                    Logger.Write(caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? $"We caught a {pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} ({CalculatePokemonPerfection(encounter?.WildPokemon?.PokemonData).ToString("0.00")}% perfection) using a {pokeball}" : $"{pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} got away while using a {pokeball}..", LogLevel.Info, ConsoleColor.Green);
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
@@ -318,7 +313,7 @@ namespace GoBot.Logic
                 }
                 catch (Exception ex)
                 {
-                    Logger.Write($"Exception in Encounter: {ex}");
+                    Logger.Write($"Exception in Encounter: {ex}", LogLevel.Error, ConsoleColor.Red);
                     break;
                 }
             }
@@ -425,6 +420,8 @@ namespace GoBot.Logic
         public async Task EvolveAllPokemonWithEnoughCandy()
         {
             var pokemonToEvolve = await _inventory.GetPokemonToEvolve();
+            Logger.Write($"Sorting through {pokemonToEvolve.ToList().Count} pokemon to evolve...", LogLevel.Info, ConsoleColor.DarkGreen);
+
             foreach (var pokemon in pokemonToEvolve)
             {
                 if (!EvolveList.Contains(pokemon.PokemonId))
@@ -441,7 +438,7 @@ namespace GoBot.Logic
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 if (evolvePokemonOutProto.Result == EvolvePokemonResponse.Types.Result.Success)
-                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExperienceAwarded}xp", LogLevel.Info);
+                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExperienceAwarded}xp", LogLevel.Info, ConsoleColor.DarkGreen);
                 else
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
 
@@ -455,7 +452,7 @@ namespace GoBot.Logic
 
             var duplicatePokemons = await _inventory.GetDuplicatePokemonToTransfer(keepCp, keepPokemonsThatCanEvolve);
 
-            Logger.Write($"Sorting through {duplicatePokemons.ToList().Count} pokemon to transfer duplicates...");
+            Logger.Write($"Sorting through {duplicatePokemons.ToList().Count} pokemon to transfer duplicates...", LogLevel.Info, ConsoleColor.Yellow);
 
             foreach (var duplicatePokemon in duplicatePokemons)
             {
@@ -472,7 +469,7 @@ namespace GoBot.Logic
                 var transfer = await _client.TransferPokemon(duplicatePokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
-                Logger.Write($"Transferred {duplicatePokemon.PokemonId} with {duplicatePokemon.Cp} CP", LogLevel.Info);
+                Logger.Write($"Transferred {duplicatePokemon.PokemonId} with {duplicatePokemon.Cp} CP", LogLevel.Info, ConsoleColor.Yellow);
                 await T.Delay(rand.Next(3000, 6000));
             }
         }
@@ -495,7 +492,7 @@ namespace GoBot.Logic
                 var transfer = await _client.TransferPokemon(pokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
-                Logger.Write($"Transferred {pokemon.PokemonId} with {pokemon.Cp} CP", LogLevel.Info);
+                Logger.Write($"Transferred {pokemon.PokemonId} with {pokemon.Cp} CP", LogLevel.Info, ConsoleColor.Yellow);
                 await T.Delay(rand.Next(3000, 6000));
             }
         }
@@ -504,7 +501,7 @@ namespace GoBot.Logic
         {
             var pokemons = await _inventory.GetPokemons();
             var pokemonList = pokemons as IList<PokemonData> ?? pokemons.ToList();
-            Logger.Write($"Forcibly (override) sorting transfer of {pokemonList.Count} pokemon(s)");
+            Logger.Write($"Forcibly (override) sorting transfer of {pokemonList.Count} pokemon(s)", LogLevel.Info, ConsoleColor.Yellow);
             // UNTESTED
             foreach (var pokemon in pokemonList.Where(x => x.Favorite == 0).OrderByDescending(i => i.Cp).ThenBy(i => i.StaminaMax).Skip(UserSettings.TopX))
             {
@@ -518,7 +515,7 @@ namespace GoBot.Logic
                 var transfer = await _client.TransferPokemon(pokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
-                Logger.Write($"Transferred {pokemon.PokemonId} with {pokemon.Cp} CP ({CalculatePokemonPerfection(pokemon).ToString("0.00")}%)", LogLevel.Info);
+                Logger.Write($"Transferred {pokemon.PokemonId} with {pokemon.Cp} CP ({CalculatePokemonPerfection(pokemon).ToString("0.00")}%)", LogLevel.Info, ConsoleColor.Yellow);
                 await T.Delay(rand.Next(3000, 6000));
             }
         }
@@ -526,6 +523,8 @@ namespace GoBot.Logic
         public async Task OverrideEvolve(int keepCp, int keepIv)
         {
             var pokemonToEvolve = await _inventory.GetPokemonToEvolve();
+            Logger.Write($"Forcibly (override) sorting evolution of {pokemonToEvolve.ToList().Count} pokemon(s)", LogLevel.Info, ConsoleColor.DarkGreen);
+
             foreach (var pokemon in pokemonToEvolve)
             {
                 //if (!EvolveList.Contains(pokemon.PokemonId))
@@ -541,7 +540,7 @@ namespace GoBot.Logic
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 if (evolvePokemonOutProto.Result == EvolvePokemonResponse.Types.Result.Success)
-                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExperienceAwarded}xp", LogLevel.Info);
+                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExperienceAwarded}xp", LogLevel.Info, ConsoleColor.DarkGreen);
                 else
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
 
@@ -553,6 +552,7 @@ namespace GoBot.Logic
         public async Task EvolvePokemonFromList()
         {
             var pokemonToEvolve = await _inventory.GetPokemonToEvolve();
+            Logger.Write($"Sorting through {pokemonToEvolve.ToList().Count} pokemon to evolve...", LogLevel.Info, ConsoleColor.DarkGreen);
             foreach (var pokemon in pokemonToEvolve)
             {
                 // skip ones we do not want to evolve
@@ -570,7 +570,7 @@ namespace GoBot.Logic
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 if (evolvePokemonOutProto.Result == EvolvePokemonResponse.Types.Result.Success)
-                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExperienceAwarded}xp", LogLevel.Info);
+                    Logger.Write($"Evolved {pokemon.PokemonId} successfully for {evolvePokemonOutProto.ExperienceAwarded}xp", LogLevel.Info, ConsoleColor.DarkGreen);
                 else
                     Logger.Write($"Failed to evolve {pokemon.PokemonId}. EvolvePokemonOutProto.Result was {evolvePokemonOutProto.Result}, stopping evolving {pokemon.PokemonId}", LogLevel.Info);
 
@@ -586,9 +586,16 @@ namespace GoBot.Logic
             foreach (var item in items)
             {
                 var transfer = await _client.RecycleItem(item.ItemId, item.Count);
-                Logger.Write($"Recycled {item.Count}x {item.ItemId}", LogLevel.Info);
+                Logger.Write($"Recycled {item.Count}x {item.ItemId}", LogLevel.Info, ConsoleColor.DarkYellow);
                 await T.Delay(rand.Next(4000, 8000));
             }
+        }
+
+        public async Task<UseItemXpBoostResponse.Types.Result> UseLuckyEgg()
+        {
+            var resp = await _client.UseItemXpBoost();
+
+            return resp.Result;
         }
 
     }

@@ -56,9 +56,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\GitHub\Pokemon-Go-Rocket-API\PokemonGo.RocketAPI\bin\Debug\C5.dll</HintPath>
     </Reference>
+    <Reference Include="GMap.NET.Core, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <HintPath>..\packages\GMap.NET.WindowsForms.1.7.1\lib\net40\GMap.NET.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <HintPath>..\packages\GMap.NET.WindowsForms.1.7.1\lib\net40\GMap.NET.WindowsForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\GitHub\Pokemon-Go-Rocket-API\PokemonGo.RocketAPI\bin\Debug\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="GoogleMapsApi, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GoogleMapsApi.0.56.0\lib\net45\GoogleMapsApi.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling">
       <HintPath>..\..\..\..\GitHub\Pokemon-Go-Rocket-API\PokemonGo.RocketAPI\bin\Debug\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
@@ -104,6 +116,11 @@
   <ItemGroup>
     <Compile Include="EventReceiver.cs" />
     <Compile Include="ListViewColumnSorter.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="UserLogger\EventLogger.cs" />
     <Compile Include="Logic\BotInstance.cs" />
     <Compile Include="DarkTheme.cs" />
@@ -132,14 +149,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -154,6 +167,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="marker.png" />
+    <None Include="bin\Debug\ash.png" />
+    <None Include="bin\Debug\marker.png" />
+    <None Include="ash.png" />
     <Content Include="go.ico" />
   </ItemGroup>
   <ItemGroup>

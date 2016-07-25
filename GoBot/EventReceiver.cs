@@ -29,7 +29,7 @@ namespace GoBot
             }
             catch (Exception ex)
             {
-                Logger.Write($"Exception: {ex}");
+                Logger.Write($"Exception: {ex}", LogLevel.Error, ConsoleColor.Red);
                 Utils.Events.FortFarmedReset.Set();
             }
         }
@@ -52,7 +52,7 @@ namespace GoBot
                         {
                             bot._stats.increasePokemonsTransfered();
                             bot._stats.updateConsoleTitle(bot._inventory);
-                            Logger.Write($"Transferred {pokeData.PokemonId} with {pokeData.Cp} CP (Pokemon was not in Catch list!)", LogLevel.Info);
+                            Logger.Write($"Transferred {pokeData.PokemonId} with {pokeData.Cp} CP (Pokemon was not in Catch list!)", LogLevel.Info, ConsoleColor.DarkGreen);
                         }
                     }
                     else
@@ -68,7 +68,7 @@ namespace GoBot
                             {
                                 bot._stats.increasePokemonsTransfered();
                                 bot._stats.updateConsoleTitle(bot._inventory);
-                                Logger.Write($"Transferred {pokeData.PokemonId} with {pokeData.Cp} CP ({BotInstance.CalculatePokemonPerfection(pokeData).ToString("0.00")}%) (Under Requirement)", LogLevel.Info);
+                                Logger.Write($"Transferred {pokeData.PokemonId} with {pokeData.Cp} CP ({BotInstance.CalculatePokemonPerfection(pokeData).ToString("0.00")}%) (Under Requirement)", LogLevel.Info, ConsoleColor.DarkGreen);
                             }
                         }
                         else
@@ -86,7 +86,7 @@ namespace GoBot
             }
             catch (Exception ex)
             {
-                Logger.Write($"Exception: {ex}");
+                Logger.Write($"Exception: {ex}", LogLevel.Error, ConsoleColor.Red);
                 Utils.Events.PokemonCaughtReset.Set();
             }
         }

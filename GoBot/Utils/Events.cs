@@ -2,6 +2,7 @@
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using System;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,9 +22,9 @@ namespace GoBot.Utils
         public static AsyncManualResetEvent FortFarmedReset = new AsyncManualResetEvent();
         public delegate void FortFarmedHandler(object sender, FortFarmedArgs e);
 
-        public static async void Log(string sender, string message)
+        public static async void Log(string sender, string message, Color color)
         {
-            OnMessageReceived(null, new LogReceivedArgs() { Sender = sender, Message = message });
+            OnMessageReceived(null, new LogReceivedArgs() { Sender = sender, Message = message, Color = color });
         }
 
         public static async Task FortFarmed(FortSearchResponse resp, FortData fortData)
@@ -72,6 +73,7 @@ namespace GoBot.Utils
     {
         public string Sender;
         public string Message;
+        public Color Color;
     }
     public class PokemonCaughtArgs : EventArgs
     {

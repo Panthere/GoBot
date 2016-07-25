@@ -1,4 +1,7 @@
-﻿using GoBot.Logic;
+﻿using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
+using GoBot.Logic;
 using GoBot.UserLogger;
 using GoBot.Utils;
 using POGOProtos.Data;
@@ -8,8 +11,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GoBot
@@ -20,6 +25,13 @@ namespace GoBot
         private Sorter pokemonSorter;
         public BotInstance bot;
         public EventReceiver rec;
+
+        private GMapOverlay mOverlay = new GMapOverlay("markers");
+        private GMapOverlay pOverlay = new GMapOverlay("routes");
+        private GMapMarker m;
+        private GMapMarker dest;
+
+        private PointLatLng lastDestination;
         public FrmMain()
         {
             InitializeComponent();
@@ -36,6 +48,7 @@ namespace GoBot
         {
             Logger.SetLogger(new UserLogger.EventLogger(LogLevel.Info));
 
+          
             LoadPokemon(clbCatch);
             LoadPokemon(clbEvolve);
             LoadPokemon(clbTransfer);
@@ -43,7 +56,7 @@ namespace GoBot
             rec.Set();
 
             GoBot.Utils.Events.OnMessageReceived += Events_OnMessageReceived;
-
+            
             foreach (ColumnHeader ch in lvBalls.Columns)
             {
                 string appendText = "< ";
@@ -56,7 +69,9 @@ namespace GoBot
             }
 
             LoadSettings();
-            
+
+
+
         }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -65,6 +80,7 @@ namespace GoBot
             // I do this because it may not exit or a thread may be open still...
             Environment.Exit(0);
         }
+        #region Settings
         private void LoadSettings()
         {
             try
@@ -194,7 +210,9 @@ namespace GoBot
             }
 
         }
+        #endregion
 
+        #region Listview Sorting and Events
         private void lvBalls_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             itemSorter.Column = e.Column;
@@ -253,12 +271,15 @@ namespace GoBot
                         lvWalkLog.Items.Clear();
 
                     ListViewItem lvi = new ListViewItem($"[{ DateTime.Now.ToString("HH:mm:ss")}]");
+                    lvi.UseItemStyleForSubItems = true;
+
                     lvi.SubItems.Add(e.Message);
 
+                    lvi.ForeColor = e.Color;
 
                     lvWalkLog.Items.Add(lvi);
 
-
+                    lvWalkLog.Items[lvWalkLog.Items.Count - 1].EnsureVisible();
                 });
             }
             catch (Exception ex)
@@ -266,8 +287,9 @@ namespace GoBot
 
             }
         }
+        #endregion
 
-
+        #region Functions
         private void MsgInfo(string msg)
         {
             MessageBox.Show(msg, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -332,7 +354,58 @@ namespace GoBot
             }
             return pids;
         }
-        private void btnStart_Click(object sender, EventArgs e)
+
+        private void ReloadMap(bool over = false)
+        {
+            gmap.ShowCenter = false;
+            if (over || gmap.Position.Lat != bot._client.CurrentLatitude && gmap.Position.Lng != bot._client.CurrentLongitude)
+            {
+
+                mOverlay.Markers.Remove(m);
+
+                gmap.Position = new GMap.NET.PointLatLng(bot._client.CurrentLatitude, bot._client.CurrentLongitude);
+               
+                m = new GMarkerGoogle(gmap.Position, Properties.Resources.ash);
+                
+                mOverlay.Markers.Add(m);
+
+
+
+                if (over)
+                {
+                    gmap.Overlays.Add(mOverlay);
+                    gmap.Overlays.Add(pOverlay);
+                    gmap.Zoom = 17;
+                }
+                
+
+            }
+
+            if (bot._navigation.FinalDestination != null && lastDestination.Lat != bot._navigation.FinalDestination.Latitude && lastDestination.Lng != bot._navigation.FinalDestination.Longitude)
+            {
+                
+                pOverlay.Clear();
+                foreach (var x in bot._navigation.DestinationSteps)
+                {
+
+                    GMapRoute r = new GMapRoute(x, "Steps" + Guid.NewGuid().ToString());
+                    r.Stroke = new Pen(Color.Red, 3);
+                    
+                    pOverlay.Routes.Add(r);
+                }
+
+                mOverlay.Markers.Remove(dest);
+
+                dest = new GMarkerGoogle(new PointLatLng(bot._navigation.FinalDestination.Latitude, bot._navigation.FinalDestination.Longitude), Properties.Resources.marker);
+
+                mOverlay.Markers.Add(dest);
+
+               
+                lastDestination = new PointLatLng(bot._navigation.FinalDestination.Latitude, bot._navigation.FinalDestination.Longitude);
+            }
+        }
+        #endregion
+        private async void btnStart_Click(object sender, EventArgs e)
         {
             UserSettings.KeepCP = (txtTransferCp.Text).ToInt();
             UserSettings.EvolveOverCP = (txtEvolveCp.Text).ToInt(); 
@@ -357,8 +430,9 @@ namespace GoBot
             UserSettings.Altitude = (txtAltitude.Text).ToDouble();
 
             UserSettings.Teleport = chkTeleport.Checked;
-
             UserSettings.UseDelays = !chkNoDelay.Checked;
+            UserSettings.UseGoogleDirections = chkGoogleDirections.Checked;
+
 
             Settings settings = new Settings();
 
@@ -381,11 +455,15 @@ namespace GoBot
             bot.TransferList = chkInverseTransfer.Checked ? GetInverseList(clbTransfer) : GetList(clbTransfer);
             bot.BerryList = chkInverseBerries.Checked ? GetInverseList(clbBerries) : GetList(clbBerries);
 
+            firstTick = true;
 
             rec.bot = bot;
             bot.Execute();
 
+           
             tStats.Start();
+            tMap.Start();
+
             btnStart.Enabled = false;
             btnStart.Scheme = cButton.Schemes.Green;
 
@@ -398,13 +476,39 @@ namespace GoBot
             Logger.Write("Stop button hit!");
             bot.Stop();
             tStats.Stop();
+            tMap.Stop();
             btnStart.Enabled = true;
             btnStart.Scheme = cButton.Schemes.Green;
 
             btnStop.Enabled = false;
             btnStop.Scheme = cButton.Schemes.Red;
         }
+        private bool firstTick = true;
+        private void tMap_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (firstTick)
+                {
+                    // Load map
+                    gmap.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
+                    GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerAndCache;
+                    gmap.Position = new GMap.NET.PointLatLng(UserSettings.StartLat, UserSettings.StartLng);
 
+                    ReloadMap(true);
+                    firstTick = false;
+
+                }
+                else
+                {
+                    ReloadMap();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Write("Map Timer Exception: " + ex.ToString(), LogLevel.Info, ConsoleColor.Red);
+            }
+        }
         private async void tStats_Tick(object sender, EventArgs e)
         {
 
@@ -424,12 +528,13 @@ namespace GoBot
                 lblRuntime.Text = Statistics.ProgramRuntime;
                 lblPokemonPerHour.Text = Statistics.PokemonPerHour;
 
+
             }
             catch (Exception ex)
             {
                 Logger.Write($"Stat Timer Error: {ex}");
             }
-}
+        }
 
         private void btnResetSettings_Click(object sender, EventArgs e)
         {
@@ -684,7 +789,7 @@ namespace GoBot
 
                         if (res.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
                         {
-                            Logger.Write($"Evolved {pd.PokemonId} successfully for {res.ExperienceAwarded}xp", LogLevel.Info);
+                            Logger.Write($"Evolved {pd.PokemonId} successfully for {res.ExperienceAwarded}xp", LogLevel.Info, ConsoleColor.DarkGreen);
                             bot._stats.increasePokemonsTransfered();
                             bot._stats.updateConsoleTitle(bot._inventory);
                         }
@@ -724,7 +829,7 @@ namespace GoBot
 
                         var res = await bot._client.TransferPokemon(pd.Id);
 
-                        Logger.Write($"Transferred {pd.PokemonId} with {pd.Cp} CP", LogLevel.Info);
+                        Logger.Write($"Transferred {pd.PokemonId} with {pd.Cp} CP", LogLevel.Info, ConsoleColor.Yellow);
                         bot._stats.increasePokemonsTransfered();
                         bot._stats.updateConsoleTitle(bot._inventory);
                     }
@@ -739,6 +844,33 @@ namespace GoBot
             {
                 MsgError(ex.ToString());
             }
+        }
+
+        private void btnActivateLuckyEgg_Click(object sender, EventArgs e)
+        {
+            if (bot == null || !bot.running)
+            {
+                MsgError("You cannot activate a Lucky Egg when the bot is not running...");
+                return;
+            }
+
+            new Task(async () =>
+            {
+                var resp = await bot.UseLuckyEgg();
+                if (resp == POGOProtos.Networking.Responses.UseItemXpBoostResponse.Types.Result.Success)
+                {
+                    MsgInfo("Used Lucky Egg!");
+                }
+                else if (resp == POGOProtos.Networking.Responses.UseItemXpBoostResponse.Types.Result.ErrorXpBoostAlreadyActive)
+                {
+                    MsgError("You already have a Lucky Egg active!");
+                }
+                else
+                {
+                    MsgError("Failed to use a Lucky Egg, make sure you have some left!");
+                }
+            }).Start();
+
         }
     }
 }

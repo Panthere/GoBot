@@ -1,0 +1,1989 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GoogleMapsApi</name>
+    </assembly>
+    <members>
+        <member name="T:GoogleMapsApi.EngineFacade`2">
+            <summary>
+            A public-surface API that exposes the Google Maps API functionality.
+            </summary>
+            <typeparam name="TRequest"></typeparam>
+            <typeparam name="TResponse"></typeparam>
+        </member>
+        <member name="P:GoogleMapsApi.EngineFacade`2.HttpConnectionLimit">
+            <summary>
+            Determines the maximum number of concurrent HTTP connections to open to this engine's host address. The default value is 2 connections.
+            </summary>
+            <remarks>
+            This value is determined by the ServicePointManager and is shared across other engines that use the same host address.
+            </remarks>
+        </member>
+        <member name="P:GoogleMapsApi.EngineFacade`2.HttpsConnectionLimit">
+            <summary>
+            Determines the maximum number of concurrent HTTPS connections to open to this engine's host address. The default value is 2 connections.
+            </summary>
+            <remarks>
+            This value is determined by the ServicePointManager and is shared across other engines that use the same host address.
+            </remarks>
+        </member>
+        <member name="E:GoogleMapsApi.EngineFacade`2.OnUriCreated">
+            <summary>
+            Occurs when the Url created. Can be used for override the Url.
+            </summary>
+        </member>
+        <member name="E:GoogleMapsApi.EngineFacade`2.OnRawResponseRecivied">
+            <summary>
+            Occurs when raw data from Google API recivied.
+            </summary>
+        </member>
+        <member name="M:GoogleMapsApi.EngineFacade`2.Query(`0)">
+            <summary>
+            Query the Google Maps API using the provided request with the default timeout of 100,000 milliseconds (100 seconds).
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <returns>The response that was received.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+            <exception cref="T:System.Security.Authentication.AuthenticationException">Thrown when the provided Google client ID or signing key are invalid.</exception>
+            <exception cref="T:System.TimeoutException">Thrown when the operation has exceeded the allotted time.</exception>
+            <exception cref="T:System.Net.WebException">Thrown when an error occurred while downloading data.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.EngineFacade`2.Query(`0,System.TimeSpan)">
+            <summary>
+            Query the Google Maps API using the provided request and timeout period.
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <param name="timeout">A TimeSpan specifying the amount of time to wait for a response before aborting the request.
+            The specify an infinite timeout, pass a TimeSpan with a TotalMillisecond value of Timeout.Infinite.
+            When a request is aborted due to a timeout an AggregateException will be thrown with an InnerException of type TimeoutException.</param>
+            <returns>The response that was received.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+            <exception cref="T:System.Security.Authentication.AuthenticationException">Thrown when the provided Google client ID or signing key are invalid.</exception>
+            <exception cref="T:System.TimeoutException">Thrown when the operation has exceeded the allotted time.</exception>
+            <exception cref="T:System.Net.WebException">Thrown when an error occurred while downloading data.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.EngineFacade`2.QueryAsync(`0)">
+            <summary>
+            Asynchronously query the Google Maps API using the provided request.
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <returns>A Task with the future value of the response.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.EngineFacade`2.QueryAsync(`0,System.TimeSpan)">
+            <summary>
+            Asynchronously query the Google Maps API using the provided request.
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <param name="timeout">A TimeSpan specifying the amount of time to wait for a response before aborting the request.
+            The specify an infinite timeout, pass a TimeSpan with a TotalMillisecond value of Timeout.Infinite.
+            When a request is aborted due to a timeout the returned task will transition to the Faulted state with a TimeoutException.</param>
+            <returns>A Task with the future value of the response.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the value of timeout is neither a positive value or infinite.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.EngineFacade`2.QueryAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously query the Google Maps API using the provided request.
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <param name="token">A cancellation token that can be used to cancel the pending asynchronous task.</param>
+            <returns>A Task with the future value of the response.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.EngineFacade`2.QueryAsync(`0,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously query the Google Maps API using the provided request.
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <param name="timeout">A TimeSpan specifying the amount of time to wait for a response before aborting the request.
+            The specify an infinite timeout, pass a TimeSpan with a TotalMillisecond value of Timeout.Infinite.
+            When a request is aborted due to a timeout the returned task will transition to the Faulted state with a TimeoutException.</param>
+            <param name="token">A cancellation token that can be used to cancel the pending asynchronous task.</param>
+            <returns>A Task with the future value of the response.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the value of timeout is neither a positive value or infinite.</exception>
+        </member>
+        <member name="P:GoogleMapsApi.Engine.MapsAPIGenericEngine`2.HttpConnectionLimit">
+            <summary>
+            Determines the maximum number of concurrent HTTP connections to open to this engine's host address. The default value is 2 connections.
+            </summary>
+            <remarks>
+            This value is determined by the ServicePointManager and is shared across other engines that use the same host address.
+            </remarks>
+        </member>
+        <member name="P:GoogleMapsApi.Engine.MapsAPIGenericEngine`2.HttpsConnectionLimit">
+            <summary>
+            Determines the maximum number of concurrent HTTPS connections to open to this engine's host address. The default value is 2 connections.
+            </summary>
+            <remarks>
+            This value is determined by the ServicePointManager and is shared across other engines that use the same host address.
+            </remarks>
+        </member>
+        <member name="M:GoogleMapsApi.Engine.UnixTimeConverter.DateTimeToUnixTimestamp(System.DateTime)">
+            <summary>
+            Converts a DateTime to a Unix timestamp
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Common.MapsBaseRequest.Sensor">
+            <summary>
+            True to indicate that request comes from a device with a location sensor, otherwise false. 
+            This information is required by Google and does not affect the results.
+            </summary>
+            <remarks>
+            It is unclear if Google refers to the device performing the request or the source of the location data.
+            In the geocoding API reference at https://developers.google.com/maps/documentation/geocoding/ the definition is:
+            
+                sensor (required) — Indicates whether or not the geocoding request comes from a device with a location sensor.
+            
+            This implies that only mobile devices that are equipped with a location sensor (such as GPS) should set the Sensor value 
+            to True. So if a location is sent to a web server which then calls the Google API, it apparently should set the Sensor
+            value to false, since the web server isn't a location sensor equipped device.
+            
+            In another page of their documentation, https://developers.google.com/maps/documentation/javascript/tutorial they say:
+            
+                The sensor parameter of the URL must be included, and indicates whether this application uses a sensor (such as a GPS 
+                locator) to determine the user's location.
+            
+            This implies something completely different, that the Sensor value must be set to true if the source of the location
+            information is a sensor or not, regardless if the request is being performed by a location sensor equipped device or not.
+            </remarks>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Common.MapsBaseRequest.IsSSL">
+            <summary>
+            True to use use the https protocol; false to use http. The default is false.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Common.MapsBaseRequest.ApiKey">
+            <summary>
+            Your application's API key. This key identifies your application for purposes of quota management and so that Places 
+            added from your application are made immediately available to your app. Visit the APIs Console to create an API Project and obtain your key.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Common.Photo">
+            <summary>
+            Place Photo.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Common.Photo.PhotoReference">
+            <summary>
+            PhotoReference — a string used to identify the photo when you perform a Photo request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Common.Photo.Height">
+            <summary>
+            Height — the maximum height of the image.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Common.Photo.Width">
+            <summary>
+            Width — the maximum width of the image.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Common.Photo.HtmlAttributions">
+            <summary>
+            HtmlAttributions — contains any required attributions. This field will always be present, but may be empty.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Common.SignableRequest">
+            <summary>
+            An abstract base class for requests that can be authenticated via URL signing.
+            </summary>
+            <remarks>
+            See https://developers.google.com/maps/documentation/business/webservices for details about signing.
+            </remarks>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Common.SignableRequest.ClientID">
+            <summary>
+            The client ID provided to you by Google Enterprise Support, or null to disable URL signing. All client IDs begin with a "gme-" prefix.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Common.SignableRequest.SigningKey">
+            <summary>
+            A cryptographic signing key (secret shared key), in base64url format, provided to you by Google Enterprise Support.
+            The key will only be used if the ClientID property is set, otherwise it will be ignored.
+            </summary>
+            <remarks>
+            This cryptographic signing key is not the same as the (freely available) Maps API key (typically beginning with 'ABQ..') 
+            that developers without a Maps API for Business license are required to use when loading the Maps JavaScript API V2 and 
+            Maps API for Flash, or the keys issued by the Google APIs Console for use with the Google Places API.
+            </remarks>
+        </member>
+        <member name="M:GoogleMapsApi.Entities.Common.SignableRequest.Sign(System.Uri)">
+            <remarks>
+            Based on the C# sample from: https://developers.google.com/maps/documentation/business/webservices
+            </remarks>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.Origin">
+            <summary>
+            origin (Required) - The address or textual latitude/longitude value from which you wish to calculate directions. 
+            If you pass an address as a string, the Directions service will geocode the string and convert it to a latitude/longitude 
+            coordinate to calculate directions. If you pass coordinates, ensure that no space exists between the latitude and longitude values.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.Destination">
+            <summary>
+            destination (required) — The address or textual latitude/longitude value from which you wish to calculate directions. 
+            If you pass an address as a string, the Directions service will geocode the string and convert it to a latitude/longitude 
+            coordinate to calculate directions. If you pass coordinates, ensure that no space exists between the latitude and longitude values.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.DepartureTime">
+            <summary>
+            The time of departure.
+            Required when TravelMode = Transit
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.ArrivalTime">
+            <summary>
+            The time of arrival.
+            Required when TravelMode = Transit
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.Waypoints">
+            <summary>
+            waypoints (optional) specifies an array of waypoints. Waypoints alter a route by routing it through the specified location(s). A waypoint is specified as either a latitude/longitude coordinate or as an address which will be geocoded. (For more information on waypoints, see Using Waypoints in Routes below.)
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.OptimizeWaypoints">
+            <summary>
+            optimize the provided route by rearranging the waypoints in a more efficient order. (This optimization is an application of the Travelling Salesman Problem.)
+            http://en.wikipedia.org/wiki/Travelling_salesman_problem
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.Alternatives">
+            <summary>
+            alternatives (optional), if set to true, specifies that the Directions service may provide more than one route alternative in the response. Note that providing route alternatives may increase the response time from the server.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.Avoid">
+            <summary>
+            avoid (optional) indicates that the calculated route(s) should avoid the indicated features. Currently, this parameter supports the following two arguments:
+            tolls indicates that the calculated route should avoid toll roads/bridges.
+            highways indicates that the calculated route should avoid highways.
+            (For more information see Route Restrictions below.)
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.Language">
+            <summary>
+            language (optional) — The language in which to return results. See the supported list of domain languages. 
+            Note that we often update supported languages so this list may not be exhaustive. 
+            If language is not supplied, the Directions service will attempt to use the native language of the browser wherever possible. 
+            You may also explicitly bias the results by using localized domains of http://map.google.com. 
+            See Region Biasing for more information.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.TravelMode">
+            <summary>
+            (optional, defaults to driving) — specifies what mode of transport to use when calculating directions. Valid values are specified in Travel Modes.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Request.DirectionsRequest.Region">
+            <summary>
+            This parameter takes a region code, specified as a IANA language region subtag (http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry). 
+            In most cases, these tags map directly to familiar ccTLD ("top-level domain") two-character values such as "uk" in "co.uk" for example.
+             In some cases, the region tag also supports ISO-3166-1 codes, which sometimes differ from ccTLD values ("GB" for "Great Britain" for example).
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.DirectionsResponse.ErrorMessage">
+            <summary>
+            Error message recived from the server when the call fails
+            </summary>
+            <value>Error message</value>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.DirectionsResponse.Status">
+            <summary>
+            "status" contains metadata on the request. See Status Codes below.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.DirectionsResponse.Routes">
+            <summary>
+            "routes" contains an array of routes from the origin to the destination. See Routes below.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Distance.Value">
+            <summary>
+            value indicates the distance in meters
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Distance.Text">
+            <summary>
+            text contains a human-readable representation of the distance, displayed in units as used at the origin, in the language specified in the request. (For example, miles and feet will be used for any origin within the United States.) Note that regardless of what unit system is displayed as text, the distance.value field always contains a value expressed in meters.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Directions.Response.Duration">
+            <summary>
+            duration indicates the total duration of this leg
+            These fields may be absent if the duration is unknown.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Duration.Value">
+            <summary>
+            value indicates the duration in seconds.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Duration.Text">
+            <summary>
+            text contains a human-readable representation of the duration.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Directions.Response.Leg">
+            <summary>
+            Each element in the legs array specifies a single leg of the journey from the origin to the destination in the calculated route. For routes that contain no waypoints, the route will consist of a single "leg," but for routes that define one or more waypoints, the route will consist of one or more legs, corresponding to the specific legs of the journey.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Leg.Steps">
+            <summary>
+            steps[] contains an array of steps denoting information about each separate step of the leg of the journey. (See Directions Steps below.)
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Leg.Distance">
+            <summary>
+            distance indicates the total distance covered by this leg
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Leg.Duration">
+            <summary>
+            duration indicates the total duration of this leg,
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Leg.StartLocation">
+            <summary>
+            start_location contains the latitude/longitude coordinates of the origin of this leg. Because the Directions API calculates directions between locations by using the nearest transportation option (usually a road) at the start and end points, start_location may be different than the provided origin of this leg if, for example, a road is not near the origin.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Leg.EndLocation">
+            <summary>
+            end_location contains the latitude/longitude coordinates of the given destination of this leg. Because the Directions API calculates directions between locations by using the nearest transportation option (usually a road) at the start and end points, end_location may be different than the provided destination of this leg if, for example, a road is not near the destination.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Leg.StartAddress">
+            <summary>
+            start_address contains the human-readable address (typically a street address) reflecting the start_location of this leg.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Leg.EndAddress">
+            <summary>
+            end_addresss contains the human-readable address (typically a street address) reflecting the end_location of this leg.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Leg.ArrivalTime">
+            <summary>
+            The time of arrival. Only avaliable when using TravelMode = Transit
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Leg.DepartureTime">
+            <summary>
+            The time of departure. Only avaliable when using TravelMode = Transit
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Line.Name">
+            <summary>
+            Contains the full name of this transit line. eg. "7 Avenue Express".
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Line.ShortName">
+            <summary>
+            Contains the short name of this transit line. This will normally be a line number, such as "M7" or "355".
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Line.Color">
+            <summary>
+            Contains the color commonly used in signage for this transit line. The color will be specified as a hex string such as: #FF0033. 
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Line.Agencies">
+            <summary>
+            Contains a List of TransitAgency objects that each provide information about the operator of the line.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Line.Url">
+            <summary>
+            Contains the URL for this transit line as provided by the transit agency.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Line.Icon">
+            <summary>
+            Contains the URL for the icon associated with this line.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Line.TextColor">
+            <summary>
+            Contains the color of text commonly used for signage of this line. The color will be specified as a hex string.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Line.Vehicle">
+            <summary>
+            Contains the type of vehicle used on this line.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Directions.Response.OverviewPolyline">
+            <summary>
+            Contains the encoded and decoded data returned in the overview_polyline field.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.OverviewPolyline.EncodedPoints">
+            <summary>
+            The encoded string containing the overview path points as they were received.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.OverviewPolyline.Points">
+            <summary>
+            An array of Location objects representing the points in the overview path, decoded from the string contained in the EncodedPoints property.
+            </summary>
+            <exception cref="T:GoogleMapsApi.Entities.Directions.Response.PointsDecodingException">Unexpectedly couldn't decode points</exception>
+        </member>
+        <member name="M:GoogleMapsApi.Entities.Directions.Response.OverviewPolyline.DecodePoints">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+            <exception cref="T:GoogleMapsApi.Entities.Directions.Response.PointsDecodingException">Unexpectedly couldn't decode points</exception>
+        </member>
+        <member name="M:GoogleMapsApi.Entities.Directions.Response.OverviewPolyline.GetRawPointsData">
+            <summary>
+            The RAW data of points from Google
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Directions.Response.Route">
+            <summary>
+            When the Directions API returns results, it places them within a (JSON) routes array. Even if the service returns no results (such as if the origin and/or destination doesn't exist) it still returns an empty routes array. (XML responses consist of zero or more route elements.)
+            Each element of the routes array contains a single result from the specified origin and destination. This route may consist of one or more legs depending on whether any waypoints were specified. As well, the route also contains copyright and warning information which must be displayed to the user in addition to the routing information.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Route.Summary">
+            <summary>
+            summary contains a short textual description for the route, suitable for naming and disambiguating the route from alternatives.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Route.Bounds">
+            <summary>
+            bounds (optionally returned) contains the viewport bounding box of the overview_polyline.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Route.Legs">
+            <summary>
+            legs[] contains an array which contains information about a leg of the route, between two locations within the given route. A separate leg will be present for each waypoint or destination specified. (A route with no waypoints will contain exactly one leg within the legs array.) Each leg consists of a series of steps. (See Directions Legs below.)
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Route.WaypointOrder">
+            <summary>
+            waypoint_order contains an array indicating the order of any waypoints in the calculated route. This waypoints may be reordered if the request was passed optimize:true within its waypoints parameter.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Route.OverviewPath">
+            <summary>
+            overview_path contains an object holding an array of encoded points and levels that represent an approximate (smoothed) path of the resulting directions.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Route.Copyrights">
+            <summary>
+            copyrights contains the copyrights text to be displayed for this route. You must handle and display this information yourself.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Route.Warnings">
+            <summary>
+            warnings[] contains an array of warnings to be displayed when showing these directions. You must handle and display these warnings yourself.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Directions.Response.Step">
+            <summary>
+            Each element in the steps array defines a single step of the calculated directions. A step is the most atomic unit of a direction's route, containing a single step describing a specific, single instruction on the journey. E.g. "Turn left at W. 4th St." The step not only describes the instruction but also contains distance and duration information relating to how this step relates to the following step. For example, a step denoted as "Merge onto I-80 West" may contain a duration of "37 miles" and "40 minutes," indicating that the next step is 37 miles/40 minutes from this step.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Step.HtmlInstructions">
+            <summary>
+            html_instructions contains formatted instructions for this step, presented as an HTML text string.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Step.PolyLine">
+            <summary>
+            Contains an object holding an array of encoded points that represent an approximate (smoothed) path of the resulting directions.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Step.Distance">
+            <summary>
+            distance contains the distance covered by this step until the next step. (See the discussion of this field in Directions Legs above.) This field may be undefined if the distance is unknown.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Step.Duration">
+            <summary>
+            duration contains the typical time required to perform the step, until the next step (See the description in Directions Legs above.) This field may be undefined if the duration is unknown.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Step.StartLocation">
+            <summary>
+            start_location contains the location of the starting point of this step, as a single set of lat and lng fields.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Step.EndLocation">
+            <summary>
+            end_location contains the location of the starting point of this step, as a single set of lat and lng fields.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Step.TransitDetails">
+            <summary>
+            More information about the step. Only avaliable when TravelMode = Transit
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Step.SubSteps">
+            <summary>
+            Contains detailed directions for walking or driving steps in transit directions. Substeps are only available when TravelMode is set to Transit.
+            * NOTE : Google documentations states that it should be 'sub_steps' but implemented as 'steps' so we use the actual implementation
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Step.TravelMode">
+            <summary>
+            Gets the mode of transportation used in this step
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Step.TravelModeString">
+            <summary>
+            Gets the mode of transportation used in this step
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Directions.Response.Stop">
+            <summary>
+            Contains information about the stop/station for this part of the trip
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Stop.Name">
+            <summary>
+            The name of the transit station/stop. eg. "Union Square".
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Stop.Location">
+            <summary>
+            The location of the transit station/stop, represented as lattitude and longitude.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Directions.Response.TransitAgency">
+            <summary>
+            Information about the transit agency.
+            Note: You must display the names and URLs of the transit agencies servicing the trip results.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitAgency.Name">
+            <summary>
+            Contains the name of the transit agency.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitAgency.Url">
+            <summary>
+            Contains the URL for the transit agency.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitAgency.Phone">
+            <summary>
+            Contains the phone number of the transit agency.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitDetails.ArrivalStop">
+            <summary>
+            Contains information about the stop/station for this part of the trip
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitDetails.DepartureStop">
+            <summary>
+            Contains information about the stop/station for this part of the trip.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitDetails.ArrivalTime">
+            <summary>
+            Contain the arrival times for this leg of the journey
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitDetails.DepartureTime">
+            <summary>
+            Contain the departure times for this leg of the journey
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitDetails.Headsign">
+            <summary>
+            Specifies the direction in which to travel on this line, as it is marked on the vehicle or at the departure stop. This will often be the terminus station.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitDetails.Headway">
+            <summary>
+            Specifies the expected number of seconds between departures from the same stop at this time. For example, with a headway value of 600, you would expect a ten minute wait if you should miss your bus.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitDetails.NumberOfStops">
+            <summary>
+            Contains the number of stops in this step, counting the arrival stop, but not the departure stop. For example, if your directions involve leaving from Stop A, passing through stops B and C, and arriving at stop D, num_stops will return 3.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.TransitDetails.Lines">
+            <summary>
+            Contains information about the transit line used in this step.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Vehicle.Name">
+            <summary>
+            Contains the name of the vehicle on this line. eg. "Subway."
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Vehicle.VehicleTypeString">
+            <summary>
+            Contains the type of vehicle that runs on this line.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Vehicle.VehicleType">
+            <summary>
+            Contains the type of vehicle that runs on this line.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Vehicle.Icon">
+            <summary>
+            Contains the URL for an icon associated with this vehicle type.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Directions.Response.Vehicle.LocalIcon">
+            <summary>
+            Contains the URL for a localized icon associated with this vehicle type.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.OTHER">
+            <summary>
+            All other vehicles will return this type.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.RAIL">
+            <summary>
+            Rail.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.METRO_RAIL">
+            <summary>
+            Light rail transit.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.SUBWAY">
+            <summary>
+            Underground light rail.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.TRAM">
+            <summary>
+            Above ground light rail.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.MONORAIL">
+            <summary>
+            Monorail.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.HEAVY_RAIL">
+            <summary>
+            Heavy rail.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.COMMUTER_TRAIN">
+            <summary>
+            Commuter rail.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.HIGH_SPEED_TRAIN">
+            <summary>
+            High speed train.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.BUS">
+            <summary>
+            Bus.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.INTERCITY_BUS">
+            <summary>
+            Intercity bus.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.TROLLEYBUS">
+            <summary>
+            Trolleybus.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.SHARE_TAXI">
+            <summary>
+            Share taxi is a kind of bus with the ability to drop off and pick up passengers anywhere on its route.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.FERRY">
+            <summary>
+            Ferry.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.CABLE_CAR">
+            <summary>
+            A vehicle that operates on a cable, usually on the ground. Aerial cable cars may be of the type GONDOLA_LIFT.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.GONDOLA_LIFT">
+            <summary>
+            An aerial cable car.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Directions.Response.VehicleType.FUNICULAR">
+            <summary>
+            A vehicle that is pulled up a steep incline by a cable. A Funicular typically consists of two cars, with each car acting as a counterweight for the other.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Request.DistanceMatrixRequest.Alternatives">
+            <summary>
+            alternatives (optional), if set to true, specifies that the Directions service may provide more than one route alternative in the response. Note that providing route alternatives may increase the response time from the server.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Request.DistanceMatrixRequest.DepartureTime">
+            <summary>
+             The desired time of departure. 
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Response.Distance.Value">
+            <summary>
+            value indicates the distance in meters
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Response.Distance.Text">
+            <summary>
+            text contains a human-readable representation of the distance, displayed in units as used at the origin, in the language specified in the request. (For example, miles and feet will be used for any origin within the United States.) Note that regardless of what unit system is displayed as text, the distance.value field always contains a value expressed in meters.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Response.DistanceMatrixResponse.Status">
+            <summary>
+            "status" contains metadata on the request. See Status Codes below.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.DistanceMatrix.Response.Duration">
+            <summary>
+            duration indicates the total duration of this leg
+            These fields may be absent if the duration is unknown.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Response.Duration.Value">
+            <summary>
+            value indicates the duration in seconds.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Response.Duration.Text">
+            <summary>
+            text contains a human-readable representation of the duration.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Response.Element.Status">
+            <summary>
+            "status" See Status Codes for a list of possible status codes.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Response.Element.Distance">
+            <summary>
+             distance: The total distance of this route, expressed in meters (value) and as text
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Response.Element.Duration">
+            <summary>
+            duration: The length of time it takes to travel this route
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Response.Element.DurationInTraffic">
+            <summary>
+            duration_in_traffic The length of time it takes to travel this route, based on current and historical traffic conditions. 
+            See the traffic_model request parameter for the options you can use to request that the returned value is optimistic, pessimistic, or a best-guess estimate.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.DistanceMatrix.Response.Row.Elements">
+            <summary>
+            element[] The information about each origin-destination pairing is returned in an element entry
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Elevation.Request.ElevationRequest">
+            <summary>
+            The Elevation API provides elevation data for all locations on the surface of the earth, including depth locations on the ocean floor (which return negative values). In those cases where Google does not possess exact elevation measurements at the precise location you request, the service will interpolate and return an averaged value using the four nearest locations.
+            With the Elevation API, you can develop hiking and biking applications, mobile positioning applications, or low resolution surveying applications.
+            You access the Elevation API through an HTTP interface Users of the Google JavaScript API V3 may also access this API directly by using the ElevationService() object. (See Elevation Service for more information.)
+            The Elevation API is a new service; we encourage you to join the Maps API discussion group to give us feedback.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Elevation.Request.ElevationRequest.Locations">
+            <summary>
+            locations (required) defines the location(s) on the earth from which to return elevation data. This parameter takes either a single location as a comma-separated {latitude,longitude} pair (e.g. "40.714728,-73.998672") or multiple latitude/longitude pairs passed as an array or as an encoded polyline. For more information, see Specifying Locations below.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Elevation.Request.ElevationRequest.Path">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Elevation.Response.Result.Location">
+            <summary>
+            A location element (containing lat and lng elements) of the position for which elevation data is being computed. Note that for path requests, the set of location elements will contain the sampled points along the path.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Elevation.Response.Result.Elevation">
+            <summary>
+            An elevation element indicating the elevation of the location in meters.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Request.GeocodingRequest.Address">
+            <summary>
+            address (required) — The address that you want to geocode.*
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Request.GeocodingRequest.Location">
+            <summary>
+            latlng (required) — The textual latitude/longitude value for which you wish to obtain the closest, human-readable address.*
+            If you pass a latlng, the geocoder performs what is known as a reverse geocode. See Reverse Geocoding for more information.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Request.GeocodingRequest.Bounds">
+            <summary>
+            bounds (optional) — The bounding box of the viewport within which to bias geocode results more prominently. (For more information see Viewport Biasing below.)
+            The bounds and region parameters will only influence, not fully restrict, results from the geocoder.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Request.GeocodingRequest.Region">
+            <summary>
+            region (optional) — The region code, specified as a ccTLD ("top-level domain") two-character value. (For more information see Region Biasing below.)
+            The bounds and region parameters will only influence, not fully restrict, results from the geocoder.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Request.GeocodingRequest.Language">
+            <summary>
+            language (optional) — The language in which to return results. See the supported list of domain languages. Note that we often update supported languages so this list may not be exhaustive. If language is not supplied, the geocoder will attempt to use the native language of the domain from which the request is sent wherever possible.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.AddressComponent.Types">
+            <summary>
+            types[] is an array indicating the type of the address component.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.AddressComponent.ShortName">
+            <summary>
+            short_name is an abbreviated textual name for the address component, if available. For example, an address component for the state of Alaska may have a long_name of "Alaska" and a short_name of "AK" using the 2-letter postal abbreviation.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.AddressComponent.LongName">
+            <summary>
+            long_name is the full text description or name of the address component as returned by the Geocoder.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.Geometry.Location">
+            <summary>
+            location contains the geocoded latitude,longitude value. For normal address lookups, this field is typically the most important.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.Geometry.LocationType">
+            <summary>
+            location_type stores additional data about the specified location. 
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.Geometry.ViewPort">
+            <summary>
+            viewport contains the recommended viewport for displaying the returned result, specified as two latitude,longitude values defining the southwest and northeast corner of the viewport bounding box. Generally the viewport is used to frame a result when displaying it to a user.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.Geometry.Bounds">
+            <summary>
+            bounds (optionally returned) stores the bounding box which can fully contain the returned result. Note that these bounds may not match the recommended viewport. (For example, San Francisco includes the Farallon islands, which are technically part of the city, but probably should not be returned in the viewport.)
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Geocoding.Response.GeocodeLocationType.ROOFTOP">
+            <summary>
+            Indicates that the returned result is a precise geocode for which we have location information accurate down to street address precision.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Geocoding.Response.GeocodeLocationType.RANGE_INTERPOLATED">
+            <summary>
+            Indicates that the returned result reflects an approximation (usually on a road) interpolated between two precise points (such as intersections). Interpolated results are generally returned when rooftop geocodes are unavailable for a street address.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Geocoding.Response.GeocodeLocationType.GEOMETRIC_CENTER">
+            <summary>
+            Indicates that the returned result is the geometric center of a result such as a polyline (for example, a street) or polygon (region).
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Geocoding.Response.GeocodeLocationType.APPROXIMATE">
+            <summary>
+            Indicates that the returned result is approximate.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Geocoding.Response.Result">
+            <summary>
+            When the geocoder returns results, it places them within a (JSON) results array. Even if the geocoder returns no results (such as if the address doesn't exist) it still returns an empty results array. (XML responses consist of zero or more result elements.)
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.Result.Types">
+            <summary>
+            The types[] array indicates the type of the returned result. This array contains a set of one or more tags identifying the type of feature returned in the result. For example, a geocode of "Chicago" returns "locality" which indicates that "Chicago" is a city, and also returns "political" which indicates it is a political entity.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.Result.FormattedAddress">
+            <summary>
+            formatted_address is a string containing the human-readable address of this location. Often this address is equivalent to the "postal address," which sometimes differs from country to country. (Note that some countries, such as the United Kingdom, do not allow distribution of true postal addresses due to licensing restrictions.) This address is generally composed of one or more address components. For example, the address "111 8th Avenue, New York, NY" contains separate address components for "111" (the street number, "8th Avenue" (the route), "New York" (the city) and "NY" (the US state). These address components contain additional information as noted below.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.Result.AddressComponents">
+            <summary>
+            address_components[] is an array containing the separate address components
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.Result.Geometry">
+            <summary>
+            geometry contains information such as latitude, longitude, location_type, viewport, bounds
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.Result.PartialMatch">
+            <summary>
+            indicates that the geocoder did not return an exact match for the original request, though it did match part of the requested address. You may wish to examine the original request for misspellings and/or an incomplete address. Partial matches most often occur for street addresses that do not exist within the locality you pass in the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Geocoding.Response.Result.PlaceId">
+            <summary>
+            provides the Google PlaceId
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Geocoding.Response.Status">
+            <summary>
+            The "status" field within the Geocoding response object contains the status of the request, and may contain debugging information to help you track down why Geocoding is not working. The "status" field may contain the following values:
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Geocoding.Response.Status.OK">
+            <summary>
+            Indicates that no errors occurred; the address was successfully parsed and at least one geocode was returned.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Geocoding.Response.Status.ZERO_RESULTS">
+            <summary>
+            Indicates that the geocode was successful but returned no results. This may occur if the geocode was passed a non-existent address or a latlng in a remote location.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Geocoding.Response.Status.OVER_QUERY_LIMIT">
+            <summary>
+            Indicates that you are over your quota.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Geocoding.Response.Status.REQUEST_DENIED">
+            <summary>
+            Indicates that your request was denied, generally because of lack of a sensor parameter.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Geocoding.Response.Status.INVALID_REQUEST">
+            <summary>
+            Generally indicates that the query (address or latlng) is missing.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlaceAutocomplete.Request.PlaceAutocompleteRequest">
+            <summary>
+            The Place Autocomplete service is a web service that returns place predictions in response to an HTTP request. The request specifies 
+            a textual search string and optional geographic bounds. The service can be used to provide autocomplete functionality for text-based 
+            geographic searches, by returning places such as businesses, addresses and points of interest as a user types.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Request.PlaceAutocompleteRequest.Input">
+            <summary>
+            Input (required) - the text string on which to search
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Request.PlaceAutocompleteRequest.Offset">
+            <summary>
+            The position, in the input term, of the last character that the service uses to match predictions (optional).
+            For example, if the input is 'Google' and the offset is 3, the service will match on 'Goo'. The string determined by the offset 
+            is matched against the first word in the input term only. For example, if the input term is 'Google abc' and the offset is 3, 
+            the service will attempt to match against 'Goo abc'. If no offset is supplied, the service will use the whole term. The offset 
+            should generally be set to the position of the text caret.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Request.PlaceAutocompleteRequest.Location">
+            <summary>
+            location (optional) — The textual latitude/longitude value from which you wish to retrieve place information.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Request.PlaceAutocompleteRequest.Radius">
+            <summary>
+            Defines the distance (in meters) within which to return Place results (optional). The maximum allowed radius is 50 000 meters. 
+            Note that radius must not be included if rankby=distance (described under Optional parameters below) is specified.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Request.PlaceAutocompleteRequest.Language">
+            <summary>
+            The language code, indicating in which language the results should be returned, if possible. See the list of supported languages and their codes. 
+            Note that we often update supported languages so this list may not be exhaustive.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Request.PlaceAutocompleteRequest.Types">
+            <summary>
+            Restricts the results to Places matching at least one of the specified types (optional). 
+            Types should be separated with a pipe symbol (type1|type2|etc). 
+            See the list of supported types - https://developers.google.com/maps/documentation/places/supported_types
+            
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Request.PlaceAutocompleteRequest.Components">
+            <summary>
+             A grouping of places to which you would like to restrict your results (optional). Currently, you can use components to filter by country. 
+             The country must be passed as a two character, ISO 3166-1 Alpha-2 compatible country code. For example: components=country:fr would 
+             restrict your results to places within France.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlaceAutocomplete.Response.MatchedSubstring">
+            <summary>
+            Describes the location of the entered term in the PlaceAutocomplete result text, so that the term can be highlighted if desired
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.MatchedSubstring.Offset">
+            <summary>
+            The start position of this term in the description, measured in Unicode characters
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.MatchedSubstring.Length">
+            <summary>
+            The length of this term in the description, measured in Unicode characters
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.PlaceAutocompleteResponse.Status">
+            <summary>
+            "status" contains metadata on the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.PlaceAutocompleteResponse.Results">
+            <summary>
+            "results" contains an array of predictions rather than full results, each including a description and a reference which can be queried further
+            to get the full place details
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Prediction">
+            <summary>
+            When the PlaceAutocomplete service returns results from a search, it places them within a predictions array. 
+            Even if the service returns no results (such as if the location is remote) it still returns an empty predictions array.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Prediction.Description">
+            <summary>
+            Contains the human-readable name for the returned result. For establishment results, this is usually the business name.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Prediction.PlaceId">
+            <summary>
+            Contains a unique identifier for this place. To retrieve information about this place, pass this identifier in the placeId field of
+            a Places API request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Prediction.Reference">
+            <summary>
+            Contains a unique token that you can use to retrieve additional information about this place in a Place Details request. 
+            You can store this token and use it at any time in future to refresh cached data about this place, but the same token is 
+            not guaranteed to be returned for any given place across different searches.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Prediction.ID">
+            <summary>
+            Contains a unique stable identifier denoting this place. This identifier may not be used to retrieve information about this
+            place, but can be used to consolidate data about this place, and to verify the identity of a place across separate searches.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Prediction.Terms">
+            <summary>
+            Contains an array of terms identifying each section of the returned description (a section of the description is generally 
+            terminated with a comma). Each entry in the array has a value field, containing the text of the term, and an offset field, 
+            defining the start position of this term in the description, measured in Unicode characters.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Prediction.Types">
+            <summary>
+            Contains an array of types that apply to this place. For example: [ "political", "locality" ] or [ "establishment", "geocode" ].
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Prediction.MatchedSubstrings">
+            <summary>
+            Contains an offset value and a length. These describe the location of the entered term in the prediction result text, so that 
+            the term can be highlighted if desired.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Term">
+            <summary>
+            Identifies a section of description in a PlaceAutocomplete search result
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Term.Value">
+            <summary>
+            The text of the term
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlaceAutocomplete.Response.Term.Offset">
+            <summary>
+            The start position of this term in the description, measured in Unicode characters
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.Aspect.Rating">
+            <summary>
+            Event id.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlacesDetails.Response.Geometry">
+            <summary>
+            Contains the location
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.OpeningHours.OpenNow">
+            <summary>
+             is a boolean value indicating if the Place is open at the current time.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.OpeningHours.Periods">
+            <summary>
+            periods[] is an array of opening periods covering seven days, starting from Sunday, in chronological order. Each period contains:
+            open contains a pair of day and time objects describing when the Place opens
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlacesDetails.Response.Period">
+            <summary>
+            periods[] is an array of opening periods covering seven days, starting from Sunday, in chronological order. Each period contains:
+            open contains a pair of day and time objects describing when the Place opens:
+            day a number from 0–6, corresponding to the days of the week, starting on Sunday. For example, 2 means Tuesday.
+            time may contain a time of day in 24-hour hhmm format. Values are in the range 0000–2359. The time will be reported in the Place’s time zone.
+            close may contain a pair of day and time objects describing when the Place closes. Note: If a Place is always open, the close section will be missing from the response. Clients can rely on always-open being represented as an open period containing day with value 0 and time with value 0000, and no close.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.PlacesDetailsResponse.Status">
+            <summary>
+            "status" contains metadata on the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.PlacesDetailsResponse.Result">
+            <summary>
+            "results" contains an array of places, with information about the place. See Place Search Results for information about these results. The Places API returns up to 20 establishment results. Additionally, political results may be returned which serve to identify the area of the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.Review.Aspect">
+            <summary>
+            Event id.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.Event.EventId">
+            <summary>
+            Event id.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.Result.AddressComponent">
+            <summary>
+            name contains the human-readable name for the returned result. For establishment results, this is usually the canonicalized business name.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.Result.OpeningHours">
+            <summary>
+            Opening hours information
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.PlacesDetails.Response.Status.OK">
+            <summary>
+            Indicates that no errors occurred; the place was successfully detected and at least one result was returned.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.PlacesDetails.Response.Status.UNKNOWN_ERROR">
+            <summary>
+            Indicates a server-side error; trying again may be successful.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.PlacesDetails.Response.Status.ZERO_RESULTS">
+            <summary>
+            Indicates that the search was successful but returned no results. This may occur if the search was passed a latlng in a remote location.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.PlacesDetails.Response.Status.OVER_QUERY_LIMIT">
+            <summary>
+            Indicates that you are over your quota.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.PlacesDetails.Response.Status.REQUEST_DENIED">
+            <summary>
+            Indicates that your request was denied, generally because of lack of a sensor parameter.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.PlacesDetails.Response.Status.INVALID_REQUEST">
+            <summary>
+            Generally indicates that the query parameter (location or radius) is missing.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.PlacesDetails.Response.Status.NOT_FOUND">
+            <summary>
+            Indicates that the referenced location was not found in the Places database.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.TimeOfWeek.Day">
+            <remarks>
+            .net's DayOfWeek follows the same numbering as google (Sunday == 0) therefor a specific
+            conversion step is not needed, the deserializer's direct casting will work.
+            http://msdn.microsoft.com/en-us/library/system.dayofweek.aspx
+            </remarks>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesDetails.Response.TimeOfWeek.Time">
+            <summary>
+            May contain a time of day in 24-hour hhmm format (values are in the range 0000–2359). The time will
+            be reported in the Place’s timezone.
+            </summary>
+            <remarks>
+            Didn't make this stronly typed due to .net's lack of an explicit 'Time' class.
+            http://noda-time.blogspot.com.au/2011/08/what-wrong-with-datetime-anyway.html
+            </remarks>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlacesNearBy.Request.PlacesNearByRequest">
+            <summary>
+            The Google Places API is a service that returns information about a "place" (hereafter referred to as a Place) — defined within this API as an establishment, a geographic location, or prominent point of interest — using an HTTP request. Place requests specify locations as latitude/longitude coordinates.
+            Two basic Place requests are available: a Place Search request and a Place Details request. Generally, a Place Search request is used to return candidate matches, while a Place Details request returns more specific information about a Place.
+            This service is designed for processing place requests generated by a user for placement of application content on a map; this service is not designed to respond to batch of offline queries, which are a violation of its terms of use.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Request.PlacesNearByRequest.Location">
+            <summary>
+            location (required) — The textual latitude/longitude value from which you wish to retrieve place information.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Request.PlacesNearByRequest.Radius">
+            <summary>
+            Defines the distance (in meters) within which to return Place results. The maximum allowed radius is 50 000 meters. 
+            Note that radius must not be included if rankby=distance (described under Optional parameters below) is specified.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Request.PlacesNearByRequest.Keyword">
+            <summary>
+            A term to be matched against all content that Google has indexed for this Place, 
+            including but not limited to name, type, and address, as well as customer reviews and other third-party content.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Request.PlacesNearByRequest.Language">
+            <summary>
+            The language code, indicating in which language the results should be returned, if possible. See the list of supported languages and their codes. 
+            Note that we often update supported languages so this list may not be exhaustive.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Request.PlacesNearByRequest.Name">
+            <summary>
+             A term to be matched against the names of Places. Results will be restricted to those containing the passed name value.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Request.PlacesNearByRequest.RankBy">
+            <summary>
+            Specifies the order in which results are listed
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Request.PlacesNearByRequest.Types">
+            <summary>
+            Restricts the results to Places matching at least one of the specified types. 
+            Types should be separated with a pipe symbol (type1|type2|etc). 
+            See the list of supported types - https://developers.google.com/maps/documentation/places/supported_types
+            
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Request.PlacesNearByRequest.PageToken">
+            <summary>
+            If there is a next page of results, this token will be supplied by Google in a previous PlacesResponse. PageToken should be set to the previous response value to get the next page of results from Google.
+            When PageToken is set, all other Request parameters are ignored.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlacesNearBy.Request.RankBy">
+            <summary>
+            Specifies the order in which results are listed
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.PlacesNearBy.Request.RankBy.Prominence">
+            <summary>
+            This option sorts results based on their importance. Ranking will favor prominent places within the specified area. Prominence can be affected by a Place's ranking in Google's index, the number of check-ins from your application, global popularity, and other factors.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.PlacesNearBy.Request.RankBy.Distance">
+            <summary>
+            This option sorts results in ascending order by their distance from the specified location. A radius should not be supplied, and bounds is not supported. One or more of keyword, name, or types is required.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlacesNearBy.Response.Geometry">
+            <summary>
+            Contains the location
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Response.PlacesNearByResponse.Status">
+            <summary>
+            "status" contains metadata on the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Response.PlacesNearByResponse.NextPage">
+            <summary>
+            If there is a next page of results, the token will be supplied by Google. Token should be set on the next PlacesRequest object to get the next page of results from Google.
+            If null is returned, there is no next page of results.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Response.PlacesNearByResponse.Results">
+            <summary>
+            "results" contains an array of places, with information about the place. See Place Search Results for information about these results. The Places API returns up to 20 establishment results. Additionally, political results may be returned which serve to identify the area of the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesNearBy.Response.Result.Name">
+            <summary>
+            name contains the human-readable name for the returned result. For establishment results, this is usually the canonicalized business name.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlacesRadar.Request.PlacesRadarRequest">
+            <summary>
+            The Google Places API Radar Search Service allows you to search for up to 200 places at once, but with less detail than is typically returned from a Text Search or Nearby Search request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesRadar.Request.PlacesRadarRequest.Location">
+            <summary>
+            Required. The latitude/longitude around which to retrieve place information. This must be specified as latitude,longitude.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesRadar.Request.PlacesRadarRequest.Radius">
+            <summary>
+            Required. Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesRadar.Request.PlacesRadarRequest.Keyword">
+            <summary>
+            Optional. A term to be matched against all content that Google has indexed for this place, including but not limited to name, type, and address, as well as customer reviews and other third-party content.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesRadar.Request.PlacesRadarRequest.MinPrice">
+            <summary>
+            Optional. Restricts results to only those places within the specified price level. Valid values are in the range from 0 (most affordable) to 4 (most expensive), inclusive. The exact amount indicated by a specific value will vary from region to region.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesRadar.Request.PlacesRadarRequest.MaxPrice">
+            <summary>
+            Optional. Restricts results to only those places within the specified price level. Valid values are in the range from 0 (most affordable) to 4 (most expensive), inclusive. The exact amount indicated by a specific value will vary from region to region.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesRadar.Request.PlacesRadarRequest.Name">
+            <summary>
+            Optional. One or more terms to be matched against the names of places, separated by a space character. Results will be restricted to those containing the passed name values. Note that a place may have additional names associated with it, beyond its listed name. The API will try to match the passed name value against all of these names. As a result, places may be returned in the results whose listed names do not match the search term, but whose associated names do.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesRadar.Request.PlacesRadarRequest.OpenNow">
+            <summary>
+            Optional. Set to true to only return those places that are open for business at the time the query is sent. Places that do not specify opening hours in the Google Places database will not be returned if you include this parameter in your query.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesRadar.Request.PlacesRadarRequest.Types">
+            <summary>
+            Optional. Restricts the results to Places matching at least one of the specified types. 
+            Types should be separated with a pipe symbol (type1|type2|etc). 
+            See the list of supported types - https://developers.google.com/maps/documentation/places/supported_types
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlacesRadar.Response.Geometry">
+            <summary>
+            Contains the location
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesRadar.Response.PlacesRadarResponse.Status">
+            <summary>
+            "status" contains metadata on the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesRadar.Response.PlacesRadarResponse.Results">
+            <summary>
+            "results" contains an array of places, with information about the place. See Place Search Results for information about these results. The Places API returns up to 20 establishment results. Additionally, political results may be returned which serve to identify the area of the request.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.PlacesText.Response.Geometry">
+            <summary>
+            Contains the location
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesText.Response.PlacesTextResponse.Status">
+            <summary>
+            "status" contains metadata on the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesText.Response.PlacesTextResponse.Results">
+            <summary>
+            "results" contains an array of places, with information about the place. See Place Search Results for information about these results. The Places API returns up to 20 establishment results. Additionally, political results may be returned which serve to identify the area of the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.PlacesText.Response.Result.Name">
+            <summary>
+            name contains the human-readable name for the returned result. For establishment results, this is usually the canonicalized business name.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Places.Request.PlacesRequest">
+            <summary>
+            The Google Places API is a service that returns information about a "place" (hereafter referred to as a Place) — defined within this API as an establishment, a geographic location, or prominent point of interest — using an HTTP request. Place requests specify locations as latitude/longitude coordinates.
+            Two basic Place requests are available: a Place Search request and a Place Details request. Generally, a Place Search request is used to return candidate matches, while a Place Details request returns more specific information about a Place.
+            This service is designed for processing place requests generated by a user for placement of application content on a map; this service is not designed to respond to batch of offline queries, which are a violation of its terms of use.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Request.PlacesRequest.Location">
+            <summary>
+            location (required) — The textual latitude/longitude value from which you wish to retrieve place information.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Request.PlacesRequest.Radius">
+            <summary>
+            Defines the distance (in meters) within which to return Place results. The maximum allowed radius is 50 000 meters. 
+            Note that radius must not be included if rankby=distance (described under Optional parameters below) is specified.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Request.PlacesRequest.Keyword">
+            <summary>
+            A term to be matched against all content that Google has indexed for this Place, 
+            including but not limited to name, type, and address, as well as customer reviews and other third-party content.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Request.PlacesRequest.Language">
+            <summary>
+            The language code, indicating in which language the results should be returned, if possible. See the list of supported languages and their codes. 
+            Note that we often update supported languages so this list may not be exhaustive.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Request.PlacesRequest.Name">
+            <summary>
+             A term to be matched against the names of Places. Results will be restricted to those containing the passed name value.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Request.PlacesRequest.RankBy">
+            <summary>
+            Specifies the order in which results are listed
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Request.PlacesRequest.Types">
+            <summary>
+            Restricts the results to Places matching at least one of the specified types. 
+            Types should be separated with a pipe symbol (type1|type2|etc). 
+            See the list of supported types - https://developers.google.com/maps/documentation/places/supported_types
+            
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Request.PlacesRequest.PageToken">
+            <summary>
+            If there is a next page of results, this token will be supplied by Google in a previous PlacesResponse. PageToken should be set to the previous response value to get the next page of results from Google.
+            When PageToken is set, all other Request parameters are ignored.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Places.Request.RankBy">
+            <summary>
+            Specifies the order in which results are listed
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Places.Request.RankBy.Prominence">
+            <summary>
+            This option sorts results based on their importance. Ranking will favor prominent places within the specified area. Prominence can be affected by a Place's ranking in Google's index, the number of check-ins from your application, global popularity, and other factors.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.Entities.Places.Request.RankBy.Distance">
+            <summary>
+            This option sorts results in ascending order by their distance from the specified location. A radius should not be supplied, and bounds is not supported. One or more of keyword, name, or types is required.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.Entities.Places.Response.Geometry">
+            <summary>
+            Contains the location
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Response.PlacesResponse.Status">
+            <summary>
+            "status" contains metadata on the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Response.PlacesResponse.NextPage">
+            <summary>
+            If there is a next page of results, the token will be supplied by Google. Token should be set on the next PlacesRequest object to get the next page of results from Google.
+            If null is returned, there is no next page of results.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Response.PlacesResponse.Results">
+            <summary>
+            "results" contains an array of places, with information about the place. See Place Search Results for information about these results. The Places API returns up to 20 establishment results. Additionally, political results may be returned which serve to identify the area of the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.Places.Response.Result.Name">
+            <summary>
+            name contains the human-readable name for the returned result. For establishment results, this is usually the canonicalized business name.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.TimeZone.Request.TimeZoneRequest.Location">
+            <summary>
+            location: a comma-separated lat,lng tuple (eg. location=-33.86,151.20), representing the location to look up
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.TimeZone.Request.TimeZoneRequest.TimeStamp">
+            <summary>
+            Timestamp specifies the desired time as seconds since midnight, January 1, 1970 UTC. The Time Zone API uses the timestamp to determine whether or not Daylight Savings should be applied. Times before 1970 can be expressed as negative values.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.TimeZone.Request.TimeZoneRequest.Language">
+            <summary>
+            The language in which to return results. See the list of supported domain languages. Note that we often update supported languages so this list may not be exhaustive. Defaults to en
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.TimeZone.Request.TimeZoneRequest.IsSSL">
+            <summary>
+            The language in which to return results. See the list of supported domain languages. Note that we often update supported languages so this list may not be exhaustive. Defaults to en.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.TimeZone.Response.TimeZoneResponse.Status">
+            <summary>
+            "status" contains metadata on the request.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.TimeZone.Response.TimeZoneResponse.OffSet">
+            <summary>
+            DstOffset: the offset for daylight-savings time in seconds. This will be zero if the time zone is not in Daylight Savings Time during the specified timestamp.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.TimeZone.Response.TimeZoneResponse.RawOffSet">
+            <summary>
+            RawOffset: the offset from UTC (in seconds) for the given location. This does not take into effect daylight savings.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.TimeZone.Response.TimeZoneResponse.TimeZoneId">
+            <summary>
+            TimeZoneId: a string containing the ID of the time zone, such as "America/Los_Angeles" or "Australia/Sydney".
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.Entities.TimeZone.Response.TimeZoneResponse.TimeZoneName">
+            <summary>
+            TimeZoneName: a string containing the long form name of the time zone. This field will be localized if the language parameter is set. eg. "Pacific Daylight Time" or "Australian.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.Geocode">
+            <summary>Perform geocoding operations.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.Directions">
+            <summary>Perform directions operations.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.Elevation">
+            <summary>Perform elevation operations.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.Places">
+            <summary>Perform places operations.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.PlacesText">
+            <summary>Perform places text search operations.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.PlacesRadar">
+            <summary>Perform places radar search operations.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.TimeZone">
+            <summary>Perform places text search operations.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.PlacesDetails">
+            <summary>Perform places details  operations.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.PlaceAutocomplete">
+            <summary>Perform place autocomplete operations.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.PlacesNearBy">
+            <summary>Perform near by places operations.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.GoogleMaps.DistanceMatrix">
+            <summary>Retrieve duration and distance values based on the recommended route between start and end points.</summary>
+        </member>
+        <member name="P:GoogleMapsApi.IEngineFacade`2.HttpConnectionLimit">
+            <summary>
+            Determines the maximum number of concurrent HTTP connections to open to this engine's host address. The default value is 2 connections.
+            </summary>
+            <remarks>
+            This value is determined by the ServicePointManager and is shared across other engines that use the same host address.
+            </remarks>
+        </member>
+        <member name="P:GoogleMapsApi.IEngineFacade`2.HttpsConnectionLimit">
+            <summary>
+            Determines the maximum number of concurrent HTTPS connections to open to this engine's host address. The default value is 2 connections.
+            </summary>
+            <remarks>
+            This value is determined by the ServicePointManager and is shared across other engines that use the same host address.
+            </remarks>
+        </member>
+        <member name="E:GoogleMapsApi.IEngineFacade`2.OnUriCreated">
+            <summary>
+            Occurs when the Url created. Can be used for override the Url.
+            </summary>
+        </member>
+        <member name="E:GoogleMapsApi.IEngineFacade`2.OnRawResponseRecivied">
+            <summary>
+            Occurs when raw data from Google API recivied.
+            </summary>
+        </member>
+        <member name="M:GoogleMapsApi.IEngineFacade`2.Query(`0)">
+            <summary>
+            Query the Google Maps API using the provided request with the default timeout of 100,000 milliseconds (100 seconds).
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <returns>The response that was received.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+            <exception cref="!:AuthenticationException">Thrown when the provided Google client ID or signing key are invalid.</exception>
+            <exception cref="T:System.TimeoutException">Thrown when the operation has exceeded the allotted time.</exception>
+            <exception cref="!:WebException">Thrown when an error occurred while downloading data.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.IEngineFacade`2.Query(`0,System.TimeSpan)">
+            <summary>
+            Query the Google Maps API using the provided request and timeout period.
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <param name="timeout">A TimeSpan specifying the amount of time to wait for a response before aborting the request.
+            The specify an infinite timeout, pass a TimeSpan with a TotalMillisecond value of Timeout.Infinite.
+            When a request is aborted due to a timeout an AggregateException will be thrown with an InnerException of type TimeoutException.</param>
+            <returns>The response that was received.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+            <exception cref="!:AuthenticationException">Thrown when the provided Google client ID or signing key are invalid.</exception>
+            <exception cref="T:System.TimeoutException">Thrown when the operation has exceeded the allotted time.</exception>
+            <exception cref="!:WebException">Thrown when an error occurred while downloading data.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.IEngineFacade`2.QueryAsync(`0)">
+            <summary>
+            Asynchronously query the Google Maps API using the provided request.
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <returns>A Task with the future value of the response.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.IEngineFacade`2.QueryAsync(`0,System.TimeSpan)">
+            <summary>
+            Asynchronously query the Google Maps API using the provided request.
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <param name="timeout">A TimeSpan specifying the amount of time to wait for a response before aborting the request.
+            The specify an infinite timeout, pass a TimeSpan with a TotalMillisecond value of Timeout.Infinite.
+            When a request is aborted due to a timeout the returned task will transition to the Faulted state with a TimeoutException.</param>
+            <returns>A Task with the future value of the response.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the value of timeout is neither a positive value or infinite.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.IEngineFacade`2.QueryAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously query the Google Maps API using the provided request.
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <param name="token">A cancellation token that can be used to cancel the pending asynchronous task.</param>
+            <returns>A Task with the future value of the response.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.IEngineFacade`2.QueryAsync(`0,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously query the Google Maps API using the provided request.
+            </summary>
+            <param name="request">The request that will be sent.</param>
+            <param name="timeout">A TimeSpan specifying the amount of time to wait for a response before aborting the request.
+            The specify an infinite timeout, pass a TimeSpan with a TotalMillisecond value of Timeout.Infinite.
+            When a request is aborted due to a timeout the returned task will transition to the Faulted state with a TimeoutException.</param>
+            <param name="token">A cancellation token that can be used to cancel the pending asynchronous task.</param>
+            <returns>A Task with the future value of the response.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the request parameter.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the value of timeout is neither a positive value or infinite.</exception>
+        </member>
+        <member name="T:GoogleMapsApi.StaticMaps.Entities.Marker">
+            <summary>
+            The markers parameter defines a set of one or more markers at a set of locations. Each marker defined within a single markers declaration must exhibit the same visual style; if you wish to display markers with different styles, you will need to supply multiple markers parameters with separate style information.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.Marker.Style">
+            <summary>
+            Marker's style
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.StaticMaps.Entities.ImageSize">
+            <summary>
+            Images may be retrieved in sizes up to 640 by 640 pixels. The size parameter takes a string with two values separated by the x character. 640x640 is the largest image size allowed. Note that the center parameter, combined with the size parameter implicitly defines the coverage area of the map image.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MarkerStyle.Size">
+            <summary>
+            (optional) specifies the size of marker from the set {tiny, mid, small}. If no size parameter is set, the marker will appear in its default (normal) size.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MarkerStyle.Color">
+            <summary>
+            optional) specifies a 24-bit color (example: color=0xFFFFCC) or a predefined color from the set {black, brown, green, purple, yellow, blue, gray, orange, red, white}.
+            Note that transparencies (specified using 32-bit hex color values) are not supported in markers, though they are supported for paths.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MarkerStyle.Label">
+            <summary>
+            (optional) specifies a single uppercase alphanumeric character from the set {A-Z, 0-9}. 
+            (The requirement for uppercase characters is new to this version of the API.) 
+            Note that default and mid sized markers are the only markers capable of displaying an alphanumeric-character parameter. 
+            tiny and small markers are not capable of displaying an alphanumeric-character.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.StaticMaps.Entities.MapStyle">
+            <summary>
+            Styled maps allow you to customize the presentation of the standard Google map styles, changing the visual display of such elements as roads, parks, and built-up areas to reflect a different style than that used in the default map type. These components are known as features and a styled map allows you to select these features and apply visual styles to their display (including hiding them entirely). With these changes, the map can be made to emphasize particular components or complement content within the surrounding page.
+            A customized "styled" map consists of one or more specified styles, each indicated through a style parameter within the Static Map request URL. Additional styles are specified by passing additional style parameters. A style consists of a selection(s) and a set of rules to apply to that selection. The rules indicate what visual modification to make to the selection.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MapStyle.MapFeature">
+            <summary>
+            (optional) indicates what features to select for this style modification. (See Map Features below.) If no feature argument is passed, all features will be selected.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MapStyle.MapElement">
+            <summary>
+            (optional) indicates what sub-set of the selected features to select. (See Map Elements below.) If no element argument is passed, all elements of the given feature will be selected.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MapStyle.HUE">
+            <summary>
+            (an RGB hex string of format 0xRRGGBB) indicates the basic color to apply to the selection. 
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MapStyle.Lightness">
+            <summary>
+            (a floating point value between -100 and 100) indicates the percentage change in brightness of the element. Negative values increase darkness (where -100 specifies black) while positive values increase brightness (where +100 specifies white).
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MapStyle.Saturation">
+            <summary>
+             (a floating point value between -100 and 100) indicates the percentage change in intensity of the basic color to apply to the element.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MapStyle.Gamma">
+            <summary>
+            (a floating point value between 0.01 and 10.0, where 1.0 applies no correction) indicates the amount of gamma correction to apply to the element. Gammas modify the lightness of hues in a non-linear fashion, while unaffecting white or black values. Gammas are typically used to modify the contrast of multiple elements. For example, you could modify the gamma to increase or decrease the contrast between the edges and interiors of elements. Low gamma values (less than 1) increase contrast, while high values (> 1) decrease contrast.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MapStyle.InverseLightness">
+            <summary>
+             simply inverts the existing lightness.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.MapStyle.MapVisibility">
+            <summary>
+            indicates whether and how the element appears on the map. visibility:simplified indicates that the map should simplify the presentation of those elements as it sees fit. (A simplified road structure may show fewer roads, for example.)
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.PathStyle.Weight">
+            <summary>
+            (optional) specifies the thickness of the path in pixels. If no weight parameter is set, the path will appear in its default thickness (5 pixels).
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.PathStyle.Color">
+            <summary>
+            (optional) specifies a color either as a 24-bit (example: color=0xFFFFCC) or 32-bit hexadecimal value (example: color=0xFFFFCCFF), or from the set {black, brown, green, purple, yellow, blue, gray, orange, red, white}.
+            When a 32-bit hex value is specified, the last two characters specify the 8-bit alpha transparency value. This value varies between 00 (completely transparent) and FF (completely opaque). Note that transparencies are supported in paths, though they are not supported for markers.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.PathStyle.FillColor">
+            <summary>
+            (optional) indicates both that the path marks off a polygonal area and specifies the fill color to use as an overlay within that area. The set of locations following need not be a "closed" loop; the Static Map server will automatically join the first and last points. Note, however, that any stroke on the exterior of the filled area will not be closed unless you specifically provide the same beginning and end location.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest">
+            <summary>
+            http://code.google.com/apis/maps/documentation/staticmaps/
+            
+            The Google Static Maps API returns an image (either GIF, PNG or JPEG) in response to a HTTP request via a URL. 
+            For each request, you can specify the location of the map, the size of the image, the zoom level, the type of map, 
+            and the placement of optional markers at locations on the map. You can additionally label your markers using alphanumeric 
+            characters, so that you can refer to them in a "key."
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.Center">
+            <summary>
+            (required if markers not present) defines the center of the map, equidistant from all edges of the map. 
+            This parameter takes a location as either a comma-separated {latitude,longitude} pair (e.g. "40.714728,-73.998672") or 
+            a string address (e.g. "city hall, new york, ny") identifying a unique location on the face of the earth. 
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.Zoom">
+            <summary>
+             (required if markers not present) defines the zoom level of the map, which determines the magnification level of the map. 
+            This parameter takes a numerical value corresponding to the zoom level of the region desired.
+            Maps on Google Maps have an integer "zoom level" which defines the resolution of the current view. Zoom levels between 0 (the lowest zoom level, in which the entire world can be seen on one map) to 21+ (down to individual buildings) are possible within the default roadmap maps view.
+            Google Maps sets zoom level 0 to encompass the entire earth. Each succeeding zoom level doubles the precision in both horizontal and vertical dimensions. More information on how this is done is available in the Google Maps API documentation.
+            Note: not all zoom levels appear at all locations on the earth. Zoom levels vary depending on location, as data in some parts of the globe is more granular than in other locations.
+            If you send a request for a zoom level in which no map tiles exist, the Static Maps API will return a blank image instead.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.Size">
+            <summary>
+            (required) defines the rectangular dimensions of the map image. 
+            This parameter takes a string of the form valuexvalue where horizontal pixels are denoted first while vertical pixels are 
+            denoted second. For example, 500x400 defines a map 500 pixels wide by 400 pixels high. 
+            If you create a static map that is 100 pixels wide or smaller, the "Powered by Google" logo is automatically reduced in size.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.ImageFormat">
+            <summary>
+            (optional) defines the format of the resulting image. 
+            By default, the Static Maps API creates PNG images. 
+            There are several possible formats including GIF, JPEG and PNG types. 
+            Which format you use depends on how you intend to present the image. 
+            JPEG typically provides greater compression, while GIF and PNG provide greater detail. 
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.MapType">
+            <summary>
+             (optional) defines the type of map to construct. 
+            There are several possible maptype values, including roadmap, satellite, hybrid, and terrain. 
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.Language">
+            <summary>
+            (optional) defines the language to use for display of labels on map tiles. 
+            Note that this parameter is only supported for some country tiles; 
+            if the specific language requested is not supported for the tile set, then the default language for that tileset will be used.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.Markers">
+            <summary>
+            (optional) define one or more markers to attach to the image at specified locations. 
+            This parameter takes a single marker definition with parameters separated by the pipe character (|). 
+            Multiple markers may be placed within the same markers parameter as long as they exhibit the same style; 
+            you may add additional markers of differing styles by adding additional markers parameters. 
+            Note that if you supply markers for a map, you do not need to specify the (normally required) center and zoom parameters. 
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.Pathes">
+            <summary>
+             (optional) defines a single path of two or more connected points to overlay on the image at specified locations. 
+            This parameter takes a string of point definitions separated by the pipe character (|). 
+            You may supply additional paths by adding additional path parameters. 
+            Note that if you supply a path for a map, you do not need to specify the (normally required) center and zoom parameters. 
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.Visible">
+            <summary>
+            (optional) specifies one or more locations that should remain visible on the map, 
+            though no markers or other indicators will be displayed. 
+            Use this parameter to ensure that certain features or map locations are shown on the static map.
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.Style">
+            <summary>
+            (optional) defines a custom style to alter the presentation of a specific feature (road, park, etc.) of the map. 
+            This parameter takes feature and element arguments identifying the features to select and a set of style operations to 
+            apply to that selection. You may supply multiple styles by adding additional style parameters. 
+            </summary>
+        </member>
+        <member name="P:GoogleMapsApi.StaticMaps.Entities.StaticMapRequest.Sensor">
+            <summary>
+            sensor (required) specifies whether the application requesting the static map is using a sensor to determine the user's 
+            location. This parameter is required for all static map requests. 
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.StaticMaps.Enums.ImageFormat">
+            <summary>
+            Images may be returned in several common web graphics formats: GIF, JPEG and PNG. The format parameter takes one of the following values:
+            png8 or png (default) specifies the 8-bit PNG format.
+            png32 specifies the 32-bit PNG format.
+            gif specifies the GIF format.
+            jpg specifies the JPEG compression format.
+            jpg-baseline specifies a non-progressive JPEG compression format.
+            jpg and jpg-baseline typically provide the smallest image size, though they do so through "lossy" compression which may degrade the image. gif, png8 and png32 provide lossless compression.
+            Most JPEG images are progressive, meaning that they load a coarser image earlier and refine the image resolution as more data arrives. This allows images to be loaded quickly in webpages and is the most widespread use of JPEG currently. However, some uses of JPEG (especially printing) require non-progressive (baseline) images. In such cases, you may want to use the jpg-baseline format, which is non-progressive.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.StaticMaps.Enums.ImageFormat.PNG8">
+            <summary>
+            (default) specifies the 8-bit PNG format.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.StaticMaps.Enums.ImageFormat.PNG32">
+            <summary>
+            specifies the 32-bit PNG format.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.StaticMaps.Enums.ImageFormat.GIF">
+            <summary>
+            specifies the GIF format.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.StaticMaps.Enums.ImageFormat.JPG">
+            <summary>
+            specifies the JPEG compression format.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.StaticMaps.Enums.ImageFormat.JPG_baseline">
+            <summary>
+            specifies a non-progressive JPEG compression format.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.StaticMaps.Enums.MapElement">
+            <summary>
+            Additionally, some features on a map typically consist of different elements. A road, for example, consists of not only the graphical line (geometry) on the map, but the text denoting its name (labels) attached the map. Elements within features are selected by declaring an element argument
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.StaticMaps.Enums.MapFeature">
+            <summary>
+            A map consists of a set of features, such as roads or parks. The feature types form a category tree, with feature:all as the root. 
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.StaticMaps.Enums.MapType.Roadmap">
+            <summary>
+             (default) specifies a standard roadmap image, as is normally shown on the Google Maps website. If no maptype value is specified, the Static Maps API serves roadmap tiles by default.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.StaticMaps.Enums.MapType.Satellite">
+            <summary>
+            specifies a satellite image.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.StaticMaps.Enums.MapType.Terrain">
+            <summary>
+             specifies a physical relief map image, showing terrain and vegetation.
+            </summary>
+        </member>
+        <member name="F:GoogleMapsApi.StaticMaps.Enums.MapType.Hybrid">
+            <summary>
+            specifies a hybrid of the satellite and roadmap image, showing a transparent layer of major streets and place names on the satellite image.
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.StaticMaps.StaticMapsEngine">
+            <summary>
+            Creates a URL to google's static map according to propery filled up StaticMapsRequest
+            http://code.google.com/apis/maps/documentation/staticmaps/
+            </summary>
+        </member>
+        <member name="T:GoogleMapsApi.WebClientExtensionMethods">
+            <summary>
+            Provides asynchronous methods based on the Task-based Asynchronous Pattern for the WebClient class.
+            </summary>
+            <remarks>
+            The code below uses the guidelines outlined in the MSDN article "Simplify Asynchronous Programming with Tasks" 
+            at http://msdn.microsoft.com/en-us/magazine/ff959203.aspx under the "Converting an Event-Based Pattern" section,
+            and follows the general TAP guidelines found at http://www.microsoft.com/en-us/download/details.aspx?id=19957.
+            </remarks>
+        </member>
+        <member name="F:GoogleMapsApi.WebClientExtensionMethods.InfiniteTimeout">
+            <summary>
+            Constant. Specified an infinite timeout duration. This is a TimeSpan of negative one (-1) milliseconds.
+            </summary>
+        </member>
+        <member name="M:GoogleMapsApi.WebClientExtensionMethods.DownloadDataTaskAsync(System.Net.WebClient,System.Uri,System.TimeSpan)">
+            <summary>
+            Asynchronously downloads the resource with the specified URI as a Byte array limited by the specified timeout.
+            </summary>
+            <param name="client">The client with which to download the specified resource.</param>
+            <param name="address">The address of the resource to download.</param>
+            <param name="timeout">A TimeSpan specifying the amount of time to wait for a response before aborting the request.
+            The specify an infinite timeout, pass a TimeSpan with a TotalMillisecond value of Timeout.Infinite.
+            When a request is aborted due to a timeout the returned task will transition to the Faulted state with a TimeoutException.</param>
+            <returns>A Task with the future value of the downloaded string.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the client or address parameters.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the value of timeout is neither a positive value or infinite.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.WebClientExtensionMethods.DownloadDataTaskAsync(System.Net.WebClient,System.Uri,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously downloads the resource with the specified URI as a Byte array and allows cancelling the operation. 
+            Note that this overload specifies an infinite timeout.
+            </summary>
+            <param name="client">The client with which to download the specified resource.</param>
+            <param name="address">The address of the resource to download.</param>
+            <param name="token">A cancellation token that can be used to cancel the pending asynchronous task.</param>
+            <returns>A Task with the future value of the downloaded string.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the client or address parameters.</exception>
+        </member>
+        <member name="M:GoogleMapsApi.WebClientExtensionMethods.DownloadDataTaskAsync(System.Net.WebClient,System.Uri,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously downloads the resource with the specified URI as a Byte array limited by the specified timeout and allows cancelling the operation.
+            </summary>
+            <param name="client">The client with which to download the specified resource.</param>
+            <param name="address">The address of the resource to download.</param>
+            <param name="timeout">A TimeSpan specifying the amount of time to wait for a response before aborting the request.
+            The specify an infinite timeout, pass a TimeSpan with a TotalMillisecond value of Timeout.Infinite.
+            When a request is aborted due to a timeout the returned task will transition to the Faulted state with a TimeoutException.</param>
+            <param name="token">A cancellation token that can be used to cancel the pending asynchronous task.</param>
+            <returns>A Task with the future value of the downloaded string.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null value is passed to the client or address parameters.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the value of timeout is neither a positive value or infinite.</exception>
+        </member>
+    </members>
+</doc>
