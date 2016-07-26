@@ -183,16 +183,17 @@ namespace GoBot.Logic
             {
                 if (!running)
                     break;
-                if (UserSettings.Teleport)
+                /*if (UserSettings.Teleport)
                 {
                     // You'll be banned, I warned you...
+                    var dist = LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(pokemon.Latitude, pokemon.Longitude));
                     var update = await _client.Player.UpdatePlayerLocation(pokeStop.Latitude, pokeStop.Longitude, UserSettings.Altitude);
                 }
                 else
-                {
+                {*/
                     var update =
                         await _navigation.DirectionalWalking(new Navigation.Location(pokeStop.Latitude, pokeStop.Longitude), UserSettings.WalkingSpeed);
-                }
+                //}
 
                 if (UserSettings.GetForts)
                 {
@@ -223,9 +224,11 @@ namespace GoBot.Logic
         {
             var mapObjects = await _client.Map.GetMapObjects();
 
-            var pokemons = mapObjects.MapCells.SelectMany(i => i.CatchablePokemons).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
+            var catchPokemons = mapObjects.MapCells.SelectMany(i => i.CatchablePokemons).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
+            var nearPokemons = mapObjects.MapCells.SelectMany(i => i.NearbyPokemons).OrderBy(i => i.DistanceInMeters);
+            var wildPokemons = mapObjects.MapCells.SelectMany(i => i.WildPokemons).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
 
-            foreach (var pokemon in pokemons)
+            /*foreach (var pokemon in wildPokemons)
             {
                 if (!running)
                     break;
@@ -244,8 +247,16 @@ namespace GoBot.Logic
 
                     var pokeId = encounter?.WildPokemon?.PokemonData.PokemonId;
 
+                    MapPokemon mp = new MapPokemon();
+                    mp.Latitude = pokemon.Latitude;
+                    mp.Longitude = pokemon.Longitude;
+                    mp.EncounterId = pokemon.EncounterId;
+                    mp.PokemonId = pokemon.PokemonData.PokemonId;
+                    mp.SpawnPointId = pokemon.SpawnPointId;
+                    mp.ExpirationTimestampMs = pokemon.TimeTillHiddenMs;
+                    
 
-                    await CatchEncounter(encounter, pokemon);
+                    await CatchEncounter(encounter, mp);
 
 
 
@@ -253,7 +264,41 @@ namespace GoBot.Logic
                 }
                 catch (Exception ex)
                 {
-                    Logger.Write($"Exception CatchNearby: {ex}", LogLevel.Error, ConsoleColor.Red);
+                    Logger.Write($"Exception Catch WildPokemon: {ex}", LogLevel.Error, ConsoleColor.Red);
+                }
+            }*/
+
+            foreach (var pokemon in catchPokemons)
+            {
+                if (!running)
+                    break;
+                try
+                {
+                    if (UserSettings.Teleport)
+                    {
+                        var dist = LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(pokemon.Latitude, pokemon.Longitude));
+                        await Task.Delay(dist > 100 ? 5000 : 500);
+                        var update = await _client.Player.UpdatePlayerLocation(pokemon.Latitude, pokemon.Longitude, UserSettings.Altitude);
+                    }
+                    else
+                    {
+                        var update = await _navigation.DirectionalWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
+                    }
+
+                    var encounter = await _client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId);
+
+                    if (encounter.Status == EncounterResponse.Types.Status.EncounterSuccess)
+                    {
+                        var pokeId = encounter?.WildPokemon?.PokemonData.PokemonId;
+                        await CatchEncounter(encounter, pokemon);
+                    }
+
+
+                    await T.Delay(rand.Next(15000, 30000));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Write($"Exception Catch MapPokemon: {ex}", LogLevel.Error, ConsoleColor.Red);
                 }
             }
         }

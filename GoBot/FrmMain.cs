@@ -158,8 +158,19 @@ namespace GoBot
                 Properties.Settings.Default.GoogleAuthValue = string.IsNullOrEmpty(UserSettings.GoogleRefreshToken) ? "" : UserSettings.GoogleRefreshToken;
                 Properties.Settings.Default.Username = txtUser.Text;
                 Properties.Settings.Default.Password = txtPass.Text;
-                Properties.Settings.Default.Lat = txtLat.Text.ToDouble();
-                Properties.Settings.Default.Lng = txtLng.Text.ToDouble();
+
+                if (!chkRememberCoords.Checked || bot == null)
+                {
+                    Properties.Settings.Default.Lat = txtLat.Text.ToDouble();
+                    Properties.Settings.Default.Lng = txtLng.Text.ToDouble();
+                }
+                else
+                {
+
+                    Properties.Settings.Default.Lat = bot._client.CurrentLatitude;
+                    Properties.Settings.Default.Lng = bot._client.CurrentLongitude;
+                }
+
                 Properties.Settings.Default.Altitude = txtAltitude.Text.ToInt();
 
                 // save lists
@@ -420,7 +431,7 @@ namespace GoBot
             UserSettings.Password = txtPass.Text;
             UserSettings.Auth = cbAuthType.SelectedIndex == 0 ? PokemonGo.RocketAPI.Enums.AuthType.Ptc : PokemonGo.RocketAPI.Enums.AuthType.Google;
             UserSettings.UseBerries = clbBerries.CheckedItems.Count > 0;
-            UserSettings.WalkingSpeed = 20;
+            UserSettings.WalkingSpeed = txtWalkSpeed.Text.ToInt();
             UserSettings.StartLat = (txtLat.Text).ToDouble();
             UserSettings.StartLng = (txtLng.Text).ToDouble();
             UserSettings.CatchPokemon = chkCatchPokes.Checked;

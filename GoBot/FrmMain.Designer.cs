@@ -47,6 +47,7 @@
             this.txtLat = new cTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnActivateLuckyEgg = new cButton();
             this.label33 = new System.Windows.Forms.Label();
             this.txtOverrideIV = new cTextBox();
             this.txtOverrideCP = new cTextBox();
@@ -160,7 +161,7 @@
             this.lblFound = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.btnActivateLuckyEgg = new cButton();
+            this.chkRememberCoords = new cCheckBox();
             this.cTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -208,6 +209,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage2.Controls.Add(this.chkRememberCoords);
             this.tabPage2.Controls.Add(this.chkGoogleDirections);
             this.tabPage2.Controls.Add(this.chkNoDelay);
             this.tabPage2.Controls.Add(this.chkTeleport);
@@ -401,6 +403,17 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Pokemon Settings";
             // 
+            // btnActivateLuckyEgg
+            // 
+            this.btnActivateLuckyEgg.Location = new System.Drawing.Point(263, 403);
+            this.btnActivateLuckyEgg.Name = "btnActivateLuckyEgg";
+            this.btnActivateLuckyEgg.Scheme = cButton.Schemes.Black;
+            this.btnActivateLuckyEgg.Size = new System.Drawing.Size(176, 23);
+            this.btnActivateLuckyEgg.TabIndex = 32;
+            this.btnActivateLuckyEgg.Text = "Use Lucky Egg";
+            this.btnActivateLuckyEgg.UseVisualStyleBackColor = true;
+            this.btnActivateLuckyEgg.Click += new System.EventHandler(this.btnActivateLuckyEgg_Click);
+            // 
             // label33
             // 
             this.label33.AutoSize = true;
@@ -418,7 +431,7 @@
             this.txtOverrideIV.ReadOnly = false;
             this.txtOverrideIV.Scheme = cTextBox.Schemes.Black;
             this.txtOverrideIV.Size = new System.Drawing.Size(85, 30);
-            this.txtOverrideIV.TabIndex = 30;
+            this.txtOverrideIV.TabIndex = 9;
             this.txtOverrideIV.Text = "25";
             this.txtOverrideIV.UseSystemPasswordChar = false;
             // 
@@ -430,7 +443,7 @@
             this.txtOverrideCP.ReadOnly = false;
             this.txtOverrideCP.Scheme = cTextBox.Schemes.Black;
             this.txtOverrideCP.Size = new System.Drawing.Size(68, 30);
-            this.txtOverrideCP.TabIndex = 29;
+            this.txtOverrideCP.TabIndex = 8;
             this.txtOverrideCP.Text = "100";
             this.txtOverrideCP.UseSystemPasswordChar = false;
             // 
@@ -504,7 +517,7 @@
             this.txtEvolveIV.ReadOnly = false;
             this.txtEvolveIV.Scheme = cTextBox.Schemes.Black;
             this.txtEvolveIV.Size = new System.Drawing.Size(85, 30);
-            this.txtEvolveIV.TabIndex = 22;
+            this.txtEvolveIV.TabIndex = 2;
             this.txtEvolveIV.Text = "25";
             this.txtEvolveIV.UseSystemPasswordChar = false;
             // 
@@ -516,7 +529,7 @@
             this.txtTransferIV.ReadOnly = false;
             this.txtTransferIV.Scheme = cTextBox.Schemes.Black;
             this.txtTransferIV.Size = new System.Drawing.Size(85, 30);
-            this.txtTransferIV.TabIndex = 21;
+            this.txtTransferIV.TabIndex = 6;
             this.txtTransferIV.Text = "25";
             this.txtTransferIV.UseSystemPasswordChar = false;
             // 
@@ -528,7 +541,7 @@
             this.txtCatchIV.ReadOnly = false;
             this.txtCatchIV.Scheme = cTextBox.Schemes.Black;
             this.txtCatchIV.Size = new System.Drawing.Size(85, 30);
-            this.txtCatchIV.TabIndex = 20;
+            this.txtCatchIV.TabIndex = 4;
             this.txtCatchIV.Text = "50";
             this.txtCatchIV.UseSystemPasswordChar = false;
             // 
@@ -540,7 +553,7 @@
             this.txtProbability.ReadOnly = false;
             this.txtProbability.Scheme = cTextBox.Schemes.Black;
             this.txtProbability.Size = new System.Drawing.Size(207, 30);
-            this.txtProbability.TabIndex = 19;
+            this.txtProbability.TabIndex = 7;
             this.txtProbability.Text = "40";
             this.txtProbability.UseSystemPasswordChar = false;
             // 
@@ -617,7 +630,7 @@
             this.txtEvolveCp.ReadOnly = false;
             this.txtEvolveCp.Scheme = cTextBox.Schemes.Black;
             this.txtEvolveCp.Size = new System.Drawing.Size(116, 30);
-            this.txtEvolveCp.TabIndex = 13;
+            this.txtEvolveCp.TabIndex = 1;
             this.txtEvolveCp.Text = "50";
             this.txtEvolveCp.UseSystemPasswordChar = false;
             // 
@@ -638,7 +651,7 @@
             this.txtCatchCp.ReadOnly = false;
             this.txtCatchCp.Scheme = cTextBox.Schemes.Black;
             this.txtCatchCp.Size = new System.Drawing.Size(85, 30);
-            this.txtCatchCp.TabIndex = 11;
+            this.txtCatchCp.TabIndex = 3;
             this.txtCatchCp.Text = "50";
             this.txtCatchCp.UseSystemPasswordChar = false;
             // 
@@ -692,7 +705,7 @@
             this.txtTransferCp.ReadOnly = false;
             this.txtTransferCp.Scheme = cTextBox.Schemes.Black;
             this.txtTransferCp.Size = new System.Drawing.Size(97, 30);
-            this.txtTransferCp.TabIndex = 6;
+            this.txtTransferCp.TabIndex = 5;
             this.txtTransferCp.Text = "100";
             this.txtTransferCp.UseSystemPasswordChar = false;
             // 
@@ -1606,16 +1619,16 @@
             this.textBox1.Text = resources.GetString("textBox1.Text");
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // btnActivateLuckyEgg
+            // chkRememberCoords
             // 
-            this.btnActivateLuckyEgg.Location = new System.Drawing.Point(263, 403);
-            this.btnActivateLuckyEgg.Name = "btnActivateLuckyEgg";
-            this.btnActivateLuckyEgg.Scheme = cButton.Schemes.Black;
-            this.btnActivateLuckyEgg.Size = new System.Drawing.Size(176, 23);
-            this.btnActivateLuckyEgg.TabIndex = 32;
-            this.btnActivateLuckyEgg.Text = "Use Lucky Egg";
-            this.btnActivateLuckyEgg.UseVisualStyleBackColor = true;
-            this.btnActivateLuckyEgg.Click += new System.EventHandler(this.btnActivateLuckyEgg_Click);
+            this.chkRememberCoords.AutoSize = true;
+            this.chkRememberCoords.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkRememberCoords.Location = new System.Drawing.Point(129, 334);
+            this.chkRememberCoords.Name = "chkRememberCoords";
+            this.chkRememberCoords.Size = new System.Drawing.Size(175, 19);
+            this.chkRememberCoords.TabIndex = 12;
+            this.chkRememberCoords.Text = "Remember Last Coordinates";
+            this.chkRememberCoords.UseVisualStyleBackColor = true;
             // 
             // FrmMain
             // 
@@ -1785,6 +1798,7 @@
         private GMap.NET.WindowsForms.GMapControl gmap;
         private System.Windows.Forms.Timer tMap;
         private cButton btnActivateLuckyEgg;
+        private cCheckBox chkRememberCoords;
     }
 }
 
