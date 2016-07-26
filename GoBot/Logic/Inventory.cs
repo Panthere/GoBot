@@ -2,6 +2,7 @@
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Inventory;
+using POGOProtos.Inventory.Item;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
 using System.Collections.Generic;
@@ -195,7 +196,7 @@ namespace GoBot.Logic
 
         public async Task<IEnumerable<PlayerStats>> GetPlayerStats()
         {
-            var inventory = await _client.GetInventory();
+            var inventory = await _client.Inventory.GetInventory();
             return inventory.InventoryDelta.InventoryItems
                 .Select(i => i.InventoryItemData?.PlayerStats)
                 .Where(p => p != null);
@@ -203,7 +204,7 @@ namespace GoBot.Logic
 
         public async Task<PokemonData> GetLastCaughtPokemon(PokemonData match)
         {
-            var inventory = await _client.GetInventory();
+            var inventory = await _client.Inventory.GetInventory();
             return
                 inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
                     .Where(p => p != null && p?.PokemonId > 0
@@ -216,7 +217,7 @@ namespace GoBot.Logic
 
         public async Task<IEnumerable<PokemonData>> GetPokemons()
         {
-            var inventory = await _client.GetInventory();
+            var inventory = await _client.Inventory.GetInventory();
             return
                 inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
                     .Where(p => p != null && p?.PokemonId > 0);
@@ -224,7 +225,7 @@ namespace GoBot.Logic
 
         public async Task<IEnumerable<PokemonFamily>> GetPokemonFamilies()
         {
-            var inventory = await _client.GetInventory();
+            var inventory = await _client.Inventory.GetInventory();
             return
                 inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonFamily)
                     .Where(p => p != null && p?.FamilyId != PokemonFamilyId.FamilyUnset);
@@ -232,7 +233,7 @@ namespace GoBot.Logic
 
         public async Task<IEnumerable<PokemonSettings>> GetPokemonSettings()
         {
-            var templates = await _client.GetItemTemplates();
+            var templates = await _client.Download.GetItemTemplates();
             return
                 templates.ItemTemplates.Select(i => i.PokemonSettings)
                     .Where(p => p != null && p?.FamilyId != PokemonFamilyId.FamilyUnset);
@@ -324,9 +325,9 @@ namespace GoBot.Logic
 
 
 
-        public async Task<IEnumerable<Item>> GetItems()
+        public async Task<IEnumerable<ItemData>> GetItems()
         {
-            var inventory = await _client.GetInventory();
+            var inventory = await _client.Inventory.GetInventory();
             return inventory.InventoryDelta.InventoryItems
                 .Select(i => i.InventoryItemData?.Item)
                 .Where(p => p != null);
@@ -338,13 +339,13 @@ namespace GoBot.Logic
             return pokeballs.FirstOrDefault(i => (ItemId)i.ItemId == type)?.Count ?? 0;
         }
 
-        public async Task<IEnumerable<Item>> GetItemsToRecycle(ISettings settings)
+        public async Task<IEnumerable<ItemData>> GetItemsToRecycle(ISettings settings)
         {
             var myItems = await GetItems();
 
             return myItems
                 .Where(x => UserSettings.ItemRecycleFilter.Any(f => f.Key == ((ItemId)x.ItemId) && x.Count > f.Value))
-                .Select(x => new Item { ItemId = x.ItemId, Count = x.Count - UserSettings.ItemRecycleFilter.Single(f => f.Key == (ItemId)x.ItemId).Value, Unseen = x.Unseen });
+                .Select(x => new ItemData { ItemId = x.ItemId, Count = x.Count - UserSettings.ItemRecycleFilter.Single(f => f.Key == (ItemId)x.ItemId).Value, Unseen = x.Unseen });
         }
     }
 }

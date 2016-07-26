@@ -5,6 +5,7 @@ using GoBot.Utils;
 using POGOProtos.Data;
 using POGOProtos.Enums;
 using POGOProtos.Inventory;
+using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
@@ -61,16 +62,16 @@ namespace GoBot.Logic
                 try
                 {
                     if (_clientSettings.AuthType == AuthType.Ptc)
-                        await _client.DoPtcLogin(_clientSettings.PtcUsername, _clientSettings.PtcPassword);
+                        await _client.Login.DoPtcLogin(_clientSettings.PtcUsername, _clientSettings.PtcPassword);
                     else if (_clientSettings.AuthType == AuthType.Google)
                     {
                         if (!string.IsNullOrEmpty(_clientSettings.GoogleRefreshToken) && _clientSettings.GoogleRefreshToken != "Auth Token")
                         {
-                            await _client.DoGoogleLogin();
+                            await _client.Login.DoGoogleLogin();
                         }
                         else
                         {
-                            _client.SetAuthType(AuthType.Google);
+                            _client.AuthType = AuthType.Google;
 
                             var devCode = await GoogleLogin.GetDeviceCode();
                             Logger.Write($"Your Google Device Code is {devCode.user_code} enter it at {devCode.verification_url}", LogLevel.Info, ConsoleColor.White);
@@ -90,7 +91,7 @@ namespace GoBot.Logic
                                 UserSettings.GoogleRefreshToken = respModel.refresh_token;
                                 _clientSettings.GoogleRefreshToken = respModel.refresh_token;
                                 _client.AuthToken = respModel.id_token;
-
+                                await _client.Login.DoGoogleLogin();
                                 Logger.Write("Google Auth Token entered, bot will now start...", LogLevel.Info, ConsoleColor.White);
                             }
                         }
@@ -122,14 +123,13 @@ namespace GoBot.Logic
                     if (!UserSettings.CatchPokemon && !UserSettings.GetForts)
                     {
                         // idle instead and clean/evolve/whatever.
-                        await _client.SetServer();
+                        // set server is done in ptclogin/googlelogin
                         await EvolveAllPokemonWithEnoughCandy();
                         await RecycleItems();
                         await TransferDuplicatePokemon(UserSettings.KeepCP, false);
                     }
                     else
                     {
-                        await _client.SetServer();
 
                         await EvolveAllPokemonWithEnoughCandy();
                         await RecycleItems();
@@ -174,7 +174,7 @@ namespace GoBot.Logic
         }
         public async Task ExecuteFarmingForts(bool getPokes)
         {
-            var mapObjects = await _client.GetMapObjects();
+            var mapObjects = await _client.Map.GetMapObjects();
 
             var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts).Where(i => i.Type == FortType.Checkpoint && i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
 
@@ -186,7 +186,7 @@ namespace GoBot.Logic
                 if (UserSettings.Teleport)
                 {
                     // You'll be banned, I warned you...
-                    var update = await _client.UpdatePlayerLocation(pokeStop.Latitude, pokeStop.Longitude, UserSettings.Altitude);
+                    var update = await _client.Player.UpdatePlayerLocation(pokeStop.Latitude, pokeStop.Longitude, UserSettings.Altitude);
                 }
                 else
                 {
@@ -197,7 +197,7 @@ namespace GoBot.Logic
                 if (UserSettings.GetForts)
                 {
                     //var fortInfo = await client.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
-                    var fortSearch = await _client.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
+                    var fortSearch = await _client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
 
                     _stats.addExperience(fortSearch.ExperienceAwarded);
                     _stats.updateConsoleTitle(_inventory);
@@ -208,7 +208,7 @@ namespace GoBot.Logic
                     await T.Delay(rand.Next(3000, 6000));
                 }
 
-                var profile = await _client.GetOwnProfile();
+                var profile = await _client.Player.GetPlayer();
                 _stats.getStardust(profile.PlayerData.Currencies.ToArray()[1].Amount);
                 _stats.updateConsoleTitle(_inventory);
 
@@ -221,7 +221,7 @@ namespace GoBot.Logic
 
         private async Task ExecuteCatchAllNearbyPokemons()
         {
-            var mapObjects = await _client.GetMapObjects();
+            var mapObjects = await _client.Map.GetMapObjects();
 
             var pokemons = mapObjects.MapCells.SelectMany(i => i.CatchablePokemons).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
 
@@ -233,14 +233,14 @@ namespace GoBot.Logic
                 {
                     if (UserSettings.Teleport)
                     {
-                        var update = await _client.UpdatePlayerLocation(pokemon.Latitude, pokemon.Longitude, UserSettings.Altitude);
+                        var update = await _client.Player.UpdatePlayerLocation(pokemon.Latitude, pokemon.Longitude, UserSettings.Altitude);
                     }
                     else
                     {
                         var update = await _navigation.DirectionalWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
                     }
 
-                    var encounter = await _client.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId);
+                    var encounter = await _client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId);
 
                     var pokeId = encounter?.WildPokemon?.PokemonData.PokemonId;
 
@@ -290,7 +290,7 @@ namespace GoBot.Logic
                         Stop();
                         return;
                     }
-                    caughtPokemonResponse = await _client.CatchPokemon(pokemon.EncounterId, pokemon.SpawnPointId, pokeball);
+                    caughtPokemonResponse = await _client.Encounter.CatchPokemon(pokemon.EncounterId, pokemon.SpawnPointId, pokeball);
 
                     Logger.Write(caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? $"We caught a {pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} ({CalculatePokemonPerfection(encounter?.WildPokemon?.PokemonData).ToString("0.00")}% perfection) using a {pokeball}" : $"{pokemon.PokemonId} with CP {encounter?.WildPokemon?.PokemonData?.Cp} got away while using a {pokeball}..", LogLevel.Info, ConsoleColor.Green);
 
@@ -301,7 +301,7 @@ namespace GoBot.Logic
                         foreach (int xp in caughtPokemonResponse.CaptureAward.Xp)
                             _stats.addExperience(xp);
 
-                        var profile = await _client.GetOwnProfile();
+                        var profile = await _client.Player.GetPlayer();
                         _stats.getStardust(profile.PlayerData.Currencies.ToArray()[1].Amount);
 
                         _stats.increasePokemons();
@@ -409,7 +409,7 @@ namespace GoBot.Logic
             if (berry == null)
                 return;
 
-            var useRaspberry = await _client.UseCaptureItem(encounterId, ItemId.ItemRazzBerry, spawnPointId);
+            var useRaspberry = await _client.Encounter.UseCaptureItem(encounterId, ItemId.ItemRazzBerry, spawnPointId);
             Logger.Write($"Use Rasperry. Remaining: {berry.Count}", LogLevel.Info);
             await T.Delay(rand.Next(4000, 8000));
         }
@@ -434,7 +434,7 @@ namespace GoBot.Logic
                     continue;
                 }
 
-                var evolvePokemonOutProto = await _client.EvolvePokemon((ulong)pokemon.Id);
+                var evolvePokemonOutProto = await _client.Inventory.EvolvePokemon((ulong)pokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 if (evolvePokemonOutProto.Result == EvolvePokemonResponse.Types.Result.Success)
@@ -466,7 +466,7 @@ namespace GoBot.Logic
                     continue;
                 }
 
-                var transfer = await _client.TransferPokemon(duplicatePokemon.Id);
+                var transfer = await _client.Inventory.TransferPokemon(duplicatePokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 Logger.Write($"Transferred {duplicatePokemon.PokemonId} with {duplicatePokemon.Cp} CP", LogLevel.Info, ConsoleColor.Yellow);
@@ -489,7 +489,7 @@ namespace GoBot.Logic
                     Logger.Write($"Did not Transfer {pokemon.PokemonId} ({pokemon.Cp} cp, {CalculatePokemonPerfection(pokemon).ToString("0.00")}%) (Over Requirement) ", LogLevel.Info);
                     continue;
                 }
-                var transfer = await _client.TransferPokemon(pokemon.Id);
+                var transfer = await _client.Inventory.TransferPokemon(pokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 Logger.Write($"Transferred {pokemon.PokemonId} with {pokemon.Cp} CP", LogLevel.Info, ConsoleColor.Yellow);
@@ -512,7 +512,7 @@ namespace GoBot.Logic
                     Logger.Write($"Did not Transfer {pokemon.PokemonId} ({pokemon.Cp} cp, {CalculatePokemonPerfection(pokemon).ToString("0.00")}%) (Over Requirement) ", LogLevel.Info);
                     continue;
                 }
-                var transfer = await _client.TransferPokemon(pokemon.Id);
+                var transfer = await _client.Inventory.TransferPokemon(pokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 Logger.Write($"Transferred {pokemon.PokemonId} with {pokemon.Cp} CP ({CalculatePokemonPerfection(pokemon).ToString("0.00")}%)", LogLevel.Info, ConsoleColor.Yellow);
@@ -536,7 +536,7 @@ namespace GoBot.Logic
                     continue;
                 }
 
-                var evolvePokemonOutProto = await _client.EvolvePokemon((ulong)pokemon.Id);
+                var evolvePokemonOutProto = await _client.Inventory.EvolvePokemon((ulong)pokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 if (evolvePokemonOutProto.Result == EvolvePokemonResponse.Types.Result.Success)
@@ -566,7 +566,7 @@ namespace GoBot.Logic
                     continue;
                 }
 
-                var evolvePokemonOutProto = await _client.EvolvePokemon((ulong)pokemon.Id);
+                var evolvePokemonOutProto = await _client.Inventory.EvolvePokemon((ulong)pokemon.Id);
                 _stats.increasePokemonsTransfered();
                 _stats.updateConsoleTitle(_inventory);
                 if (evolvePokemonOutProto.Result == EvolvePokemonResponse.Types.Result.Success)
@@ -585,7 +585,7 @@ namespace GoBot.Logic
 
             foreach (var item in items)
             {
-                var transfer = await _client.RecycleItem(item.ItemId, item.Count);
+                var transfer = await _client.Inventory.RecycleItem(item.ItemId, item.Count);
                 Logger.Write($"Recycled {item.Count}x {item.ItemId}", LogLevel.Info, ConsoleColor.DarkYellow);
                 await T.Delay(rand.Next(4000, 8000));
             }
@@ -593,7 +593,7 @@ namespace GoBot.Logic
 
         public async Task<UseItemXpBoostResponse.Types.Result> UseLuckyEgg()
         {
-            var resp = await _client.UseItemXpBoost();
+            var resp = await _client.Inventory.UseItemXpBoost();
 
             return resp.Result;
         }

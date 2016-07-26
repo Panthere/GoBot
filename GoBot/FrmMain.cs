@@ -7,6 +7,7 @@ using GoBot.Utils;
 using POGOProtos.Data;
 using POGOProtos.Enums;
 using POGOProtos.Inventory;
+using POGOProtos.Inventory.Item;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -785,7 +786,7 @@ namespace GoBot
                             Logger.Write($"Skipped {pd.PokemonId} because it only had {candy[0]} out of {candy[1]} required candies");
                             continue;
                         }
-                        var res = await bot._client.EvolvePokemon(pd.Id);
+                        var res = await bot._client.Inventory.EvolvePokemon(pd.Id);
 
                         if (res.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
                         {
@@ -827,7 +828,7 @@ namespace GoBot
                     {
                         PokemonData pd = lvi.Tag as PokemonData;
 
-                        var res = await bot._client.TransferPokemon(pd.Id);
+                        var res = await bot._client.Inventory.TransferPokemon(pd.Id);
 
                         Logger.Write($"Transferred {pd.PokemonId} with {pd.Cp} CP", LogLevel.Info, ConsoleColor.Yellow);
                         bot._stats.increasePokemonsTransfered();

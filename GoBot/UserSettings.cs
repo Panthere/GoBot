@@ -1,5 +1,6 @@
 ﻿using GoogleMapsApi.Entities.Directions.Request;
 using POGOProtos.Inventory;
+using POGOProtos.Inventory.Item;
 using PokemonGo.RocketAPI.Enums;
 using System.Collections.Generic;
 

@@ -46,7 +46,7 @@ namespace GoBot.Utils
 
             //Initial walking
             DateTime requestSendDateTime = DateTime.Now;
-            var result = await _client.UpdatePlayerLocation(waypoint.Latitude, waypoint.Longitude, rand.Next((int)UserSettings.Altitude - 10, (int)UserSettings.Altitude + 10));
+            var result = await _client.Player.UpdatePlayerLocation(waypoint.Latitude, waypoint.Longitude, rand.Next((int)UserSettings.Altitude - 10, (int)UserSettings.Altitude + 10));
 
             do
             {
@@ -79,7 +79,7 @@ namespace GoBot.Utils
                 waypoint = LocationUtils.CreateWaypoint(sourceLocation, nextWaypointDistance, nextWaypointBearing);
 
                 requestSendDateTime = DateTime.Now;
-                result = await _client.UpdatePlayerLocation(waypoint.Latitude, waypoint.Longitude, rand.Next((int)UserSettings.Altitude - 10, (int)UserSettings.Altitude + 10));
+                result = await _client.Player.UpdatePlayerLocation(waypoint.Latitude, waypoint.Longitude, rand.Next((int)UserSettings.Altitude - 10, (int)UserSettings.Altitude + 10));
             } while (LocationUtils.CalculateDistanceInMeters(sourceLocation, targetLocation) >= 30);
 
             return result;
@@ -109,6 +109,25 @@ namespace GoBot.Utils
                 TravelMode = UserSettings.ModeOfTravel
             };
             DirectionsResponse directions = GoogleMaps.Directions.Query(directionsRequest);
+
+            if (directions.Routes.ToList().Count == 0)
+            {
+                List<GMap.NET.PointLatLng> destSteps = new List<GMap.NET.PointLatLng>();
+                destSteps.Add(new GMap.NET.PointLatLng(_client.CurrentLatitude, _client.CurrentLongitude));
+                destSteps.Add(new GMap.NET.PointLatLng(target.Latitude, target.Longitude));
+                DestinationSteps.Add(destSteps);
+
+                return await HumanLikeWalking(target, walkSpeed, true);
+            }
+            if (directions.Routes.First().Legs.ToList().Count == 0)
+            {
+                List<GMap.NET.PointLatLng> destSteps = new List<GMap.NET.PointLatLng>();
+                destSteps.Add(new GMap.NET.PointLatLng(_client.CurrentLatitude, _client.CurrentLongitude));
+                destSteps.Add(new GMap.NET.PointLatLng(target.Latitude, target.Longitude));
+                DestinationSteps.Add(destSteps);
+
+                return await HumanLikeWalking(target, walkSpeed, true);
+            }
 
             IEnumerable<Step> steps = directions.Routes.First().Legs.First().Steps;
             foreach (var s in steps)

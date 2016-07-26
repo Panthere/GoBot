@@ -46,7 +46,7 @@ namespace GoBot
                         // transfer but wait a bit before
                         await T.Delay(bot.rand.Next(9000, 15000));
                         var actualPokemon = await bot._inventory.GetLastCaughtPokemon(pokeData);
-                        var resp = await bot._client.TransferPokemon(actualPokemon.Id);
+                        var resp = await bot._client.Inventory.TransferPokemon(actualPokemon.Id);
                         // stats
                         if (resp.Result == POGOProtos.Networking.Responses.ReleasePokemonResponse.Types.Result.Success)
                         {
@@ -62,7 +62,7 @@ namespace GoBot
                         {
                             await T.Delay(bot.rand.Next(9000, 15000));
                             var actualPokemon = await bot._inventory.GetLastCaughtPokemon(pokeData);
-                            var resp = await bot._client.TransferPokemon(actualPokemon.Id);
+                            var resp = await bot._client.Inventory.TransferPokemon(actualPokemon.Id);
                             // stats
                             if (resp.Result == POGOProtos.Networking.Responses.ReleasePokemonResponse.Types.Result.Success)
                             {

@@ -1,4 +1,5 @@
 ﻿using POGOProtos.Inventory;
+using POGOProtos.Inventory.Item;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
