@@ -40,3 +40,6 @@ Bitcoin Address: 1LAPANo2N1jBBBHvBEqbMxG13pWqV1xCsY
 # To Do
 - Don't waste pokeballs on softbanned accounts
 - Tutorial for retards
+- Lured pokemons
+- Deploy insense
+- Catch pokemon while moving (hook walking function with event)
