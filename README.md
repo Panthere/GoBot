@@ -42,4 +42,4 @@ Bitcoin Address: 1LAPANo2N1jBBBHvBEqbMxG13pWqV1xCsY
 - Tutorial for retards
 - Lured pokemons
 - Deploy insense
-- Catch pokemon while moving (hook walking function with event)
+- Account item count/pokemon counts
