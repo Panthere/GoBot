@@ -41,6 +41,7 @@ namespace GoBot.Logic
         public bool running = false;
 
         public Random rand = new Random();
+
         public BotInstance(ISettings clientSettings)
         {
 
@@ -54,6 +55,11 @@ namespace GoBot.Logic
 
         private async void Events_OnStepWalked(object sender, StepWalkedArgs e)
         {
+            if (!UserSettings.CatchPokemonOnWalk)
+            {
+                Events.StepWalkedReset.Set();
+                return;
+            }
 
             await ExecuteCatchAllNearbyPokemons(true);
             if (_client.CurrentLatitude != e.curLocation.Latitude && _client.CurrentLongitude != e.curLocation.Longitude)
@@ -82,6 +88,7 @@ namespace GoBot.Logic
         {
             Logger.Write($"Starting Execute on login server: {_clientSettings.AuthType}", LogLevel.Info, ConsoleColor.Magenta);
             running = true;
+            _client.Login.GoogleDeviceCodeEvent += Login_GoogleDeviceCodeEvent;
             while (running)
             {
                 try
@@ -111,12 +118,23 @@ namespace GoBot.Logic
                 await T.Delay(rand.Next(8000, 15000));
             }
         }
+
+        private void Login_GoogleDeviceCodeEvent(string code, string uri)
+        {
+
+            Logger.Write($"Your Google Device Code is {code} enter it at {uri}", LogLevel.Info, ConsoleColor.White);
+
+            Logger.Write("Once entered, please wait for the bot to start...", LogLevel.Info, ConsoleColor.White);
+           
+
+        }
+
         public async Task<bool> Login()
         {
             try
             {
                 if (_clientSettings.AuthType == AuthType.Ptc)
-                    await _client.Login.DoPtcLogin(_clientSettings.PtcUsername, _clientSettings.PtcPassword);
+                    await _client.Login.DoPtcLogin();
                 else if (_clientSettings.AuthType == AuthType.Google)
                 {
                     if (!string.IsNullOrEmpty(_clientSettings.GoogleRefreshToken) && _clientSettings.GoogleRefreshToken != "Auth Token")
@@ -125,28 +143,8 @@ namespace GoBot.Logic
                     }
                     else
                     {
-                        _client.AuthType = AuthType.Google;
+                        await _client.Login.DoGoogleLogin();
 
-                        var devCode = await GoogleLogin.GetDeviceCode();
-                        Logger.Write($"Your Google Device Code is {devCode.user_code} enter it at {devCode.verification_url}", LogLevel.Info, ConsoleColor.White);
-
-                        //Process.Start(devCode.verification_url);
-
-                        Logger.Write("Once entered, please wait for the bot to start...", LogLevel.Info, ConsoleColor.White);
-                        var respModel = await GoogleLogin.GetAccessToken(devCode);
-                        if (respModel == null)
-                        {
-                            Logger.Write("Google Response Model was null! Cannot continue!", LogLevel.Info, ConsoleColor.White);
-                            return false;
-                        }
-                        else
-                        {
-                            UserSettings.GoogleRefreshToken = respModel.refresh_token;
-                            _clientSettings.GoogleRefreshToken = respModel.refresh_token;
-                            _client.AuthToken = respModel.id_token;
-                            await _client.Login.DoGoogleLogin();
-                            Logger.Write("Google Auth Token entered, bot will now start...", LogLevel.Info, ConsoleColor.White);
-                        }
                     }
                 }
 
