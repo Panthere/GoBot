@@ -32,7 +32,7 @@ namespace GoBot.Utils
             _client = client;
         }
 
-        public async Task<PlayerUpdateResponse> HumanLikeWalking(Location targetLocation, double walkingSpeedInKilometersPerHour, bool slowDown = true)
+        public async Task<PlayerUpdateResponse> HumanLikeWalking(Location targetLocation, double walkingSpeedInKilometersPerHour, bool slowDown = true, bool bypassEvent = false)
         {
             double speedInMetersPerSecond = walkingSpeedInKilometersPerHour / 3.6;
 
@@ -50,6 +50,7 @@ namespace GoBot.Utils
 
             do
             {
+
                 speedInMetersPerSecond = rand.Next((int)walkingSpeedInKilometersPerHour - 5, (int)walkingSpeedInKilometersPerHour + 5) / 3.6;
                 await Task.Delay(3000);
                 double millisecondsUntilGetUpdatePlayerLocationResponse = (DateTime.Now - requestSendDateTime).TotalMilliseconds;
@@ -80,13 +81,20 @@ namespace GoBot.Utils
 
                 requestSendDateTime = DateTime.Now;
                 result = await _client.Player.UpdatePlayerLocation(waypoint.Latitude, waypoint.Longitude, rand.Next((int)UserSettings.Altitude - 10, (int)UserSettings.Altitude + 10));
+
+                // Wait for the event
+                if (!bypassEvent)
+                {
+                    await Events.WaypointStepWalked(waypoint, _client, this);
+
+                }
             } while (LocationUtils.CalculateDistanceInMeters(sourceLocation, targetLocation) >= 30);
 
             return result;
         }
 
 
-        public async Task<PlayerUpdateResponse> DirectionalWalking(Location target, double walkSpeed)
+        public async Task<PlayerUpdateResponse> DirectionalWalking(Location target, double walkSpeed, bool bypassEvents = false)
         {
             PlayerUpdateResponse resp = null;
             FinalDestination = target;
@@ -99,7 +107,8 @@ namespace GoBot.Utils
                 destSteps.Add(new GMap.NET.PointLatLng(target.Latitude, target.Longitude));
                 DestinationSteps.Add(destSteps);
 
-                return await HumanLikeWalking(target, walkSpeed, true);
+                var update = await HumanLikeWalking(target, walkSpeed, true, bypassEvents);
+                return update;
             }
 
             DirectionsRequest directionsRequest = new DirectionsRequest()
@@ -117,7 +126,7 @@ namespace GoBot.Utils
                 destSteps.Add(new GMap.NET.PointLatLng(target.Latitude, target.Longitude));
                 DestinationSteps.Add(destSteps);
 
-                return await HumanLikeWalking(target, walkSpeed, true);
+                return await HumanLikeWalking(target, walkSpeed, true, bypassEvents);
             }
             if (directions.Routes.First().Legs.ToList().Count == 0)
             {
@@ -126,7 +135,7 @@ namespace GoBot.Utils
                 destSteps.Add(new GMap.NET.PointLatLng(target.Latitude, target.Longitude));
                 DestinationSteps.Add(destSteps);
 
-                return await HumanLikeWalking(target, walkSpeed, true);
+                return await HumanLikeWalking(target, walkSpeed, true, bypassEvents);
             }
 
             IEnumerable<Step> steps = directions.Routes.First().Legs.First().Steps;
@@ -143,12 +152,12 @@ namespace GoBot.Utils
                 Logger.Write($"Currently on step {steps.ToList().IndexOf(s) + 1} of {steps.ToList().Count}");
                 //Logger.Write($"Direction Text: {s.HtmlInstructions.StripTags()}");
 
-                resp = await HumanLikeWalking(new Location(s.EndLocation.Latitude, s.EndLocation.Longitude), walkSpeed, false);
+                resp = await HumanLikeWalking(new Location(s.EndLocation.Latitude, s.EndLocation.Longitude), walkSpeed, false, bypassEvents);
             }
             if (_client.CurrentLatitude != target.Latitude && _client.CurrentLongitude != target.Longitude)
             {
                 // do last steps
-                resp = await HumanLikeWalking(target, walkSpeed);
+                resp = await HumanLikeWalking(target, walkSpeed, true, bypassEvents);
                 Logger.Write($"Corrected location to exact coordinates: {target.Latitude}, {target.Longitude}");
             }
             Logger.Write($"Client is now at {_client.CurrentLatitude}, {_client.CurrentLongitude}, target was: {target.Latitude}, {target.Longitude}");

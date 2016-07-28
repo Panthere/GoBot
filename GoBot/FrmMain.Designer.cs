@@ -34,6 +34,12 @@
             this.tMap = new System.Windows.Forms.Timer(this.components);
             this.cTabControl1 = new cTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label36 = new System.Windows.Forms.Label();
+            this.txtCatchRadiusWalk = new cTextBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.chkTeleportPokemonWalk = new cCheckBox();
+            this.chkCatchNearbyWalk = new cCheckBox();
+            this.chkRememberCoords = new cCheckBox();
             this.chkGoogleDirections = new cCheckBox();
             this.chkNoDelay = new cCheckBox();
             this.chkTeleport = new cCheckBox();
@@ -161,7 +167,7 @@
             this.lblFound = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.chkRememberCoords = new cCheckBox();
+            this.chkAvoidDupeForts = new cCheckBox();
             this.cTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -209,6 +215,12 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
+            this.tabPage2.Controls.Add(this.chkAvoidDupeForts);
+            this.tabPage2.Controls.Add(this.label36);
+            this.tabPage2.Controls.Add(this.txtCatchRadiusWalk);
+            this.tabPage2.Controls.Add(this.label35);
+            this.tabPage2.Controls.Add(this.chkTeleportPokemonWalk);
+            this.tabPage2.Controls.Add(this.chkCatchNearbyWalk);
             this.tabPage2.Controls.Add(this.chkRememberCoords);
             this.tabPage2.Controls.Add(this.chkGoogleDirections);
             this.tabPage2.Controls.Add(this.chkNoDelay);
@@ -230,6 +242,69 @@
             this.tabPage2.Size = new System.Drawing.Size(736, 586);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Walk Settings";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(393, 125);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(98, 15);
+            this.label36.TabIndex = 17;
+            this.label36.Text = "Catch Radius (m)";
+            // 
+            // txtCatchRadiusWalk
+            // 
+            this.txtCatchRadiusWalk.Location = new System.Drawing.Point(497, 117);
+            this.txtCatchRadiusWalk.MaxLength = 32767;
+            this.txtCatchRadiusWalk.Name = "txtCatchRadiusWalk";
+            this.txtCatchRadiusWalk.ReadOnly = false;
+            this.txtCatchRadiusWalk.Scheme = cTextBox.Schemes.Black;
+            this.txtCatchRadiusWalk.Size = new System.Drawing.Size(97, 30);
+            this.txtCatchRadiusWalk.TabIndex = 16;
+            this.txtCatchRadiusWalk.Text = "100";
+            this.txtCatchRadiusWalk.UseSystemPasswordChar = false;
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(393, 49);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(84, 15);
+            this.label35.TabIndex = 15;
+            this.label35.Text = "Catch on Walk";
+            // 
+            // chkTeleportPokemonWalk
+            // 
+            this.chkTeleportPokemonWalk.AutoSize = true;
+            this.chkTeleportPokemonWalk.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkTeleportPokemonWalk.Location = new System.Drawing.Point(396, 92);
+            this.chkTeleportPokemonWalk.Name = "chkTeleportPokemonWalk";
+            this.chkTeleportPokemonWalk.Size = new System.Drawing.Size(158, 19);
+            this.chkTeleportPokemonWalk.TabIndex = 14;
+            this.chkTeleportPokemonWalk.Text = "Teleport to the Pokemon";
+            this.chkTeleportPokemonWalk.UseVisualStyleBackColor = true;
+            // 
+            // chkCatchNearbyWalk
+            // 
+            this.chkCatchNearbyWalk.AutoSize = true;
+            this.chkCatchNearbyWalk.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkCatchNearbyWalk.Location = new System.Drawing.Point(396, 67);
+            this.chkCatchNearbyWalk.Name = "chkCatchNearbyWalk";
+            this.chkCatchNearbyWalk.Size = new System.Drawing.Size(198, 19);
+            this.chkCatchNearbyWalk.TabIndex = 13;
+            this.chkCatchNearbyWalk.Text = "Catch Pokemon Nearby on Walk";
+            this.chkCatchNearbyWalk.UseVisualStyleBackColor = true;
+            // 
+            // chkRememberCoords
+            // 
+            this.chkRememberCoords.AutoSize = true;
+            this.chkRememberCoords.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkRememberCoords.Location = new System.Drawing.Point(129, 334);
+            this.chkRememberCoords.Name = "chkRememberCoords";
+            this.chkRememberCoords.Size = new System.Drawing.Size(175, 19);
+            this.chkRememberCoords.TabIndex = 12;
+            this.chkRememberCoords.Text = "Remember Last Coordinates";
+            this.chkRememberCoords.UseVisualStyleBackColor = true;
             // 
             // chkGoogleDirections
             // 
@@ -1619,16 +1694,16 @@
             this.textBox1.Text = resources.GetString("textBox1.Text");
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // chkRememberCoords
+            // chkAvoidDupeForts
             // 
-            this.chkRememberCoords.AutoSize = true;
-            this.chkRememberCoords.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.chkRememberCoords.Location = new System.Drawing.Point(129, 334);
-            this.chkRememberCoords.Name = "chkRememberCoords";
-            this.chkRememberCoords.Size = new System.Drawing.Size(175, 19);
-            this.chkRememberCoords.TabIndex = 12;
-            this.chkRememberCoords.Text = "Remember Last Coordinates";
-            this.chkRememberCoords.UseVisualStyleBackColor = true;
+            this.chkAvoidDupeForts.AutoSize = true;
+            this.chkAvoidDupeForts.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkAvoidDupeForts.Location = new System.Drawing.Point(129, 359);
+            this.chkAvoidDupeForts.Name = "chkAvoidDupeForts";
+            this.chkAvoidDupeForts.Size = new System.Drawing.Size(168, 19);
+            this.chkAvoidDupeForts.TabIndex = 18;
+            this.chkAvoidDupeForts.Text = "Never Visit Pokestop Twice";
+            this.chkAvoidDupeForts.UseVisualStyleBackColor = true;
             // 
             // FrmMain
             // 
@@ -1799,6 +1874,12 @@
         private System.Windows.Forms.Timer tMap;
         private cButton btnActivateLuckyEgg;
         private cCheckBox chkRememberCoords;
+        private System.Windows.Forms.Label label35;
+        private cCheckBox chkTeleportPokemonWalk;
+        private cCheckBox chkCatchNearbyWalk;
+        private System.Windows.Forms.Label label36;
+        private cTextBox txtCatchRadiusWalk;
+        private cCheckBox chkAvoidDupeForts;
     }
 }
 

@@ -36,6 +36,8 @@ namespace GoBot.Logic
         public List<PokemonId> CatchList;
         public List<PokemonId> BerryList;
 
+        public List<FortData> VisitedForts = new List<FortData>();
+
         public bool running = false;
 
         public Random rand = new Random();
@@ -47,7 +49,30 @@ namespace GoBot.Logic
             _inventory = new Inventory(_client);
             _navigation = new Navigation(_client);
             _stats = new Statistics();
+            Events.OnStepWalked += Events_OnStepWalked;
         }
+
+        private async void Events_OnStepWalked(object sender, StepWalkedArgs e)
+        {
+
+            await ExecuteCatchAllNearbyPokemons(true);
+            if (_client.CurrentLatitude != e.curLocation.Latitude && _client.CurrentLongitude != e.curLocation.Longitude)
+            {
+                Logger.Write("Walking back to initial route...");
+                // only if they have moved
+                if (UserSettings.TeleportToPokemonOnWalk)
+                {
+                    var update = await _client.Player.UpdatePlayerLocation(e.curLocation.Latitude, e.curLocation.Longitude, UserSettings.Altitude);
+                }
+                else
+                {
+                    var update = await _navigation.HumanLikeWalking(e.curLocation, UserSettings.WalkingSpeed, true, true);
+                }
+            }
+            Events.StepWalkedReset.Set();
+
+        }
+
         public void Stop()
         {
             running = false;
@@ -61,49 +86,22 @@ namespace GoBot.Logic
             {
                 try
                 {
-                    if (_clientSettings.AuthType == AuthType.Ptc)
-                        await _client.Login.DoPtcLogin(_clientSettings.PtcUsername, _clientSettings.PtcPassword);
-                    else if (_clientSettings.AuthType == AuthType.Google)
+                    /*if (await Login())
                     {
-                        if (!string.IsNullOrEmpty(_clientSettings.GoogleRefreshToken) && _clientSettings.GoogleRefreshToken != "Auth Token")
-                        {
-                            await _client.Login.DoGoogleLogin();
-                        }
-                        else
-                        {
-                            _client.AuthType = AuthType.Google;
+                        running = true;
 
-                            var devCode = await GoogleLogin.GetDeviceCode();
-                            Logger.Write($"Your Google Device Code is {devCode.user_code} enter it at {devCode.verification_url}", LogLevel.Info, ConsoleColor.White);
-                            
-                            //Process.Start(devCode.verification_url);
+                        await PostLoginExecute();
 
-                            Logger.Write("Once entered, please wait for the bot to start...", LogLevel.Info, ConsoleColor.White);
-                            var respModel = await GoogleLogin.GetAccessToken(devCode);
-                            if (respModel == null)
-                            {
-                                Logger.Write("Google Response Model was null! Cannot continue!", LogLevel.Info, ConsoleColor.White);
-                                running = false;
-                                break;
-                            }
-                            else
-                            {
-                                UserSettings.GoogleRefreshToken = respModel.refresh_token;
-                                _clientSettings.GoogleRefreshToken = respModel.refresh_token;
-                                _client.AuthToken = respModel.id_token;
-                                await _client.Login.DoGoogleLogin();
-                                Logger.Write("Google Auth Token entered, bot will now start...", LogLevel.Info, ConsoleColor.White);
-                            }
-                        }
+                        running = true;
                     }
-                        
-                    running = true;
+                    else
+                    {
+                        running = false;
+                        break;
+                    }*/
+                  
 
                     await PostLoginExecute();
-
-                    running = true;
-
-                    
                 }
                 catch (Exception ex)
                 {
@@ -113,10 +111,63 @@ namespace GoBot.Logic
                 await T.Delay(rand.Next(8000, 15000));
             }
         }
+        public async Task<bool> Login()
+        {
+            try
+            {
+                if (_clientSettings.AuthType == AuthType.Ptc)
+                    await _client.Login.DoPtcLogin(_clientSettings.PtcUsername, _clientSettings.PtcPassword);
+                else if (_clientSettings.AuthType == AuthType.Google)
+                {
+                    if (!string.IsNullOrEmpty(_clientSettings.GoogleRefreshToken) && _clientSettings.GoogleRefreshToken != "Auth Token")
+                    {
+                        await _client.Login.DoGoogleLogin();
+                    }
+                    else
+                    {
+                        _client.AuthType = AuthType.Google;
+
+                        var devCode = await GoogleLogin.GetDeviceCode();
+                        Logger.Write($"Your Google Device Code is {devCode.user_code} enter it at {devCode.verification_url}", LogLevel.Info, ConsoleColor.White);
+
+                        //Process.Start(devCode.verification_url);
+
+                        Logger.Write("Once entered, please wait for the bot to start...", LogLevel.Info, ConsoleColor.White);
+                        var respModel = await GoogleLogin.GetAccessToken(devCode);
+                        if (respModel == null)
+                        {
+                            Logger.Write("Google Response Model was null! Cannot continue!", LogLevel.Info, ConsoleColor.White);
+                            return false;
+                        }
+                        else
+                        {
+                            UserSettings.GoogleRefreshToken = respModel.refresh_token;
+                            _clientSettings.GoogleRefreshToken = respModel.refresh_token;
+                            _client.AuthToken = respModel.id_token;
+                            await _client.Login.DoGoogleLogin();
+                            Logger.Write("Google Auth Token entered, bot will now start...", LogLevel.Info, ConsoleColor.White);
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Write($"Execute Exception: {ex}", LogLevel.Info, ConsoleColor.Red);
+            }
+            return false;
+        }
         public async Task PostLoginExecute()
         {
             while (running)
             {
+                // login... messy
+                if (!await Login())
+                {
+                    running = false;
+                    break;
+                }
 
                 try
                 {
@@ -153,6 +204,7 @@ namespace GoBot.Logic
 
                 await T.Delay(rand.Next(8000, 15000));
                 Logger.Write($"Looping PostLogin Again - Idle: {!UserSettings.CatchPokemon && !UserSettings.GetForts}", LogLevel.Info);
+                Logger.Write($"If this is happening a lot it means the Pokemon servers are unstable, do not spam issues on git with this! We can't fix it!", LogLevel.Info);
             }
             Logger.Write($"We're out of the loop now, Running is {running}");
             // walk home
@@ -176,11 +228,17 @@ namespace GoBot.Logic
         {
             var mapObjects = await _client.Map.GetMapObjects();
 
-            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts).Where(i => i.Type == FortType.Checkpoint && i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
+            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts).Where(i => i.Type == FortType.Checkpoint && i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime() && (UserSettings.NoDupeForts && !VisitedForts.Contains(i))).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
+
+            if (pokeStops.ToList().Count == 0)
+            {
+                VisitedForts.Clear();
+            }
 
             Logger.Write($"Farming {pokeStops.ToList().Count} PokeStops... {running}", LogLevel.Info, ConsoleColor.Cyan);
             foreach (var pokeStop in pokeStops)
             {
+
                 if (!running)
                     break;
                 /*if (UserSettings.Teleport)
@@ -200,10 +258,15 @@ namespace GoBot.Logic
                     //var fortInfo = await client.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                     var fortSearch = await _client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
 
+                    VisitedForts.Add(pokeStop);
+
                     _stats.addExperience(fortSearch.ExperienceAwarded);
                     _stats.updateConsoleTitle(_inventory);
 
+
+
                     await Events.FortFarmed(fortSearch, pokeStop);
+
 
                     Logger.Write($"Farmed XP: {fortSearch.ExperienceAwarded}, Gems: { fortSearch.GemsAwarded}, Eggs: {fortSearch.PokemonDataEgg} Items: {StringUtils.GetSummedFriendlyNameOfItemAwardList(fortSearch.ItemsAwarded)}", LogLevel.Info, ConsoleColor.Cyan);
                     await T.Delay(rand.Next(3000, 6000));
@@ -220,7 +283,7 @@ namespace GoBot.Logic
             }
         }
 
-        private async Task ExecuteCatchAllNearbyPokemons()
+        private async Task ExecuteCatchAllNearbyPokemons(bool fromWalking = false)
         {
             var mapObjects = await _client.Map.GetMapObjects();
 
@@ -228,45 +291,7 @@ namespace GoBot.Logic
             var nearPokemons = mapObjects.MapCells.SelectMany(i => i.NearbyPokemons).OrderBy(i => i.DistanceInMeters);
             var wildPokemons = mapObjects.MapCells.SelectMany(i => i.WildPokemons).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
 
-            /*foreach (var pokemon in wildPokemons)
-            {
-                if (!running)
-                    break;
-                try
-                {
-                    if (UserSettings.Teleport)
-                    {
-                        var update = await _client.Player.UpdatePlayerLocation(pokemon.Latitude, pokemon.Longitude, UserSettings.Altitude);
-                    }
-                    else
-                    {
-                        var update = await _navigation.DirectionalWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
-                    }
-
-                    var encounter = await _client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId);
-
-                    var pokeId = encounter?.WildPokemon?.PokemonData.PokemonId;
-
-                    MapPokemon mp = new MapPokemon();
-                    mp.Latitude = pokemon.Latitude;
-                    mp.Longitude = pokemon.Longitude;
-                    mp.EncounterId = pokemon.EncounterId;
-                    mp.PokemonId = pokemon.PokemonData.PokemonId;
-                    mp.SpawnPointId = pokemon.SpawnPointId;
-                    mp.ExpirationTimestampMs = pokemon.TimeTillHiddenMs;
-                    
-
-                    await CatchEncounter(encounter, mp);
-
-
-
-                    await T.Delay(rand.Next(15000, 30000));
-                }
-                catch (Exception ex)
-                {
-                    Logger.Write($"Exception Catch WildPokemon: {ex}", LogLevel.Error, ConsoleColor.Red);
-                }
-            }*/
+            Logger.Write($"Catching {catchPokemons.ToList().Count} nearby Pokemon", LogLevel.Info, ConsoleColor.Magenta);
 
             foreach (var pokemon in catchPokemons)
             {
@@ -274,15 +299,27 @@ namespace GoBot.Logic
                     break;
                 try
                 {
-                    if (UserSettings.Teleport)
+                    // we'll teleport if we're on the walk? I don't think that'd be wise
+                    var dist = LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(pokemon.Latitude, pokemon.Longitude));
+                    if (UserSettings.Teleport || (fromWalking && UserSettings.TeleportToPokemonOnWalk))
                     {
-                        var dist = LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(pokemon.Latitude, pokemon.Longitude));
+                       
+                        if (dist > UserSettings.CatchWalkRadius && fromWalking)
+                        {
+                            Logger.Write($"Did not catch pokemon due to it being >{UserSettings.CatchWalkRadius} meters from the pokestop route!");
+                            continue;
+                        }
                         await Task.Delay(dist > 100 ? 5000 : 500);
                         var update = await _client.Player.UpdatePlayerLocation(pokemon.Latitude, pokemon.Longitude, UserSettings.Altitude);
                     }
                     else
                     {
-                        var update = await _navigation.DirectionalWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed);
+                        if (dist > UserSettings.CatchWalkRadius && fromWalking)
+                        {
+                            Logger.Write($"Did not catch pokemon due to it being >{UserSettings.CatchWalkRadius} meters from the pokestop route!");
+                            continue;
+                        }
+                        var update = await _navigation.DirectionalWalking(new Navigation.Location(pokemon.Latitude, pokemon.Longitude), UserSettings.WalkingSpeed, true);
                     }
 
                     var encounter = await _client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId);

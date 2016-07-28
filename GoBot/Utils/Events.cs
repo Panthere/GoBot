@@ -1,6 +1,8 @@
-﻿using POGOProtos.Data;
+﻿using GoBot.UserLogger;
+using POGOProtos.Data;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using PokemonGo.RocketAPI;
 using System;
 using System.Drawing;
 using System.Threading;
@@ -22,6 +24,10 @@ namespace GoBot.Utils
         public static AsyncManualResetEvent FortFarmedReset = new AsyncManualResetEvent();
         public delegate void FortFarmedHandler(object sender, FortFarmedArgs e);
 
+        public static event StepWalked OnStepWalked;
+        public static AsyncManualResetEvent StepWalkedReset = new AsyncManualResetEvent();
+        public delegate void StepWalked(object sender, StepWalkedArgs e);
+
         public static async void Log(string sender, string message, Color color)
         {
             OnMessageReceived(null, new LogReceivedArgs() { Sender = sender, Message = message, Color = color });
@@ -36,12 +42,18 @@ namespace GoBot.Utils
         }
 
         public static async Task PokemonCaught(PokemonData poke, ulong pokemonId)
-        {
-
+        { 
             OnPokemonCaught(null, new PokemonCaughtArgs() { CaughtPokemon = poke });
-
             await PokemonCaughtReset.WaitAsync();
             PokemonCaughtReset.Reset();
+        }
+
+        public static async Task WaypointStepWalked(Navigation.Location currentLocation, Client client, Navigation nav)
+        {
+            OnStepWalked(null, new StepWalkedArgs() { curClient = client, curLocation = currentLocation, curNavigation = nav });
+
+            await StepWalkedReset.WaitAsync();
+            StepWalkedReset.Reset();
         }
     }
     public class AsyncManualResetEvent
@@ -79,6 +91,12 @@ namespace GoBot.Utils
     {
         public PokemonData CaughtPokemon;
         public ulong CaughtID;
+    }
+    public class StepWalkedArgs : EventArgs
+    {
+        public Navigation.Location curLocation;
+        public Navigation curNavigation;
+        public Client curClient;
     }
     public class FortFarmedArgs : EventArgs
     {

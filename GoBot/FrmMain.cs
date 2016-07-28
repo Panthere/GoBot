@@ -431,6 +431,8 @@ namespace GoBot
             UserSettings.Password = txtPass.Text;
             UserSettings.Auth = cbAuthType.SelectedIndex == 0 ? PokemonGo.RocketAPI.Enums.AuthType.Ptc : PokemonGo.RocketAPI.Enums.AuthType.Google;
             UserSettings.UseBerries = clbBerries.CheckedItems.Count > 0;
+            UserSettings.BerryProbability = txtProbability.Text.ToInt();
+
             UserSettings.WalkingSpeed = txtWalkSpeed.Text.ToInt();
             UserSettings.StartLat = (txtLat.Text).ToDouble();
             UserSettings.StartLng = (txtLng.Text).ToDouble();
@@ -444,6 +446,12 @@ namespace GoBot
             UserSettings.Teleport = chkTeleport.Checked;
             UserSettings.UseDelays = !chkNoDelay.Checked;
             UserSettings.UseGoogleDirections = chkGoogleDirections.Checked;
+
+            UserSettings.TeleportToPokemonOnWalk = chkTeleportPokemonWalk.Checked;
+            UserSettings.CatchPokemonOnWalk = chkCatchNearbyWalk.Checked;
+            UserSettings.CatchWalkRadius = txtCatchRadiusWalk.Text.ToInt();
+
+            UserSettings.NoDupeForts = chkAvoidDupeForts.Checked;
 
 
             Settings settings = new Settings();

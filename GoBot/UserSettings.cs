@@ -33,10 +33,17 @@ namespace GoBot
         public static int CatchOverIV;
 
         public static int TopX;
+        public static int CatchWalkRadius;
 
         public static bool Teleport;
         public static bool UseDelays = true;
         public static bool UseGoogleDirections;
+
+        public static bool CatchPokemonOnWalk;
+        public static bool TeleportToPokemonOnWalk;
+
+        public static bool NoDupeForts;
+
 
         public static TravelMode ModeOfTravel = TravelMode.Walking;
 
