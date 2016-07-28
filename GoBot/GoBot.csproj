@@ -85,9 +85,8 @@
     <Reference Include="POGOProtos">
       <HintPath>..\..\..\..\GitHub\Pokemon-Go-Rocket-API\PokemonGo.RocketAPI\bin\Debug\POGOProtos.dll</HintPath>
     </Reference>
-    <Reference Include="Pokemon Go Rocket API, Version=1.0.3.4, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\GitHub\Pokemon-Go-Rocket-API\PokemonGo.RocketAPI\bin\Debug\Pokemon Go Rocket API.dll</HintPath>
+    <Reference Include="Pokemon.Go.Rocket.API">
+      <HintPath>..\..\..\..\GitHub\Pokemon-Go-Rocket-API\PokemonGo.RocketAPI\bin\Debug\Pokemon.Go.Rocket.API.dll</HintPath>
     </Reference>
     <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

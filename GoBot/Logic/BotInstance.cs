@@ -88,7 +88,6 @@ namespace GoBot.Logic
         {
             Logger.Write($"Starting Execute on login server: {_clientSettings.AuthType}", LogLevel.Info, ConsoleColor.Magenta);
             running = true;
-            _client.Login.GoogleDeviceCodeEvent += Login_GoogleDeviceCodeEvent;
             while (running)
             {
                 try
@@ -113,6 +112,7 @@ namespace GoBot.Logic
                 catch (Exception ex)
                 {
                     Logger.Write($"Execute Exception: {ex}", LogLevel.Info, ConsoleColor.Red);
+                    
                 }
                 Logger.Write($"Looping Execute Again", LogLevel.Info);
                 await T.Delay(rand.Next(8000, 15000));
@@ -134,25 +134,17 @@ namespace GoBot.Logic
             try
             {
                 if (_clientSettings.AuthType == AuthType.Ptc)
-                    await _client.Login.DoPtcLogin();
+                    await _client.Login.DoPtcLogin(UserSettings.Username, UserSettings.Password);
                 else if (_clientSettings.AuthType == AuthType.Google)
                 {
-                    if (!string.IsNullOrEmpty(_clientSettings.GoogleRefreshToken) && _clientSettings.GoogleRefreshToken != "Auth Token")
-                    {
-                        await _client.Login.DoGoogleLogin();
-                    }
-                    else
-                    {
-                        await _client.Login.DoGoogleLogin();
-
-                    }
+                    await _client.Login.DoGoogleLogin(UserSettings.Username, UserSettings.Password);
                 }
 
                 return true;
             }
             catch (Exception ex)
             {
-                Logger.Write($"Execute Exception: {ex}", LogLevel.Info, ConsoleColor.Red);
+                Logger.Write($"Login Exception: {ex}", LogLevel.Info, ConsoleColor.Red);
             }
             return false;
         }
@@ -163,6 +155,7 @@ namespace GoBot.Logic
                 // login... messy
                 if (!await Login())
                 {
+                    Logger.Write($"Invalid email/username or password for Google/Ptc Authentication!");
                     running = false;
                     break;
                 }

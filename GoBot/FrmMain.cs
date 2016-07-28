@@ -90,7 +90,6 @@ namespace GoBot
                 txtUser.Text = Properties.Settings.Default.Username;
                 txtPass.Text = Properties.Settings.Default.Password;
 
-                txtGoogleAuth.Text = UserSettings.GoogleRefreshToken;
 
                 txtLat.Text = Properties.Settings.Default.Lat.ToString();
                 txtLng.Text = Properties.Settings.Default.Lng.ToString();
@@ -616,18 +615,7 @@ namespace GoBot
 
         private void cbAuthType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbAuthType.SelectedIndex == 0)
-            {
-                txtUser.Visible = true;
-                txtPass.Visible = true;
-                txtGoogleAuth.Visible = false;
-            }
-            else
-            {
-                txtUser.Visible = false;
-                txtPass.Visible = false;
-                txtGoogleAuth.Visible = true;
-            }
+
         }
 
         private async void refreshBallsToolStripMenuItem_Click(object sender, EventArgs e)

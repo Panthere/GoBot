@@ -34,6 +34,7 @@
             this.tMap = new System.Windows.Forms.Timer(this.components);
             this.cTabControl1 = new cTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.chkAvoidDupeForts = new cCheckBox();
             this.label36 = new System.Windows.Forms.Label();
             this.txtCatchRadiusWalk = new cTextBox();
             this.label35 = new System.Windows.Forms.Label();
@@ -111,7 +112,6 @@
             this.txtPB = new cTextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.txtGoogleAuth = new cTextBox();
             this.label27 = new System.Windows.Forms.Label();
             this.cbAuthType = new BoosterComboBox();
             this.chkGetForts = new cCheckBox();
@@ -167,7 +167,7 @@
             this.lblFound = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.chkAvoidDupeForts = new cCheckBox();
+            this.label37 = new System.Windows.Forms.Label();
             this.cTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -242,6 +242,17 @@
             this.tabPage2.Size = new System.Drawing.Size(736, 586);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Walk Settings";
+            // 
+            // chkAvoidDupeForts
+            // 
+            this.chkAvoidDupeForts.AutoSize = true;
+            this.chkAvoidDupeForts.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chkAvoidDupeForts.Location = new System.Drawing.Point(129, 359);
+            this.chkAvoidDupeForts.Name = "chkAvoidDupeForts";
+            this.chkAvoidDupeForts.Size = new System.Drawing.Size(168, 19);
+            this.chkAvoidDupeForts.TabIndex = 18;
+            this.chkAvoidDupeForts.Text = "Never Visit Pokestop Twice";
+            this.chkAvoidDupeForts.UseVisualStyleBackColor = true;
             // 
             // label36
             // 
@@ -1104,7 +1115,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(43)))));
-            this.tabPage1.Controls.Add(this.txtGoogleAuth);
+            this.tabPage1.Controls.Add(this.label37);
             this.tabPage1.Controls.Add(this.label27);
             this.tabPage1.Controls.Add(this.cbAuthType);
             this.tabPage1.Controls.Add(this.chkGetForts);
@@ -1121,19 +1132,6 @@
             this.tabPage1.Size = new System.Drawing.Size(736, 586);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Bot Settings";
-            // 
-            // txtGoogleAuth
-            // 
-            this.txtGoogleAuth.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtGoogleAuth.Location = new System.Drawing.Point(265, 183);
-            this.txtGoogleAuth.MaxLength = 32767;
-            this.txtGoogleAuth.Name = "txtGoogleAuth";
-            this.txtGoogleAuth.ReadOnly = false;
-            this.txtGoogleAuth.Scheme = cTextBox.Schemes.Black;
-            this.txtGoogleAuth.Size = new System.Drawing.Size(207, 30);
-            this.txtGoogleAuth.TabIndex = 21;
-            this.txtGoogleAuth.UseSystemPasswordChar = false;
-            this.txtGoogleAuth.Visible = false;
             // 
             // label27
             // 
@@ -1694,16 +1692,15 @@
             this.textBox1.Text = resources.GetString("textBox1.Text");
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // chkAvoidDupeForts
+            // label37
             // 
-            this.chkAvoidDupeForts.AutoSize = true;
-            this.chkAvoidDupeForts.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.chkAvoidDupeForts.Location = new System.Drawing.Point(129, 359);
-            this.chkAvoidDupeForts.Name = "chkAvoidDupeForts";
-            this.chkAvoidDupeForts.Size = new System.Drawing.Size(168, 19);
-            this.chkAvoidDupeForts.TabIndex = 18;
-            this.chkAvoidDupeForts.Text = "Never Visit Pokestop Twice";
-            this.chkAvoidDupeForts.UseVisualStyleBackColor = true;
+            this.label37.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(262, 334);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(218, 15);
+            this.label37.TabIndex = 21;
+            this.label37.Text = "Google now requires EMAIL:PASSWORD\r\n";
             // 
             // FrmMain
             // 
@@ -1834,7 +1831,6 @@
         private System.Windows.Forms.Label lblCurLevel;
         private System.Windows.Forms.Label lblPokemonPerHour;
         private System.Windows.Forms.Label lblRuntime;
-        private cTextBox txtGoogleAuth;
         private cContextMenuStrip cmsItemRefresh;
         private System.Windows.Forms.ToolStripMenuItem refreshBallsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -1880,6 +1876,7 @@
         private System.Windows.Forms.Label label36;
         private cTextBox txtCatchRadiusWalk;
         private cCheckBox chkAvoidDupeForts;
+        private System.Windows.Forms.Label label37;
     }
 }
 

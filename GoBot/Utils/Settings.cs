@@ -1,27 +1,13 @@
-﻿using PokemonGo.RocketAPI;
+﻿using System;
+using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
 
 namespace GoBot
 {
     public class Settings : ISettings
     {
-        public AuthType AuthType => UserSettings.Auth;
-        public string PtcUsername => UserSettings.Username;
-        public string PtcPassword => UserSettings.Password;
-        public double DefaultLatitude => UserSettings.StartLat;
-        public double DefaultLongitude => UserSettings.StartLng;
-        public double DefaultAltitude = UserSettings.Altitude;
         public double WalkingSpeedInKilometerPerHour => UserSettings.WalkingSpeed;
        
-
-
-        double ISettings.DefaultAltitude
-        {
-            get
-            {
-                return UserSettings.Altitude;
-            }
-        }
 
         public string GoogleRefreshToken
         {
@@ -32,6 +18,108 @@ namespace GoBot
             }
         }
 
-       
+        AuthType ISettings.AuthType
+        {
+            get
+            {
+                return UserSettings.Auth;
+            }
+
+            set
+            {
+                UserSettings.Auth = value;
+            }
+        }
+
+        double ISettings.DefaultLatitude
+        {
+            get
+            {
+                return UserSettings.StartLat;
+            }
+
+            set
+            {
+                UserSettings.StartLat = value;
+            }
+        }
+
+        double ISettings.DefaultLongitude
+        {
+            get
+            {
+                return UserSettings.StartLng;
+            }
+
+            set
+            {
+                UserSettings.StartLng = value;
+            }
+        }
+
+        double ISettings.DefaultAltitude
+        {
+            get
+            {
+                return UserSettings.Altitude;
+            }
+
+            set
+            {
+                UserSettings.Altitude = value;
+            }
+        }
+
+        string ISettings.PtcPassword
+        {
+            get
+            {
+                return UserSettings.Password;
+            }
+
+            set
+            {
+                UserSettings.Password = value;
+            }
+        }
+
+        string ISettings.PtcUsername
+        {
+            get
+            {
+                return UserSettings.Username;
+            }
+
+            set
+            {
+                UserSettings.Username = value;
+            }
+        }
+
+        public string GoogleUsername
+        {
+            get
+            {
+                return UserSettings.Username;
+            }
+
+            set
+            {
+                UserSettings.Username = value;
+            }
+        }
+
+        public string GooglePassword
+        {
+            get
+            {
+                return UserSettings.Password;
+            }
+
+            set
+            {
+                UserSettings.Password = value;
+            }
+        }
     }
 }
