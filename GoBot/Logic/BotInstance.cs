@@ -228,13 +228,17 @@ namespace GoBot.Logic
         {
             var mapObjects = await _client.Map.GetMapObjects();
 
-            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts).Where(i => i.Type == FortType.Checkpoint && i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime() && (UserSettings.NoDupeForts && !VisitedForts.Contains(i))).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
+            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts).Where(i => i.Type == FortType.Checkpoint && i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
+
+            if (UserSettings.NoDupeForts)
+                pokeStops = pokeStops.Where(i => !VisitedForts.Contains(i)).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
 
             if (pokeStops.ToList().Count == 0)
             {
                 VisitedForts.Clear();
             }
 
+            
             Logger.Write($"Farming {pokeStops.ToList().Count} PokeStops... {running}", LogLevel.Info, ConsoleColor.Cyan);
             foreach (var pokeStop in pokeStops)
             {
