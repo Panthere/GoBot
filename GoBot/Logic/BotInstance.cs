@@ -188,8 +188,7 @@ namespace GoBot.Logic
                     throw;
                 }
                 catch (Exception ex)
-                {
-                    //if ()
+                { 
                     Logger.Write($"Exception (PostLogin): {ex}", LogLevel.Error, ConsoleColor.Red);
                 }
 

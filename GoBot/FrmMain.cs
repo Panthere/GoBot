@@ -635,20 +635,37 @@ namespace GoBot
                                           || i.ItemId == ItemId.ItemUltraBall
                                           || i.ItemId == ItemId.ItemMasterBall) && i.Count > 0).GroupBy(i => i.ItemId).ToList();
 
+                int ballCount = 0;
+
                 var pokeBalls = items.Where(i => i.ItemId == ItemId.ItemPokeBall).ToList();
                 var greatBalls = items.Where(i => i.ItemId == ItemId.ItemGreatBall).ToList();
                 var ultraBalls = items.Where(i => i.ItemId == ItemId.ItemUltraBall).ToList();
                 var masterBalls = items.Where(i => i.ItemId == ItemId.ItemMasterBall).ToList();
 
 
+
                 if (pokeBalls.Count > 0)
+                {
                     lvBalls.Items.Add(new ListViewItem(new[] { "Poke Balls", pokeBalls[0].Count.ToString() }));
+                    ballCount += pokeBalls[0].Count;
+                }
                 if (greatBalls.Count > 0)
+                {
                     lvBalls.Items.Add(new ListViewItem(new[] { "Great Balls", greatBalls[0].Count.ToString() }));
+                    ballCount += greatBalls[0].Count;
+                }
+
                 if (ultraBalls.Count > 0)
+                {
                     lvBalls.Items.Add(new ListViewItem(new[] { "Ultra Balls", ultraBalls[0].Count.ToString() }));
+                    ballCount += ultraBalls[0].Count;
+                }
                 if (masterBalls.Count > 0)
+                {
                     lvBalls.Items.Add(new ListViewItem(new[] { "Master Balls", masterBalls[0].Count.ToString() }));
+                    ballCount += masterBalls[0].Count;
+                }
+                lblAccountItems.Text = "Account Items - " + ballCount.ToString();
             }
             catch (Exception ex)
             {
@@ -678,22 +695,26 @@ namespace GoBot
             {
                 lvBalls.Items.Clear();
                 var items = await bot._inventory.GetItems();
+                int itemCount = 0;
                 foreach (var item in items)
                 {
                     if (item.Count == 0)
                         continue;
+
                     try
                     {
                         var itemName = item.ItemId;
                         ListViewItem lvi = new ListViewItem(Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(itemName.ToString().Replace("Item", "").ToLower()));
                         lvi.SubItems.Add(item.Count.ToString());
                         lvBalls.Items.Add(lvi);
+                        itemCount += item.Count;
                     }
                     catch (InvalidCastException)
                     {
 
                     }
                 }
+                lblAccountItems.Text = "Account Items - " + itemCount.ToString();
             }
             catch (Exception ex)
             {
@@ -720,6 +741,7 @@ namespace GoBot
                 var myPokemonFamilies = await bot._inventory.GetPokemonFamilies();
                 var pokemonFamilies = myPokemonFamilies.ToArray();
 
+                int pokemonCount = 0;
 
                 foreach (var pokemon in pokemons)
                 {
@@ -739,7 +761,10 @@ namespace GoBot
                         lvi.SubItems.Add(string.Format("{0}/{1}", candy[0], candy[1]));
                     lvi.Tag = pokemon; // set as tag
                     lvPokemon.Items.Add(lvi);
+                    pokemonCount++;
                 }
+                
+                lblPokemon.Text = "Account Pokemon - " + pokemonCount;
             }
             catch (Exception ex)
             {

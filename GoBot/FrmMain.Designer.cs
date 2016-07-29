@@ -112,6 +112,7 @@
             this.txtPB = new cTextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label37 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.cbAuthType = new BoosterComboBox();
             this.chkGetForts = new cCheckBox();
@@ -139,8 +140,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.transferSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label34 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
+            this.lblPokemon = new System.Windows.Forms.Label();
+            this.lblAccountItems = new System.Windows.Forms.Label();
             this.lvBalls = new System.Windows.Forms.ListView();
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -167,7 +168,6 @@
             this.lblFound = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label37 = new System.Windows.Forms.Label();
             this.cTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -1133,6 +1133,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Bot Settings";
             // 
+            // label37
+            // 
+            this.label37.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(262, 334);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(218, 15);
+            this.label37.TabIndex = 21;
+            this.label37.Text = "Google now requires EMAIL:PASSWORD\r\n";
+            // 
             // label27
             // 
             this.label27.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -1186,6 +1196,7 @@
             // btnStop
             // 
             this.btnStop.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnStop.Enabled = false;
             this.btnStop.Location = new System.Drawing.Point(381, 266);
             this.btnStop.Name = "btnStop";
             this.btnStop.Scheme = cButton.Schemes.Red;
@@ -1237,8 +1248,8 @@
             this.tabPage8.Controls.Add(this.gmap);
             this.tabPage8.Controls.Add(this.lvPokemon);
             this.tabPage8.Controls.Add(this.label34);
-            this.tabPage8.Controls.Add(this.label32);
-            this.tabPage8.Controls.Add(this.label31);
+            this.tabPage8.Controls.Add(this.lblPokemon);
+            this.tabPage8.Controls.Add(this.lblAccountItems);
             this.tabPage8.Controls.Add(this.lvBalls);
             this.tabPage8.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.tabPage8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
@@ -1400,32 +1411,32 @@
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(152, 23);
+            this.label34.Location = new System.Drawing.Point(245, 23);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(65, 15);
             this.label34.TabIndex = 18;
             this.label34.Text = "Right click!";
             // 
-            // label32
+            // lblPokemon
             // 
-            this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label32.AutoSize = true;
-            this.label32.Font = new System.Drawing.Font("Segoe UI", 14F);
-            this.label32.Location = new System.Drawing.Point(15, 297);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(165, 25);
-            this.label32.TabIndex = 17;
-            this.label32.Text = "Account Pokemon";
+            this.lblPokemon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPokemon.AutoSize = true;
+            this.lblPokemon.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.lblPokemon.Location = new System.Drawing.Point(15, 297);
+            this.lblPokemon.Name = "lblPokemon";
+            this.lblPokemon.Size = new System.Drawing.Size(165, 25);
+            this.lblPokemon.TabIndex = 17;
+            this.lblPokemon.Text = "Account Pokemon";
             // 
-            // label31
+            // lblAccountItems
             // 
-            this.label31.AutoSize = true;
-            this.label31.Font = new System.Drawing.Font("Segoe UI", 14F);
-            this.label31.Location = new System.Drawing.Point(15, 15);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(131, 25);
-            this.label31.TabIndex = 15;
-            this.label31.Text = "Account Items";
+            this.lblAccountItems.AutoSize = true;
+            this.lblAccountItems.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.lblAccountItems.Location = new System.Drawing.Point(15, 15);
+            this.lblAccountItems.Name = "lblAccountItems";
+            this.lblAccountItems.Size = new System.Drawing.Size(131, 25);
+            this.lblAccountItems.TabIndex = 15;
+            this.lblAccountItems.Text = "Account Items";
             // 
             // lvBalls
             // 
@@ -1692,16 +1703,6 @@
             this.textBox1.Text = resources.GetString("textBox1.Text");
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label37
-            // 
-            this.label37.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(262, 334);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(218, 15);
-            this.label37.TabIndex = 21;
-            this.label37.Text = "Google now requires EMAIL:PASSWORD\r\n";
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1836,11 +1837,11 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem refreshAllItemsToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPage8;
-        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label lblAccountItems;
         private System.Windows.Forms.ListView lvBalls;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label lblPokemon;
         private cContextMenuStrip cmsRefreshPokemon;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private cTextBox txtOverrideIV;
