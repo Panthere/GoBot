@@ -53,6 +53,18 @@ namespace GoBot.Logic
             Events.OnStepWalked += Events_OnStepWalked;
         }
 
+        private async void Login_OnRelogRequiredEvent(Client client, int errorCount)
+        {
+            Logger.Write($"Relog Requested error count was {errorCount}", LogLevel.Error, ConsoleColor.Magenta);
+            // login... messy
+            if (!await Login())
+            {
+                Logger.Write($"Invalid email/username or password for Google/Ptc Authentication!");
+                running = false;
+                
+            }
+        }
+
         private async void Events_OnStepWalked(object sender, StepWalkedArgs e)
         {
             if (!UserSettings.CatchPokemonOnWalk)
@@ -60,20 +72,27 @@ namespace GoBot.Logic
                 Events.StepWalkedReset.Set();
                 return;
             }
-
-            await ExecuteCatchAllNearbyPokemons(true);
-            if (_client.CurrentLatitude != e.curLocation.Latitude && _client.CurrentLongitude != e.curLocation.Longitude)
+            try
             {
-                Logger.Write("Walking back to initial route...");
-                // only if they have moved
-                if (UserSettings.TeleportToPokemonOnWalk)
+                await ExecuteCatchAllNearbyPokemons(true);
+                if (_client.CurrentLatitude != e.curLocation.Latitude && _client.CurrentLongitude != e.curLocation.Longitude)
                 {
-                    var update = await _client.Player.UpdatePlayerLocation(e.curLocation.Latitude, e.curLocation.Longitude, UserSettings.Altitude);
+                    Logger.Write("Walking back to initial route...");
+                    // only if they have moved
+                    if (UserSettings.TeleportToPokemonOnWalk)
+                    {
+                        var update = await _client.Player.UpdatePlayerLocation(e.curLocation.Latitude, e.curLocation.Longitude, UserSettings.Altitude);
+                    }
+                    else
+                    {
+                        var update = await _navigation.HumanLikeWalking(e.curLocation, UserSettings.WalkingSpeed, true, true);
+                    }
+
                 }
-                else
-                {
-                    var update = await _navigation.HumanLikeWalking(e.curLocation, UserSettings.WalkingSpeed, true, true);
-                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Write($"Exception on Step Walked: {ex}", LogLevel.Error, ConsoleColor.Red);
             }
             Events.StepWalkedReset.Set();
 
@@ -182,6 +201,16 @@ namespace GoBot.Logic
                     }
 
                 }
+                catch (InvalidResponseException)
+                {
+                    Logger.Write("Invalid packet was received. Please wait for the bot to reset, we'll keep your last known coordinates to update to the server!");
+                    UserSettings.StartLat = _client.CurrentLatitude;
+                    UserSettings.StartLng = _client.CurrentLongitude;
+                    UserSettings.Altitude = _client.CurrentAltitude;
+
+
+                    await Task.Delay(5000);
+                }
                 catch (AccessTokenExpiredException)
                 {
                     Logger.Write("Access token was expired", LogLevel.Error, ConsoleColor.Red);
@@ -282,8 +311,8 @@ namespace GoBot.Logic
             var mapObjects = await _client.Map.GetMapObjects();
 
             var catchPokemons = mapObjects.MapCells.SelectMany(i => i.CatchablePokemons).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
-            var nearPokemons = mapObjects.MapCells.SelectMany(i => i.NearbyPokemons).OrderBy(i => i.DistanceInMeters);
-            var wildPokemons = mapObjects.MapCells.SelectMany(i => i.WildPokemons).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
+            //var nearPokemons = mapObjects.MapCells.SelectMany(i => i.NearbyPokemons).OrderBy(i => i.DistanceInMeters);
+            //var wildPokemons = mapObjects.MapCells.SelectMany(i => i.WildPokemons).OrderBy(i => LocationUtils.CalculateDistanceInMeters(new Navigation.Location(_client.CurrentLatitude, _client.CurrentLongitude), new Navigation.Location(i.Latitude, i.Longitude)));
 
             Logger.Write($"Catching {catchPokemons.ToList().Count} nearby Pokemon", LogLevel.Info, ConsoleColor.Magenta);
 
