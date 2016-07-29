@@ -223,11 +223,11 @@ namespace GoBot.Logic
                     .Where(p => p != null && p?.PokemonId > 0);
         }
 
-        public async Task<IEnumerable<PokemonFamily>> GetPokemonFamilies()
+        public async Task<IEnumerable<Candy>> GetPokemonFamilies()
         {
             var inventory = await _client.Inventory.GetInventory();
             return
-                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonFamily)
+                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.Candy)
                     .Where(p => p != null && p?.FamilyId != PokemonFamilyId.FamilyUnset);
         }
 
@@ -239,13 +239,13 @@ namespace GoBot.Logic
                     .Where(p => p != null && p?.FamilyId != PokemonFamilyId.FamilyUnset);
         }
 
-        public async Task<int[]> GetRequiredCandy(List<PokemonSettings> pokemonSettings, PokemonFamily[] pokemonFamilies, PokemonId pokemon)
+        public async Task<int[]> GetRequiredCandy(List<PokemonSettings> pokemonSettings, Candy[] pokemonFamilies, PokemonId pokemon)
         {
            
             var settings = pokemonSettings.Single(x => x.PokemonId == pokemon);
             var familyCandy = pokemonFamilies.Single(x => settings.FamilyId == x.FamilyId);
 
-            return new[] { familyCandy.Candy, settings.CandyToEvolve };
+            return new[] { familyCandy.Candy_, settings.CandyToEvolve };
         }
 
         public async Task<IEnumerable<PokemonData>> GetDuplicatePokemonToTransfer(int belowCp, bool keepPokemonsThatCanEvolve = false)
@@ -274,7 +274,7 @@ namespace GoBot.Logic
                     if (settings.CandyToEvolve == 0)
                         continue;
 
-                    var amountToSkip = (familyCandy.Candy + settings.CandyToEvolve - 1) / settings.CandyToEvolve;
+                    var amountToSkip = (familyCandy.Candy_ + settings.CandyToEvolve - 1) / settings.CandyToEvolve;
 
                     results.AddRange(pokemonList.Where(x => x.PokemonId == pokemon.Key && x.Favorite == 0 && x.Cp < belowCp)
                         .OrderByDescending(x => x.Cp)
@@ -316,7 +316,7 @@ namespace GoBot.Logic
                     continue;
 
                 var pokemonCandyNeededAlready = pokemonToEvolve.Count(p => pokemonSettings.Single(x => x.PokemonId == p.PokemonId).FamilyId == settings.FamilyId) * settings.CandyToEvolve;
-                if (familyCandy.Candy - pokemonCandyNeededAlready > settings.CandyToEvolve)
+                if (familyCandy.Candy_ - pokemonCandyNeededAlready > settings.CandyToEvolve)
                     pokemonToEvolve.Add(pokemon);
             }
 
