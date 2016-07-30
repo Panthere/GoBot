@@ -110,7 +110,11 @@ namespace GoBot.Utils
             {
                 if (_lvlUp == null)
                     return "Level up in -";
-                return string.Format("Level up in {0}", TimeSpan.FromHours(double.Parse(_lvlUp)).ToPretty());
+                double lvlUpDbl = _lvlUp.ToDouble();
+                
+                if (lvlUpDbl > 50000 || double.IsInfinity(lvlUpDbl) || double.IsNaN(lvlUpDbl) || double.IsNegativeInfinity(lvlUpDbl) || double.IsPositiveInfinity(lvlUpDbl) || lvlUpDbl == 0 || lvlUpDbl > int.MaxValue)
+                    return "Level up in 50k+ hours! :(";
+                return string.Format("Level up in {0}", TimeSpan.FromHours(lvlUpDbl).ToPretty());
             }
         }
         public static string ExperiencePerHour
