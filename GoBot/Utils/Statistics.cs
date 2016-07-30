@@ -93,10 +93,7 @@ namespace GoBot.Utils
             get
             {
                 TimeSpan time = (DateTime.Now - _initSessionDateTime);
-                return string.Format("Runtime: {0} hour{3}, {1} minute{4}, {2} second{5}", time.Hours, time.Minutes, time.Seconds,
-                    time.Hours > 1 ? "s" : "",
-                    time.Minutes > 1 ? "s" : "",
-                    time.Seconds > 1 ? "s" : "");
+                return string.Format("Runtime: {0}", time.ToPretty());
                 //return string.Format((DateTime.Now - _initSessionDateTime).ToString("h'hours 'm'm 's's'")
             }
         }
@@ -111,7 +108,9 @@ namespace GoBot.Utils
         {
             get
             {
-                return string.Format("Level up in {0} hours", _lvlUp);
+                if (_lvlUp == null)
+                    return "Level up in -";
+                return string.Format("Level up in {0}", TimeSpan.FromHours(double.Parse(_lvlUp)).ToPretty());
             }
         }
         public static string ExperiencePerHour

@@ -1,8 +1,10 @@
 ﻿using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 
 namespace GoBot.Utils
 {
@@ -24,6 +26,23 @@ namespace GoBot.Utils
         public static Color ToColor(this string str)
         {
             return Helpers.ColorFromHex(str);
+        }
+        public static string ToNormal(this string str)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (char c in str)
+            {
+                if (char.IsUpper(c) && builder.Length > 0) builder.Append(' ');
+                builder.Append(c);
+            }
+            return builder.ToString();
+        }
+        public static string ToPretty(this TimeSpan time)
+        {
+            return string.Format("{0} hour{3}, {1} minute{4}, {2} second{5}", time.Hours, time.Minutes, time.Seconds,
+                    time.Hours > 1 ? "s" : "",
+                    time.Minutes > 1 ? "s" : "",
+                    time.Seconds > 1 ? "s" : "");
         }
         public static string StripTags(this string source)
         {

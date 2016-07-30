@@ -43,7 +43,7 @@ namespace GoBot.Utils
 
         public static async Task PokemonCaught(PokemonData poke, ulong pokemonId)
         { 
-            OnPokemonCaught(null, new PokemonCaughtArgs() { CaughtPokemon = poke });
+            OnPokemonCaught(null, new PokemonCaughtArgs() { CaughtPokemon = poke, CaughtID = pokemonId });
             await PokemonCaughtReset.WaitAsync();
             PokemonCaughtReset.Reset();
         }

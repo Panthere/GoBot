@@ -14,6 +14,8 @@ using GoogleMapsApi.StaticMaps;
 using GoogleMapsApi.StaticMaps.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using GoBot.Logic;
+using PokemonGo.RocketAPI.Exceptions;
 
 namespace GoBot.Utils
 {
@@ -22,14 +24,16 @@ namespace GoBot.Utils
 
         private static readonly double speedDownTo = 10 / 3.6;
         private readonly Client _client;
+        private BotInstance _bot;
 
         public  Location FinalDestination;
         public List<List<GMap.NET.PointLatLng>> DestinationSteps = new List<List<GMap.NET.PointLatLng>>();
 
         private Random rand = new Random();
-        public Navigation(Client client)
+        public Navigation(Client client, BotInstance bot)
         {
             _client = client;
+            _bot = bot;
         }
 
         public async Task<PlayerUpdateResponse> HumanLikeWalking(Location targetLocation, double walkingSpeedInKilometersPerHour, bool slowDown = true, bool bypassEvent = false)
@@ -87,6 +91,11 @@ namespace GoBot.Utils
                 {
                     await Events.WaypointStepWalked(waypoint, _client, this);
 
+                }
+                if (_bot.restarting)
+                {
+                    _bot.restarting = false;
+                    throw new InvalidResponseException();
                 }
             } while (LocationUtils.CalculateDistanceInMeters(sourceLocation, targetLocation) >= 30);
 

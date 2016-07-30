@@ -173,21 +173,21 @@ namespace GoBot.Logic
 
         public async Task<IEnumerable<PokemonData>> GetHighestsCP(int limit)
         {
-            var myPokemon = await GetPokemons();
+            var myPokemon = await GetPokemons(false);
             var pokemons = myPokemon.ToList();
             return pokemons.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax).Take(limit);
         }
 
         public async Task<IEnumerable<PokemonData>> GetHighestsPerfect(int limit)
         {
-            var myPokemon = await GetPokemons();
+            var myPokemon = await GetPokemons(false);
             var pokemons = myPokemon.ToList();
             return pokemons.OrderByDescending(BotInstance.CalculatePokemonPerfection).Take(limit);
         }
 
         public async Task<PokemonData> GetHighestPokemonOfTypeByCP(PokemonData pokemon)
         {
-            var myPokemon = await GetPokemons();
+            var myPokemon = await GetPokemons(false);
             var pokemons = myPokemon.ToList();
             return pokemons.Where(x => x.PokemonId == pokemon.PokemonId)
                 .OrderByDescending(x => x.Cp)
@@ -215,12 +215,35 @@ namespace GoBot.Logic
                     && BotInstance.CalculatePokemonPerfection(p) == BotInstance.CalculatePokemonPerfection(match)).First();
         }
 
-        public async Task<IEnumerable<PokemonData>> GetPokemons()
+
+
+        public async Task<IEnumerable<PokemonData>> GetPokemons(bool topPokesCheck = true)
         {
             var inventory = await _client.Inventory.GetInventory();
-            return
-                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
-                    .Where(p => p != null && p?.PokemonId > 0);
+
+            if (topPokesCheck)
+            {
+                var topPokes = await GetHighestsCP(UserSettings.TopX);
+
+                return
+                    inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
+                        .Where(p => p != null && p?.PokemonId > 0 && !topPokes.Any(i => i.Id == p.Id));
+            }
+            else
+            {
+                return
+                    inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
+                        .Where(p => p != null && p?.PokemonId > 0);
+            }
+        }
+
+        public async Task<PokemonData> GetPokemonById(ulong id)
+        {
+            var myPokemon = await GetPokemons();
+
+            var pokemonList = myPokemon as IList<PokemonData> ?? myPokemon.ToList();
+
+            return pokemonList.FirstOrDefault(p => p.Id == id);
         }
 
         public async Task<IEnumerable<Candy>> GetPokemonFamilies()
@@ -267,19 +290,23 @@ namespace GoBot.Logic
 
                 foreach (var pokemon in pokemonsThatCanBeTransfered)
                 {
-                    
+
+
+
                     var settings = pokemonSettings.Single(x => x.PokemonId == pokemon.Key);
                     var familyCandy = pokemonFamilies.Single(x => settings.FamilyId == x.FamilyId);
 
                     if (settings.CandyToEvolve == 0)
                         continue;
 
+                    
+
                     var amountToSkip = (familyCandy.Candy_ + settings.CandyToEvolve - 1) / settings.CandyToEvolve;
 
                     results.AddRange(pokemonList.Where(x => x.PokemonId == pokemon.Key && x.Favorite == 0 && x.Cp < belowCp)
                         .OrderByDescending(x => x.Cp)
                         .ThenBy(n => n.StaminaMax)
-                        .Skip(amountToSkip).Skip(UserSettings.TopX)
+                        .Skip(amountToSkip)
                         .ToList());
 
                 }
@@ -287,10 +314,12 @@ namespace GoBot.Logic
                 return results;
             }
 
+            var topPokes = await GetHighestsCP(UserSettings.TopX);
+
             return pokemonList
                 .GroupBy(p => p.PokemonId)
                 .Where(x => x.Count() > 1)
-                .SelectMany(p => p.Where(x => x.Favorite == 0 && x.Cp < belowCp).OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax).Skip(1).Skip(UserSettings.TopX).ToList());
+                .SelectMany(p => p.Where(x => x.Favorite == 0 && x.Cp < belowCp && !topPokes.Any(y => x.Id == y.Id)).OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax).Skip(1).Skip(UserSettings.TopX).ToList());
         }
 
 
@@ -305,9 +334,19 @@ namespace GoBot.Logic
             var myPokemonFamilies = await GetPokemonFamilies();
             var pokemonFamilies = myPokemonFamilies.ToArray();
 
+            var topPokemon = await GetHighestsCP(UserSettings.TopX);
+
             var pokemonToEvolve = new List<PokemonData>();
             foreach (var pokemon in pokemons)
             {
+
+                if (topPokemon.Any(i => pokemon.Id == i.Id))
+                {
+                    // top pokemon
+                    continue;
+                }
+
+
                 var settings = pokemonSettings.Single(x => x.PokemonId == pokemon.PokemonId);
                 var familyCandy = pokemonFamilies.Single(x => settings.FamilyId == x.FamilyId);
                 

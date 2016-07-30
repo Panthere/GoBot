@@ -341,6 +341,8 @@ namespace GoBot
 
             foreach (string str in clb.CheckedItems)
             {
+                if (str == "All")
+                    continue;
                 pids.Remove((PokemonId)Enum.Parse(typeof(PokemonId), str));
             }
             return pids;
@@ -704,7 +706,8 @@ namespace GoBot
                     try
                     {
                         var itemName = item.ItemId;
-                        ListViewItem lvi = new ListViewItem(Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(itemName.ToString().Replace("Item", "").ToLower()));
+                        var procItemName = itemName.ToString().ToNormal();
+                        ListViewItem lvi = new ListViewItem(Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(procItemName.Replace("Item", "").ToLower()));
                         lvi.SubItems.Add(item.Count.ToString());
                         lvBalls.Items.Add(lvi);
                         itemCount += item.Count;
@@ -733,7 +736,7 @@ namespace GoBot
             {
                 lvPokemon.Items.Clear();
 
-                var pokemons = await bot._inventory.GetPokemons();
+                var pokemons = await bot._inventory.GetPokemons(false);
 
                 var myPokemonSettings = await bot._inventory.GetPokemonSettings();
                 var pokemonSettings = myPokemonSettings.ToList();

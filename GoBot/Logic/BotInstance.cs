@@ -39,6 +39,7 @@ namespace GoBot.Logic
         public List<FortData> VisitedForts = new List<FortData>();
 
         public bool running = false;
+        public bool restarting = false;
 
         public Random rand = new Random();
 
@@ -48,7 +49,7 @@ namespace GoBot.Logic
             _clientSettings = clientSettings;
             _client = new Client(_clientSettings);
             _inventory = new Inventory(_client);
-            _navigation = new Navigation(_client);
+            _navigation = new Navigation(_client, this);
             _stats = new Statistics();
             Events.OnStepWalked += Events_OnStepWalked;
         }
@@ -75,6 +76,7 @@ namespace GoBot.Logic
             try
             {
                 await ExecuteCatchAllNearbyPokemons(true);
+
                 if (_client.CurrentLatitude != e.curLocation.Latitude && _client.CurrentLongitude != e.curLocation.Longitude)
                 {
                     Logger.Write("Walking back to initial route...");
@@ -90,6 +92,16 @@ namespace GoBot.Logic
 
                 }
             }
+            catch (InvalidResponseException)
+            {
+                /*Logger.Write("Invalid packet was received. Please wait for the bot to reset, we'll keep your last known coordinates to update to the server!");
+                UserSettings.StartLat = _client.CurrentLatitude;
+                UserSettings.StartLng = _client.CurrentLongitude;
+                UserSettings.Altitude = _client.CurrentAltitude;*/
+
+                restarting = true;
+                
+            }
             catch (Exception ex)
             {
                 Logger.Write($"Exception on Step Walked: {ex}", LogLevel.Error, ConsoleColor.Red);
@@ -103,6 +115,7 @@ namespace GoBot.Logic
             running = false;
             Logger.Write("Stop was called!");
         }
+
         public async Task Execute()
         {
             Logger.Write($"Starting Execute on login server: {_clientSettings.AuthType}", LogLevel.Info, ConsoleColor.Magenta);
@@ -585,7 +598,7 @@ namespace GoBot.Logic
             var pokemonList = pokemons as IList<PokemonData> ?? pokemons.ToList();
 
             // UNTESTED
-            foreach (var pokemon in pokemonList.Where(x => x.Favorite == 0).OrderByDescending(i=> i.Cp).ThenBy(i => i.StaminaMax).Skip(UserSettings.TopX))
+            foreach (var pokemon in pokemonList.Where(x => x.Favorite == 0).OrderByDescending(i=> i.Cp).ThenBy(i => i.StaminaMax))
             {
                 if (!TransferList.Contains(pokemon.PokemonId))
                     continue;
@@ -608,7 +621,7 @@ namespace GoBot.Logic
             var pokemonList = pokemons as IList<PokemonData> ?? pokemons.ToList();
             Logger.Write($"Forcibly (override) sorting transfer of {pokemonList.Count} pokemon(s)", LogLevel.Info, ConsoleColor.Yellow);
             // UNTESTED
-            foreach (var pokemon in pokemonList.Where(x => x.Favorite == 0).OrderByDescending(i => i.Cp).ThenBy(i => i.StaminaMax).Skip(UserSettings.TopX))
+            foreach (var pokemon in pokemonList.Where(x => x.Favorite == 0).OrderByDescending(i => i.Cp).ThenBy(i => i.StaminaMax))
             {
                // if (!TransferList.Contains(pokemon.PokemonId))
                //     continue;
