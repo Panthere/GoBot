@@ -1,6 +1,6 @@
 # GoBot
 A simple bot using the Rocket API for Pokemon Go.
-
+**Currently Discontinued due to API updates. May resume development sometime**
 
 # Warning
 This is not a fully functioning bot. This was made in only a couple of hours. The API that this uses changes several hundred times a day.
